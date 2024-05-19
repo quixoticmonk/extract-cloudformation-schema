@@ -1,0 +1,37 @@
+---
+name: ${{github.actor}} Extract CFN Schema
+
+on:
+    schedule:
+      - cron: '0 20 * * 5'  # Every Friday at 4:00 PM EST
+    workflow_dispatch:
+
+jobs:
+  run_python_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Run Python script
+      run: python main.py
+
+    - name: Create directory if not exists
+      run: mkdir -p schema 
+
+    - name: Move output files to directory
+      run: mv *.json schema/
+
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add schema/
+        git commit -m "Add output files"
+        git push
