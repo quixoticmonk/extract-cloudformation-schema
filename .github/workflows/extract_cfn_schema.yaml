@@ -6,6 +6,10 @@ on:
       - cron: '0 20 * * 5'  # Every Friday at 4:00 PM EST
     workflow_dispatch:
 
+permissions:
+    contents: write
+    pull-requests: read
+
 jobs:
   run_python_script:
     runs-on: ubuntu-latest
