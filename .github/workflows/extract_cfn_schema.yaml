@@ -1,5 +1,5 @@
 ---
-name: ${{github.actor}} Extract CFN Schema
+name: Extract CFN Schema
 
 on:
     schedule:
