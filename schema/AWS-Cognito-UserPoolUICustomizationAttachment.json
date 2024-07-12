@@ -1,23 +1,62 @@
 {
-  "typeName" : "AWS::Cognito::UserPoolUICustomizationAttachment",
-  "description" : "Resource Type definition for AWS::Cognito::UserPoolUICustomizationAttachment",
-  "additionalProperties" : false,
-  "properties" : {
-    "Id" : {
-      "type" : "string"
+    "typeName": "AWS::Cognito::UserPoolUICustomizationAttachment",
+    "description": "Resource Type definition for AWS::Cognito::UserPoolUICustomizationAttachment",
+    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "tagging": {
+        "taggable": false,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false
     },
-    "CSS" : {
-      "type" : "string"
+    "properties": {
+        "UserPoolId": {
+            "type": "string"
+        },
+        "ClientId": {
+            "type": "string"
+        },
+        "CSS": {
+            "type": "string"
+        }
     },
-    "UserPoolId" : {
-      "type" : "string"
-    },
-    "ClientId" : {
-      "type" : "string"
+    "additionalProperties": false,
+    "required": [
+        "UserPoolId",
+        "ClientId"
+    ],
+    "primaryIdentifier": [
+        "/properties/UserPoolId",
+        "/properties/ClientId"
+    ],
+    "createOnlyProperties": [
+        "/properties/UserPoolId",
+        "/properties/ClientId"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+                "cognito-idp:SetUICustomization",
+                "cognito-idp:GetUICustomization"
+            ],
+            "timeoutInMinutes": 2
+        },
+        "read": {
+            "permissions": [
+                "cognito-idp:GetUICustomization"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "cognito-idp:SetUICustomization"
+            ],
+            "timeoutInMinutes": 2
+        },
+        "delete": {
+            "permissions": [
+                "cognito-idp:SetUICustomization",
+                "cognito-idp:GetUICustomization"
+            ],
+            "timeoutInMinutes": 2
+        }
     }
-  },
-  "required" : [ "ClientId", "UserPoolId" ],
-  "createOnlyProperties" : [ "/properties/UserPoolId", "/properties/ClientId" ],
-  "readOnlyProperties" : [ "/properties/Id" ],
-  "primaryIdentifier" : [ "/properties/Id" ]
 }
