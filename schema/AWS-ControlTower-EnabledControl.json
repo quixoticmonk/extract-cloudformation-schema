@@ -154,6 +154,8 @@
     },
     "delete": {
       "permissions": [
+        "controltower:ListEnabledControls",
+        "controltower:GetEnabledControl",
         "controltower:GetControlOperation",
         "controltower:DisableControl",
         "organizations:UpdatePolicy",
