@@ -187,12 +187,14 @@
     },
     "list": {
       "handlerSchema": {
-        "properties":{
-          "DomainName" :{
+        "properties": {
+          "DomainName": {
             "$ref": "resource-schema.json#/properties/DomainName"
           }
         },
-        "required": ["DomainName"]
+        "required": [
+          "DomainName"
+        ]
       },
       "permissions": [
         "codeartifact:ListPackageGroups"
@@ -204,6 +206,11 @@
     "tagOnCreate": true,
     "tagUpdatable": true,
     "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
+    "tagProperty": "/properties/Tags",
+    "permissions": [
+      "codeartifact:ListTagsForResource",
+      "codeartifact:UntagResource",
+      "codeartifact:TagResource"
+    ]
   }
 }
