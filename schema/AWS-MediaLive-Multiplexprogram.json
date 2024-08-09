@@ -236,6 +236,9 @@
         "/properties/ProgramName",
         "/properties/MultiplexId"
     ],
+    "readOnlyProperties":[
+        "/properties/ChannelId"
+    ],
     "writeOnlyProperties":[
         "/properties/PreferredChannelPipeline"
     ],
