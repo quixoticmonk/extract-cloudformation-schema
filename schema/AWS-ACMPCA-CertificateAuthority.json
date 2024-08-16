@@ -86,7 +86,10 @@
                 "S3ObjectAcl": { "type": "string" },
                 "CrlDistributionPointExtensionConfiguration": {
                     "$ref": "#/definitions/CrlDistributionPointExtensionConfiguration"
-                }
+                },
+                "RetainExpiredCertificates": { "type": "boolean" },
+                "PartitioningEnabled": { "type": "boolean"},
+                "CustomPath": { "type": "string" }
             },
             "required": [
                 "Enabled"
