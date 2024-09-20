@@ -46,8 +46,12 @@
             }
         },
         "Maintenance": {
-            "description": "The maintenance settings you want to use for the flow. ",
+            "description": "The maintenance settings you want to use for the flow.",
             "$ref": "#/definitions/Maintenance"
+        },
+        "SourceMonitoringConfig": {
+            "description": "The source monitoring config of the flow.",
+            "$ref": "#/definitions/SourceMonitoringConfig"
         }
     },
     "definitions": {
@@ -165,7 +169,7 @@
             "description": "Information about the encryption of the flow.",
             "properties": {
                 "Algorithm": {
-                    "type":"string",
+                    "type": "string",
                     "enum": [
                         "aes128",
                         "aes192",
@@ -193,7 +197,7 @@
                 },
                 "Region": {
                     "type": "string",
-                    "description":  "The AWS Region that the API Gateway proxy endpoint was created in. This parameter is required for SPEKE encryption and is not valid for static key encryption."
+                    "description": "The AWS Region that the API Gateway proxy endpoint was created in. This parameter is required for SPEKE encryption and is not valid for static key encryption."
                 },
                 "ResourceId": {
                     "type": "string",
@@ -205,7 +209,7 @@
                 },
                 "SecretArn": {
                     "type": "string",
-                    "description":" The ARN of the secret that you created in AWS Secrets Manager to store the encryption key. This parameter is required for static key encryption and is not valid for SPEKE encryption."
+                    "description": " The ARN of the secret that you created in AWS Secrets Manager to store the encryption key. This parameter is required for static key encryption and is not valid for SPEKE encryption."
                 },
                 "Url": {
                     "type": "string",
@@ -219,7 +223,7 @@
         },
         "FailoverConfig": {
             "type": "object",
-            "description":"The settings for source failover",
+            "description": "The settings for source failover",
             "properties": {
                 "State": {
                     "type": "string",
@@ -240,7 +244,7 @@
                         "FAILOVER"
                     ]
                 },
-                "SourcePriority":{
+                "SourcePriority": {
                     "type": "object",
                     "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
                     "properties": {
@@ -561,6 +565,24 @@
             "required": [
                 "Name"
             ]
+        },
+        "SourceMonitoringConfig": {
+            "type": "object",
+            "description": "The settings for source monitoring.",
+            "properties": {
+                "ThumbnailState": {
+                    "type": "string",
+                    "description": "The state of thumbnail monitoring.",
+                    "enum": [
+                        "ENABLED",
+                        "DISABLED"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "ThumbnailState"
+            ]
         }
     },
     "required": [
@@ -583,7 +605,7 @@
         "/properties/MediaStreams/*/Fmt",
         "/properties/EgressIp"
     ],
-    "primaryIdentifier" : [
+    "primaryIdentifier": [
         "/properties/FlowArn"
     ],
     "resourceLink": {

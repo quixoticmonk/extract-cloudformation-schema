@@ -192,7 +192,8 @@
     ],
     "createOnlyProperties": [
         "/properties/Name",
-        "/properties/TargetArn"
+        "/properties/TargetArn",
+        "/properties/Tags"
     ],
     "handlers": {
         "create": {
