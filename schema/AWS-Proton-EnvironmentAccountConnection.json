@@ -149,7 +149,9 @@
       ]
     },
     "list": {
-      "permissions": ["proton:ListEnvironmentAccountConnections"]
+      "permissions": [
+        "proton:ListEnvironmentAccountConnections"
+      ]
     }
   },
   "additionalProperties": false,
@@ -158,6 +160,11 @@
     "tagOnCreate": true,
     "tagUpdatable": true,
     "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
+    "tagProperty": "/properties/Tags",
+    "permissions": [
+      "proton:ListTagsForResource",
+      "proton:UntagResource",
+      "proton:TagResource"
+    ]
   }
 }
