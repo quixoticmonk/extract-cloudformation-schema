@@ -85,11 +85,13 @@
     "tagOnCreate" : true,
     "tagUpdatable" : true,
     "cloudFormationSystemTags" : false,
-    "tagProperty" : "/properties/Tags"
+    "tagProperty" : "/properties/Tags",
+    "permissions" : [ "ec2:CreateTags", "ec2:DeleteTags", "ec2:DescribeTags" ]
   },
   "handlers" : {
     "create" : {
-      "permissions" : [ "ec2:CreateVolume", "ec2:DescribeVolumes", "ec2:DescribeVolumeAttribute", "ec2:ModifyVolumeAttribute", "ec2:CreateTags", "kms:GenerateDataKeyWithoutPlaintext", "kms:CreateGrant" ]
+      "permissions" : [ "ec2:CreateVolume", "ec2:DescribeVolumes", "ec2:DescribeVolumeAttribute", "ec2:ModifyVolumeAttribute", "ec2:CreateTags", "kms:GenerateDataKeyWithoutPlaintext", "kms:CreateGrant" ],
+      "timeoutInMinutes" : 725
     },
     "read" : {
       "permissions" : [ "ec2:DescribeVolumes", "ec2:DescribeVolumeAttribute", "ec2:DescribeTags" ]
