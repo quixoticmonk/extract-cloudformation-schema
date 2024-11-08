@@ -233,15 +233,14 @@
         "tagOnCreate": true,
         "tagUpdatable": true,
         "cloudFormationSystemTags": false,
-        "tagProperty": "/properties/Tags"
+        "tagProperty": "/properties/Tags",
+        "permissions": ["ec2:CreateTags", "ec2:DescribeTags", "ec2:DeleteTags"]
     },
     "handlers": {
         "create": {
             "permissions": [
                 "ec2:CreateVerifiedAccessEndpoint",
                 "ec2:DescribeVerifiedAccessEndpoints",
-                "ec2:CreateTags",
-                "ec2:DescribeTags",
                 "iam:CreateServiceLinkedRole",
                 "iam:ListRoles",
                 "acm:GetCertificateWithPK",
@@ -258,9 +257,10 @@
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "elasticloadbalancing:DescribeListeners",
                 "elasticloadbalancing:DescribeListenerCertificates",
+                "ec2:CreateTags",
+                "ec2:DescribeTags",
                 
                 "acm:DeleteCertificateRelation",
-                "ec2:DeleteTags",
                 "ec2:DeleteVerifiedAccessEndpoint",
                 "ec2:GetVerifiedAccessEndpointPolicy",
                 "ec2:ModifyVerifiedAccessEndpoint",
@@ -285,9 +285,7 @@
                 "acm:DeleteCertificateRelation",
                 "acm:DescribeCertificate",
                 "acm:GetCertificateWithPK",
-                "ec2:CreateTags",
                 "ec2:CreateVerifiedAccessEndpoint",
-                "ec2:DeleteTags",
                 "ec2:DeleteVerifiedAccessEndpoint",
                 "ec2:DescribeAccountAttributes",
                 "ec2:DescribeNetworkInterfaces",
@@ -319,9 +317,6 @@
                 "ec2:ModifyVerifiedAccessEndpointPolicy",
                 "ec2:DescribeVerifiedAccessEndpoints",
                 "ec2:GetVerifiedAccessEndpointPolicy",
-                "ec2:DescribeTags",
-                "ec2:DeleteTags",
-                "ec2:CreateTags",
                 "acm:GetCertificateWithPK",
                 "acm:DescribeCertificate",
                 "acm:CreateCertificateRelation",
@@ -338,6 +333,9 @@
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "elasticloadbalancing:DescribeListeners",
                 "elasticloadbalancing:DescribeListenerCertificates",
+                "ec2:DescribeTags",
+                "ec2:DeleteTags",
+                "ec2:CreateTags",
 
                 "ec2:CreateVerifiedAccessEndpoint",
                 "ec2:DeleteVerifiedAccessEndpoint",
@@ -355,8 +353,8 @@
         "delete": {
             "permissions": [
                 "ec2:DescribeVerifiedAccessEndpoints",
-                "ec2:DescribeTags",
                 "ec2:DeleteVerifiedAccessEndpoint",
+                "ec2:DescribeTags",
                 "ec2:DeleteTags",
                 "sso:DeleteManagedApplicationInstance",
                 "acm:DeleteCertificateRelation",
@@ -364,7 +362,6 @@
 
                 "acm:CreateCertificateRelation",
                 "acm:GetCertificateWithPK",
-                "ec2:CreateTags",
                 "ec2:CreateVerifiedAccessEndpoint",
                 "ec2:DescribeAccountAttributes",
                 "ec2:DescribeNetworkInterfaces",
@@ -400,9 +397,7 @@
                 "acm:DeleteCertificateRelation",
                 "acm:DescribeCertificate",
                 "acm:GetCertificateWithPK",
-                "ec2:CreateTags",
                 "ec2:CreateVerifiedAccessEndpoint",
-                "ec2:DeleteTags",
                 "ec2:DeleteVerifiedAccessEndpoint",
                 "ec2:DescribeAccountAttributes",
                 "ec2:DescribeNetworkInterfaces",
