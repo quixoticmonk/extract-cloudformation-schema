@@ -65,7 +65,14 @@
         }
     },
     "additionalProperties": false,
-    "taggable": true,
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": true,
+        "tagUpdatable": true,
+        "cloudFormationSystemTags": true,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["iotsitewise:TagResource", "iotsitewise:UntagResource", "iotsitewise:ListTagsForResource"]
+    },
     "required": [
         "PortalId",
         "ProjectName"
@@ -118,7 +125,8 @@
         },
         "list": {
             "permissions": [
-                "iotsitewise:ListProjects"
+                "iotsitewise:ListProjects",
+                "iotsitewise:ListTagsForResource"
             ]
         }
     }
