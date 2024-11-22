@@ -98,6 +98,17 @@
                     "maximum": 100
                 }
             }
+        },
+        "NodeRepairConfig": {
+            "description": "The node auto repair configuration for node group.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Enabled": {
+                    "description": "Set this value to true to enable node auto repair for the node group.",
+                    "type": "boolean"
+                }
+            }
         }
     },
     "properties": {
@@ -198,6 +209,10 @@
             "description": "The node group update configuration.",
             "$ref": "#/definitions/UpdateConfig"
         },
+        "NodeRepairConfig": {
+            "description": "The node auto repair configuration for node group.",
+            "$ref": "#/definitions/NodeRepairConfig"
+        },
         "Version": {
             "description": "The Kubernetes version to use for your managed nodes.",
             "type": "string"
@@ -216,7 +231,10 @@
         "tagUpdatable": true,
         "cloudFormationSystemTags": true,
         "tagProperty": "/properties/Tags",
-        "permissions": ["eks:TagResource", "eks:UntagResource"]
+        "permissions": [
+            "eks:TagResource",
+            "eks:UntagResource"
+        ]
     },
     "required": [
         "ClusterName",
@@ -284,7 +302,9 @@
                         "$ref": "resource-schema.json#/properties/ClusterName"
                     }
                 },
-                "required": ["ClusterName"]
+                "required": [
+                    "ClusterName"
+                ]
             },
             "permissions": [
                 "eks:ListNodegroups"
