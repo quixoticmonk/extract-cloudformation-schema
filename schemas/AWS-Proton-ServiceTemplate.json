@@ -100,6 +100,7 @@
       "permissions": [
         "proton:CreateServiceTemplate",
         "proton:TagResource",
+<<<<<<< HEAD
         "proton:GetServiceTemplate",
         "kms:CancelKeyDeletion",
         "kms:CreateAlias",
@@ -178,6 +179,14 @@
         "kms:UpdateKeyDescription",
         "kms:UpdatePrimaryRegion"
       ]
+=======
+        "kms:*",
+        "proton:GetServiceTemplate"
+      ]
+    },
+    "read": {
+      "permissions": ["proton:GetServiceTemplate", "proton:ListTagsForResource", "kms:*"]
+>>>>>>> ad372ee (fix: cfn schemas list)
     },
     "update": {
       "permissions": [
@@ -187,6 +196,7 @@
         "proton:TagResource",
         "proton:UntagResource",
         "proton:UpdateServiceTemplate",
+<<<<<<< HEAD
         "kms:CancelKeyDeletion",
         "kms:CreateAlias",
         "kms:CreateCustomKeyStore",
@@ -222,12 +232,16 @@
         "kms:UpdateCustomKeyStore",
         "kms:UpdateKeyDescription",
         "kms:UpdatePrimaryRegion"
+=======
+        "kms:*"
+>>>>>>> ad372ee (fix: cfn schemas list)
       ]
     },
     "delete": {
       "permissions": [
         "proton:DeleteServiceTemplate",
         "proton:UntagResource",
+<<<<<<< HEAD
         "proton:GetServiceTemplate",
         "kms:CancelKeyDeletion",
         "kms:CreateAlias",
@@ -270,6 +284,14 @@
       "permissions": [
         "proton:ListServiceTemplates"
       ]
+=======
+        "kms:*",
+        "proton:GetServiceTemplate"
+      ]
+    },
+    "list": {
+      "permissions": ["proton:ListServiceTemplates"]
+>>>>>>> ad372ee (fix: cfn schemas list)
     }
   },
   "additionalProperties": false,
@@ -278,6 +300,7 @@
     "tagOnCreate": true,
     "tagUpdatable": true,
     "cloudFormationSystemTags": true,
+<<<<<<< HEAD
     "tagProperty": "/properties/Tags",
     "permissions": [
       "proton:ListTagsForResource",
@@ -287,3 +310,9 @@
   },
   "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-proton"
 }
+=======
+    "tagProperty": "/properties/Tags"
+  },
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-proton"
+}
+>>>>>>> ad372ee (fix: cfn schemas list)

@@ -96,6 +96,7 @@
     "create": {
       "permissions": [
         "proton:CreateEnvironmentTemplate",
+<<<<<<< HEAD
         "proton:DeleteEnvironmentTemplate",
         "proton:ListTagsForResource",
         "proton:TagResource",
@@ -179,10 +180,20 @@
         "kms:UpdateKeyDescription",
         "kms:UpdatePrimaryRegion"
       ]
+=======
+        "proton:TagResource",
+        "proton:GetEnvironmentTemplate",
+        "kms:*"
+      ]
+    },
+    "read": {
+      "permissions": ["proton:GetEnvironmentTemplate", "proton:ListTagsForResource", "kms:*"]
+>>>>>>> ad372ee (fix: cfn schemas list)
     },
     "update": {
       "permissions": [
         "proton:CreateEnvironmentTemplate",
+<<<<<<< HEAD
         "proton:DeleteEnvironmentTemplate",
         "proton:GetEnvironmentTemplate",
         "proton:ListTagsForResource",
@@ -224,10 +235,19 @@
         "kms:UpdateCustomKeyStore",
         "kms:UpdateKeyDescription",
         "kms:UpdatePrimaryRegion"
+=======
+        "proton:ListTagsForResource",
+        "proton:TagResource",
+        "proton:UntagResource",
+        "proton:UpdateEnvironmentTemplate",
+        "proton:GetEnvironmentTemplate",
+        "kms:*"
+>>>>>>> ad372ee (fix: cfn schemas list)
       ]
     },
     "delete": {
       "permissions": [
+<<<<<<< HEAD
         "proton:CreateEnvironmentTemplate",
         "proton:DeleteEnvironmentTemplate",
         "proton:GetEnvironmentTemplate",
@@ -275,6 +295,15 @@
       "permissions": [
         "proton:ListEnvironmentTemplates"
       ]
+=======
+        "proton:DeleteEnvironmentTemplate",
+        "proton:GetEnvironmentTemplate",
+        "kms:*"
+      ]
+    },
+    "list": {
+      "permissions": ["proton:ListEnvironmentTemplates"]
+>>>>>>> ad372ee (fix: cfn schemas list)
     }
   },
   "additionalProperties": false,
@@ -283,6 +312,7 @@
     "tagOnCreate": true,
     "tagUpdatable": true,
     "cloudFormationSystemTags": true,
+<<<<<<< HEAD
     "tagProperty": "/properties/Tags",
     "permissions": [
       "proton:ListTagsForResource",
@@ -292,3 +322,9 @@
   },
   "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-proton"
 }
+=======
+    "tagProperty": "/properties/Tags"
+  },
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-proton"
+}
+>>>>>>> ad372ee (fix: cfn schemas list)

@@ -23,6 +23,7 @@
       "type": "string",
       "enum": [
         "XML",
+<<<<<<< HEAD
         "JSON",
         "NOT_USED"
       ]
@@ -141,6 +142,11 @@
       ],
       "additionalProperties": false
     },
+=======
+        "JSON"
+      ]
+    },
+>>>>>>> ad372ee (fix: cfn schemas list)
     "Tag": {
       "type": "object",
       "properties": {
@@ -161,12 +167,15 @@
       ],
       "additionalProperties": false
     },
+<<<<<<< HEAD
     "ToFormat": {
       "type": "string",
       "enum": [
         "X12"
       ]
     },
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
     "TransformerStatus": {
       "type": "string",
       "enum": [
@@ -189,6 +198,7 @@
     "X12TransactionSet": {
       "type": "string",
       "enum": [
+<<<<<<< HEAD
         "X12_100",
         "X12_101",
         "X12_102",
@@ -307,11 +317,27 @@
         "X12_271",
         "X12_272",
         "X12_273",
+=======
+        "X12_110",
+        "X12_180",
+        "X12_204",
+        "X12_210",
+        "X12_211",
+        "X12_214",
+        "X12_215",
+        "X12_259",
+        "X12_260",
+        "X12_266",
+        "X12_269",
+        "X12_270",
+        "X12_271",
+>>>>>>> ad372ee (fix: cfn schemas list)
         "X12_274",
         "X12_275",
         "X12_276",
         "X12_277",
         "X12_278",
+<<<<<<< HEAD
         "X12_280",
         "X12_283",
         "X12_284",
@@ -507,6 +533,41 @@
         "X12_996",
         "X12_997",
         "X12_998",
+=======
+        "X12_310",
+        "X12_315",
+        "X12_322",
+        "X12_404",
+        "X12_410",
+        "X12_417",
+        "X12_421",
+        "X12_426",
+        "X12_810",
+        "X12_820",
+        "X12_824",
+        "X12_830",
+        "X12_832",
+        "X12_834",
+        "X12_835",
+        "X12_837",
+        "X12_844",
+        "X12_846",
+        "X12_849",
+        "X12_850",
+        "X12_852",
+        "X12_855",
+        "X12_856",
+        "X12_860",
+        "X12_861",
+        "X12_864",
+        "X12_865",
+        "X12_869",
+        "X12_870",
+        "X12_940",
+        "X12_945",
+        "X12_990",
+        "X12_997",
+>>>>>>> ad372ee (fix: cfn schemas list)
         "X12_999",
         "X12_270_X279",
         "X12_271_X279",
@@ -538,8 +599,11 @@
       "enum": [
         "VERSION_4010",
         "VERSION_4030",
+<<<<<<< HEAD
         "VERSION_4050",
         "VERSION_4060",
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
         "VERSION_5010",
         "VERSION_5010_HIPAA"
       ]
@@ -556,6 +620,7 @@
     "FileFormat": {
       "$ref": "#/definitions/FileFormat"
     },
+<<<<<<< HEAD
     "InputConversion": {
       "$ref": "#/definitions/InputConversion"
     },
@@ -567,6 +632,12 @@
       "maxLength": 350000,
       "minLength": 0,
       "description": "This shape is deprecated: This is a legacy trait. Please use input-conversion or output-conversion."
+=======
+    "MappingTemplate": {
+      "type": "string",
+      "maxLength": 350000,
+      "minLength": 0
+>>>>>>> ad372ee (fix: cfn schemas list)
     },
     "ModifiedAt": {
       "type": "string",
@@ -575,20 +646,28 @@
     "Name": {
       "type": "string",
       "maxLength": 254,
+<<<<<<< HEAD
       "minLength": 1,
       "pattern": "^[a-zA-Z0-9_-]{1,512}$"
     },
     "OutputConversion": {
       "$ref": "#/definitions/OutputConversion"
+=======
+      "minLength": 1
+>>>>>>> ad372ee (fix: cfn schemas list)
     },
     "SampleDocument": {
       "type": "string",
       "maxLength": 1024,
+<<<<<<< HEAD
       "minLength": 0,
       "description": "This shape is deprecated: This is a legacy trait. Please use input-conversion or output-conversion."
     },
     "SampleDocuments": {
       "$ref": "#/definitions/SampleDocuments"
+=======
+      "minLength": 0
+>>>>>>> ad372ee (fix: cfn schemas list)
     },
     "Status": {
       "$ref": "#/definitions/TransformerStatus"
@@ -614,6 +693,12 @@
     }
   },
   "required": [
+<<<<<<< HEAD
+=======
+    "EdiType",
+    "FileFormat",
+    "MappingTemplate",
+>>>>>>> ad372ee (fix: cfn schemas list)
     "Name",
     "Status"
   ],
@@ -623,12 +708,15 @@
     "/properties/TransformerArn",
     "/properties/TransformerId"
   ],
+<<<<<<< HEAD
   "deprecatedProperties": [
     "/properties/EdiType",
     "/properties/FileFormat",
     "/properties/MappingTemplate",
     "/properties/SampleDocument"
   ],
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
   "primaryIdentifier": [
     "/properties/TransformerId"
   ],
@@ -680,8 +768,12 @@
     "tagOnCreate": true,
     "tagProperty": "/properties/Tags",
     "tagUpdatable": true,
+<<<<<<< HEAD
     "taggable": true,
     "permissions":  ["b2bi:ListTagsForResource", "b2bi:TagResource", "b2bi:UntagResource"]
+=======
+    "taggable": true
+>>>>>>> ad372ee (fix: cfn schemas list)
   },
   "additionalProperties": false
 }

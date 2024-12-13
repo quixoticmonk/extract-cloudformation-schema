@@ -3,6 +3,7 @@
     "description": "Definition of AWS::Bedrock::DataSource Resource Type",
     "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-aps",
     "definitions": {
+<<<<<<< HEAD
         "BedrockFoundationModelConfiguration": {
             "type": "object",
             "description": "Settings for a foundation model used to parse documents for a data source.",
@@ -23,6 +24,8 @@
             ],
             "additionalProperties": false
         },
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
         "ChunkingConfiguration": {
             "type": "object",
             "description": "Details about how to chunk the documents in the data source. A chunk refers to an excerpt from a data source that is returned when the knowledge base that it belongs to is queried.",
@@ -32,12 +35,15 @@
                 },
                 "FixedSizeChunkingConfiguration": {
                     "$ref": "#/definitions/FixedSizeChunkingConfiguration"
+<<<<<<< HEAD
                 },
                 "HierarchicalChunkingConfiguration": {
                     "$ref": "#/definitions/HierarchicalChunkingConfiguration"
                 },
                 "SemanticChunkingConfiguration": {
                     "$ref": "#/definitions/SemanticChunkingConfiguration"
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
                 }
             },
             "required": [
@@ -50,6 +56,7 @@
             "description": "Knowledge base can split your source data into chunks. A chunk refers to an excerpt from a data source that is returned when the knowledge base that it belongs to is queried. You have the following options for chunking your data. If you opt for NONE, then you may want to pre-process your files by splitting them up such that each file corresponds to a chunk.",
             "enum": [
                 "FIXED_SIZE",
+<<<<<<< HEAD
                 "NONE",
                 "HIERARCHICAL",
                 "SEMANTIC"
@@ -79,6 +86,11 @@
             ],
             "additionalProperties": false
         },
+=======
+                "NONE"
+            ]
+        },
+>>>>>>> ad372ee (fix: cfn schemas list)
         "DataSourceConfiguration": {
             "type": "object",
             "description": "Specifies a raw data source location to ingest.",
@@ -88,6 +100,7 @@
                 },
                 "S3Configuration": {
                     "$ref": "#/definitions/S3DataSourceConfiguration"
+<<<<<<< HEAD
                 },
                 "ConfluenceConfiguration": {
                     "$ref": "#/definitions/ConfluenceDataSourceConfiguration"
@@ -111,6 +124,13 @@
                 {"required": ["SalesforceConfiguration"]},
                 {"required": ["SharePointConfiguration"]},
                 {"required": ["WebConfiguration"]}
+=======
+                }
+            },
+            "required": [
+                "Type",
+                "S3Configuration"
+>>>>>>> ad372ee (fix: cfn schemas list)
             ],
             "additionalProperties": false
         },
@@ -127,11 +147,15 @@
             "type": "string",
             "description": "The type of the data source location.",
             "enum": [
+<<<<<<< HEAD
                 "S3",
                 "CONFLUENCE",
                 "SALESFORCE",
                 "SHAREPOINT",
                 "WEB"
+=======
+                "S3"
+>>>>>>> ad372ee (fix: cfn schemas list)
             ]
         },
         "DataDeletionPolicy": {
@@ -164,6 +188,7 @@
             ],
             "additionalProperties": false
         },
+<<<<<<< HEAD
         "HierarchicalChunkingConfiguration": {
             "type": "object",
             "description": "Configurations for when you choose hierarchical chunking. If you set the chunkingStrategy as NONE, exclude this field.",
@@ -261,6 +286,11 @@
         "S3DataSourceConfiguration": {
             "type": "object",
             "description": "The configuration information to connect to Amazon S3 as your data source.",
+=======
+        "S3DataSourceConfiguration": {
+            "type": "object",
+            "description": "Contains information about the S3 configuration of the data source.",
+>>>>>>> ad372ee (fix: cfn schemas list)
             "properties": {
                 "BucketArn": {
                     "type": "string",
@@ -295,6 +325,7 @@
             ],
             "additionalProperties": false
         },
+<<<<<<< HEAD
         "ConfluenceDataSourceConfiguration": {
             "type": "object",
             "description": "The configuration information to connect to Confluence as your data source.",
@@ -405,6 +436,8 @@
             ],
             "additionalProperties": false
         },
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
         "ServerSideEncryptionConfiguration": {
             "type": "object",
             "description": "Contains details about the server-side encryption for the data source.",
@@ -419,6 +452,7 @@
             },
             "additionalProperties": false
         },
+<<<<<<< HEAD
         "Transformation": {
             "type": "object",
             "description": "A Lambda function that processes documents.",
@@ -470,12 +504,15 @@
             ],
             "additionalProperties": false
         },
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
         "VectorIngestionConfiguration": {
             "type": "object",
             "description": "Details about how to chunk the documents in the data source. A chunk refers to an excerpt from a data source that is returned when the knowledge base that it belongs to is queried.",
             "properties": {
                 "ChunkingConfiguration": {
                     "$ref": "#/definitions/ChunkingConfiguration"
+<<<<<<< HEAD
                 },
                 "CustomTransformationConfiguration": {
                     "$ref": "#/definitions/CustomTransformationConfiguration"
@@ -809,6 +846,11 @@
             "maxItems": 25,
             "minItems": 1,
             "insertionOrder": false
+=======
+                }
+            },
+            "additionalProperties": false
+>>>>>>> ad372ee (fix: cfn schemas list)
         }
     },
     "properties": {
@@ -882,9 +924,13 @@
     ],
     "createOnlyProperties": [
         "/properties/KnowledgeBaseId",
+<<<<<<< HEAD
         "/properties/VectorIngestionConfiguration/ChunkingConfiguration",
         "/properties/VectorIngestionConfiguration/ParsingConfiguration",
         "/properties/DataSourceConfiguration/Type"        
+=======
+        "/properties/VectorIngestionConfiguration"
+>>>>>>> ad372ee (fix: cfn schemas list)
     ],
     "primaryIdentifier": [
         "/properties/KnowledgeBaseId",

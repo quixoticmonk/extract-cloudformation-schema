@@ -2,6 +2,7 @@
   "typeName": "AWS::B2BI::Partnership",
   "description": "Definition of AWS::B2BI::Partnership Resource Type",
   "definitions": {
+<<<<<<< HEAD
     "CapabilityOptions": {
       "type": "object",
       "properties": {
@@ -28,6 +29,8 @@
         }
       ]
     },
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
     "Tag": {
       "type": "object",
       "properties": {
@@ -47,6 +50,7 @@
         "Value"
       ],
       "additionalProperties": false
+<<<<<<< HEAD
     },
     "X12Delimiters": {
       "type": "object",
@@ -169,6 +173,8 @@
         }
       },
       "additionalProperties": false
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
     }
   },
   "properties": {
@@ -181,9 +187,12 @@
         "pattern": "^[a-zA-Z0-9_-]+$"
       }
     },
+<<<<<<< HEAD
     "CapabilityOptions": {
       "$ref": "#/definitions/CapabilityOptions"
     },
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
     "CreatedAt": {
       "type": "string",
       "format": "date-time"
@@ -242,7 +251,10 @@
     }
   },
   "required": [
+<<<<<<< HEAD
     "Capabilities",
+=======
+>>>>>>> ad372ee (fix: cfn schemas list)
     "Email",
     "Name",
     "ProfileId"
@@ -299,8 +311,12 @@
     "tagOnCreate": true,
     "tagProperty": "/properties/Tags",
     "tagUpdatable": true,
+<<<<<<< HEAD
     "taggable": true,
     "permissions":  ["b2bi:ListTagsForResource", "b2bi:TagResource", "b2bi:UntagResource"]
+=======
+    "taggable": true
+>>>>>>> ad372ee (fix: cfn schemas list)
   },
   "additionalProperties": false
 }
