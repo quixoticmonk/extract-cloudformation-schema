@@ -55,28 +55,28 @@ jobs:
             echo "$diff_output" >> pr_body.md
             echo "\`\`\`" >> pr_body.md
             
-            # Update reference file
-            cp current-resources.txt reference-resources.txt
+            # # Update reference file
+            # cp current-resources.txt reference-resources.txt
             
-            # Create PR
-            gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+            # # Create PR
+            # gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
             
-            current_date=$(date +%Y-%m-%d)
-            branch_name="resource-update-${current_date}"
+            # current_date=$(date +%Y-%m-%d)
+            # branch_name="resource-update-${current_date}"
             
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git config --global user.name "GitHub Actions"
+            # git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            # git config --global user.name "GitHub Actions"
             
-            git checkout -b $branch_name
-            git add reference-resources.txt
-            git commit -m "Update CloudFormation resource list ${current_date}"
-            git push origin $branch_name
+            # git checkout -b $branch_name
+            # git add reference-resources.txt
+            # git commit -m "Update CloudFormation resource list ${current_date}"
+            # git push origin $branch_name
             
-            gh pr create \
-              --title "Update CloudFormation resource list ${current_date}" \
-              --body-file pr_body.md \
-              --base main \
-              --head $branch_name
+            # gh pr create \
+            #   --title "Update CloudFormation resource list ${current_date}" \
+            #   --body-file pr_body.md \
+            #   --base main \
+            #   --head $branch_name
           else
             echo "No changes detected"
           fi
