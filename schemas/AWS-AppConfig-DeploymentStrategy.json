@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "typeName": "AWS::AppConfig::DeploymentStrategy",
     "description": "Resource Type definition for AWS::AppConfig::DeploymentStrategy",
     "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-appconfig.git",
@@ -122,72 +121,3 @@
         "permissions": ["appconfig:TagResource", "appconfig:UntagResource", "appconfig:ListTagsForResource"]
     }
 }
-=======
-  "typeName": "AWS::AppConfig::DeploymentStrategy",
-  "description": "Resource Type definition for AWS::AppConfig::DeploymentStrategy",
-  "additionalProperties": false,
-  "properties": {
-    "ReplicateTo": {
-      "type": "string"
-    },
-    "GrowthType": {
-      "type": "string"
-    },
-    "Description": {
-      "type": "string"
-    },
-    "DeploymentDurationInMinutes": {
-      "type": "number"
-    },
-    "GrowthFactor": {
-      "type": "number"
-    },
-    "Id": {
-      "type": "string"
-    },
-    "FinalBakeTimeInMinutes": {
-      "type": "number"
-    },
-    "Tags": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "$ref": "#/definitions/Tags"
-      }
-    },
-    "Name": {
-      "type": "string"
-    }
-  },
-  "definitions": {
-    "Tags": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Value": {
-          "type": "string"
-        },
-        "Key": {
-          "type": "string"
-        }
-      }
-    }
-  },
-  "required": [
-    "ReplicateTo",
-    "DeploymentDurationInMinutes",
-    "GrowthFactor",
-    "Name"
-  ],
-  "createOnlyProperties": [
-    "/properties/Name",
-    "/properties/ReplicateTo"
-  ],
-  "primaryIdentifier": [
-    "/properties/Id"
-  ],
-  "readOnlyProperties": [
-    "/properties/Id"
-  ]
-}
->>>>>>> ad372ee (fix: cfn schemas list)

@@ -21,7 +21,6 @@
         "Value",
         "Key"
       ]
-<<<<<<< HEAD
     },
     "ConfiguredTableAssociationAnalysisRuleType": {
       "type": "string",
@@ -165,8 +164,6 @@
         "Policy"
       ],
       "additionalProperties": false
-=======
->>>>>>> ad372ee (fix: cfn schemas list)
     }
   },
   "properties": {
@@ -214,7 +211,6 @@
       "type": "string",
       "maxLength": 512,
       "minLength": 32
-<<<<<<< HEAD
     },
     "ConfiguredTableAssociationAnalysisRules": {
       "type": "array",
@@ -224,8 +220,6 @@
       },
       "maxItems": 1,
       "minItems": 1
-=======
->>>>>>> ad372ee (fix: cfn schemas list)
     }
   },
   "required": [
@@ -247,25 +241,18 @@
     "/properties/ConfiguredTableAssociationIdentifier",
     "/properties/MembershipIdentifier"
   ],
-<<<<<<< HEAD
   "replacementStrategy": "delete_then_create",
-=======
->>>>>>> ad372ee (fix: cfn schemas list)
   "tagging": {
     "taggable": true,
     "tagOnCreate": true,
     "tagUpdatable": true,
     "cloudFormationSystemTags": true,
-<<<<<<< HEAD
     "tagProperty": "/properties/Tags",
     "permissions": [
       "cleanrooms:ListTagsForResource",
       "cleanrooms:UntagResource",
       "cleanrooms:TagResource"
     ]
-=======
-    "tagProperty": "/properties/Tags"
->>>>>>> ad372ee (fix: cfn schemas list)
   },
   "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-cleanrooms",
   "handlers": {
@@ -276,26 +263,18 @@
         "cleanrooms:ListTagsForResource",
         "cleanrooms:TagResource",
         "cleanrooms:GetConfiguredTableAssociation",
-<<<<<<< HEAD
         "cleanrooms:ListConfiguredTableAssociations",
         "cleanrooms:DeleteConfiguredTableAssociation",
         "cleanrooms:DeleteConfiguredTableAssociationAnalysisRule",
         "cleanrooms:CreateConfiguredTableAssociationAnalysisRule",
         "cleanrooms:GetConfiguredTableAssociationAnalysisRule"
-=======
-        "cleanrooms:ListConfiguredTableAssociations"
->>>>>>> ad372ee (fix: cfn schemas list)
       ]
     },
     "read": {
       "permissions": [
         "cleanrooms:GetConfiguredTableAssociation",
-<<<<<<< HEAD
         "cleanrooms:ListTagsForResource",
         "cleanrooms:GetConfiguredTableAssociationAnalysisRule"
-=======
-        "cleanrooms:ListTagsForResource"
->>>>>>> ad372ee (fix: cfn schemas list)
       ]
     },
     "update": {
@@ -305,15 +284,11 @@
         "iam:PassRole",
         "cleanrooms:ListTagsForResource",
         "cleanrooms:TagResource",
-<<<<<<< HEAD
         "cleanrooms:UntagResource",
         "cleanrooms:DeleteConfiguredTableAssociationAnalysisRule",
         "cleanrooms:CreateConfiguredTableAssociationAnalysisRule",
         "cleanrooms:GetConfiguredTableAssociationAnalysisRule",
         "cleanrooms:UpdateConfiguredTableAssociationAnalysisRule"
-=======
-        "cleanrooms:UntagResource"
->>>>>>> ad372ee (fix: cfn schemas list)
       ]
     },
     "delete": {
@@ -322,13 +297,9 @@
         "cleanrooms:GetConfiguredTableAssociation",
         "cleanrooms:ListConfiguredTableAssociations",
         "cleanrooms:ListTagsForResource",
-<<<<<<< HEAD
         "cleanrooms:UntagResource",
         "cleanrooms:DeleteConfiguredTableAssociationAnalysisRule",
         "cleanrooms:GetConfiguredTableAssociationAnalysisRule"
-=======
-        "cleanrooms:UntagResource"
->>>>>>> ad372ee (fix: cfn schemas list)
       ]
     },
     "list": {
@@ -348,8 +319,4 @@
     }
   },
   "additionalProperties": false
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ad372ee (fix: cfn schemas list)

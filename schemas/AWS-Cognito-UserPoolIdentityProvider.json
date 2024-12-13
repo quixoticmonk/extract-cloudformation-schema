@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "typeName": "AWS::Cognito::UserPoolIdentityProvider",
     "description": "Resource Type definition for AWS::Cognito::UserPoolIdentityProvider",
     "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
@@ -102,52 +101,3 @@
         }
     }
 }
-=======
-  "typeName": "AWS::Cognito::UserPoolIdentityProvider",
-  "description": "Resource Type definition for AWS::Cognito::UserPoolIdentityProvider",
-  "additionalProperties": false,
-  "properties": {
-    "ProviderName": {
-      "type": "string"
-    },
-    "UserPoolId": {
-      "type": "string"
-    },
-    "AttributeMapping": {
-      "type": "object"
-    },
-    "ProviderDetails": {
-      "type": "object"
-    },
-    "ProviderType": {
-      "type": "string"
-    },
-    "Id": {
-      "type": "string"
-    },
-    "IdpIdentifiers": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": {
-        "type": "string"
-      }
-    }
-  },
-  "required": [
-    "ProviderName",
-    "UserPoolId",
-    "ProviderType"
-  ],
-  "createOnlyProperties": [
-    "/properties/UserPoolId",
-    "/properties/ProviderName",
-    "/properties/ProviderType"
-  ],
-  "primaryIdentifier": [
-    "/properties/Id"
-  ],
-  "readOnlyProperties": [
-    "/properties/Id"
-  ]
-}
->>>>>>> ad372ee (fix: cfn schemas list)
