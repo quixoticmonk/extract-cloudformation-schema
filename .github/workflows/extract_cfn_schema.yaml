@@ -31,15 +31,15 @@ jobs:
         python main.py
 
     - name: Create directory if not exists
-      run: mkdir -p schema 
+      run: mkdir -p schemas
 
     - name: Move output files to directory
-      run: mv *.json schema/
+      run: mv *.json schemas/
 
     - name: Commit changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add schema/
+        git add schemas/
         git commit -m "Add output files"
         git push

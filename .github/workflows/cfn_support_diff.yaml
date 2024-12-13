@@ -1,0 +1,88 @@
+name: CloudFormation Resource Diff
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:      # Allows manual trigger
+
+jobs:
+  generate-and-diff:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.git_role }}
+          aws-region: us-east-1
+
+      - name: Generate current resource list
+        run: |
+          aws cloudformation list-types \
+            --type RESOURCE \
+            --visibility PUBLIC \
+            --provisioning-type FULLY_MUTABLE \
+            --filters Type=TYPE_NAME_PREFIX,Value=AWS:: | \
+          jq -r '.TypeSummaries[].TypeName' | sort > current-resources.txt
+
+      - name: Compare with reference list
+        run: |
+          cd schemas && \
+          for f in *.json; do \
+              echo "AWS::$(echo ${f%.*} | tr '_' '::')" \
+          done | sort > ../reference-resources.txt
+          if [ ! -f reference-resources.txt ]; then
+            cp current-resources.txt reference-resources.txt
+          fi
+          
+          # Generate diff
+          diff_output=$(diff -u reference-resources.txt current-resources.txt || true)
+          
+          if [ ! -z "$diff_output" ]; then
+            echo "Changes detected!"
+            echo "$diff_output" > changes.diff
+            
+            # Create summary of changes
+            echo "### CloudFormation Resource Changes" > pr_body.md
+            echo "\`\`\`diff" >> pr_body.md
+            echo "$diff_output" >> pr_body.md
+            echo "\`\`\`" >> pr_body.md
+            
+            # Update reference file
+            cp current-resources.txt reference-resources.txt
+            
+            # Create PR
+            gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+            
+            current_date=$(date +%Y-%m-%d)
+            branch_name="resource-update-${current_date}"
+            
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "GitHub Actions"
+            
+            git checkout -b $branch_name
+            git add reference-resources.txt
+            git commit -m "Update CloudFormation resource list ${current_date}"
+            git push origin $branch_name
+            
+            gh pr create \
+              --title "Update CloudFormation resource list ${current_date}" \
+              --body-file pr_body.md \
+              --base main \
+              --head $branch_name
+          else
+            echo "No changes detected"
+          fi
+
+      # - name: Upload diff as artifact
+      #   if: hashFiles('changes.diff') != ''
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: resource-changes
+      #     path: changes.diff
