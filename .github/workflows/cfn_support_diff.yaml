@@ -44,42 +44,9 @@ jobs:
           
           # Generate diff
           diff_output=$(diff -u reference-resources.txt current-resources.txt || true)
+          echo diff_output
           
-          if [ ! -z "$diff_output" ]; then
-            echo "Changes detected!"
-            echo "$diff_output" > changes.diff
-            
-            # Create summary of changes
-            echo "### CloudFormation Resource Changes" > pr_body.md
-            echo "\`\`\`diff" >> pr_body.md
-            echo "$diff_output" >> pr_body.md
-            echo "\`\`\`" >> pr_body.md
-            
-            # # Update reference file
-            # cp current-resources.txt reference-resources.txt
-            
-            # # Create PR
-            # gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
-            
-            # current_date=$(date +%Y-%m-%d)
-            # branch_name="resource-update-${current_date}"
-            
-            # git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            # git config --global user.name "GitHub Actions"
-            
-            # git checkout -b $branch_name
-            # git add reference-resources.txt
-            # git commit -m "Update CloudFormation resource list ${current_date}"
-            # git push origin $branch_name
-            
-            # gh pr create \
-            #   --title "Update CloudFormation resource list ${current_date}" \
-            #   --body-file pr_body.md \
-            #   --base main \
-            #   --head $branch_name
-          else
-            echo "No changes detected"
-          fi
+
 
       # - name: Upload diff as artifact
       #   if: hashFiles('changes.diff') != ''
