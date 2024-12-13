@@ -38,7 +38,7 @@ jobs:
           
           # Generate diff
           diff_output=$(diff -u reference-resources.txt current-resources.txt || true)
-          echo diff_output
+          echo $diff_output
           
 
 
