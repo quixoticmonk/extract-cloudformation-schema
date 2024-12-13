@@ -29,18 +29,12 @@ jobs:
             --type RESOURCE \
             --visibility PUBLIC \
             --provisioning-type FULLY_MUTABLE \
-            --filters Type=TYPE_NAME_PREFIX,Value=AWS:: | \
+            --filters TypeNamePrefix="AWS::" | \
           jq -r '.TypeSummaries[].TypeName' | sort > current-resources.txt
 
       - name: Compare with reference list
         run: |
-          cd schemas && \
-          for f in *.json; do \
-              echo "AWS::$(echo ${f%.*} | tr '_' '::')" \
-          done | sort > ../reference-resources.txt
-          if [ ! -f reference-resources.txt ]; then
-            cp current-resources.txt reference-resources.txt
-          fi
+          sh reference_resources.sh schemas
           
           # Generate diff
           diff_output=$(diff -u reference-resources.txt current-resources.txt || true)
