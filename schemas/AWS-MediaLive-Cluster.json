@@ -188,7 +188,8 @@
         "delete": {
             "permissions": [
                 "medialive:DeleteCluster",
-                "medialive:DescribeCluster"
+                "medialive:DescribeCluster",
+                "ecs:DeleteService"
             ]
         },
         "list": {

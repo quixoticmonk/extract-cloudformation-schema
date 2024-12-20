@@ -140,7 +140,8 @@
         },
         "read": {
             "permissions": [
-                "imagebuilder:GetComponent"
+                "imagebuilder:GetComponent",
+                "kms:Decrypt"
             ]
         },
         "delete": {
@@ -152,7 +153,8 @@
         },
         "list": {
             "permissions": [
-                "imagebuilder:ListComponents"
+                "imagebuilder:ListComponents",
+                "imagebuilder:ListComponentBuildVersions"
             ],
             "handlerSchema":{
                 "properties": {
