@@ -140,7 +140,8 @@
                 "es:AddTags",
                 "es:ListApplications"
 
-            ]
+            ],
+            "timeoutInMinutes": 30
         },
         "read": {
             "permissions": [
