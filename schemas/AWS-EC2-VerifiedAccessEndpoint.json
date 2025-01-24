@@ -273,7 +273,7 @@
                 "kms:GenerateDataKey",
                 "kms:Decrypt"
             ],
-            "timeoutInMinutes": 60
+            "timeoutInMinutes": 600
         },
         "read": {
             "permissions": [

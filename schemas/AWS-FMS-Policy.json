@@ -307,7 +307,7 @@
         "NetworkAclCommonPolicy": {
             "description": "Network ACL common policy.",
             "type": "object",
-            "properties":  {
+            "properties": {
                 "NetworkAclEntrySet": {
                     "$ref": "#/definitions/NetworkAclEntrySet"
                 }
@@ -388,6 +388,13 @@
             },
             "maxItems": 8,
             "insertionOrder": true
+        },
+        "ResourceTagLogicalOperator": {
+            "type": "string",
+            "enum": [
+                "AND",
+                "OR"
+            ]
         },
         "ResourceType": {
             "$ref": "#/definitions/ResourceType"

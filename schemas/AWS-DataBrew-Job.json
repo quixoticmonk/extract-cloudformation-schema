@@ -550,6 +550,7 @@
       "permissions": [
         "databrew:CreateProfileJob",
         "databrew:CreateRecipeJob",
+        "databrew:DescribeJob",
         "databrew:TagResource",
         "databrew:UntagResource",
         "iam:PassRole"

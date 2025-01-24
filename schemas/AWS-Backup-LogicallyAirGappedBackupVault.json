@@ -91,7 +91,9 @@
   ],
   "readOnlyProperties": [
     "/properties/BackupVaultArn",
-    "/properties/EncryptionKeyArn"
+    "/properties/EncryptionKeyArn",
+    "/properties/VaultState",
+    "/properties/VaultType"
   ],
   "primaryIdentifier": [
     "/properties/BackupVaultName"

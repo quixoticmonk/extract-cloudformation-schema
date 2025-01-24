@@ -206,6 +206,7 @@
         "create": {
             "permissions": [
                 "databrew:CreateRuleset",
+                "databrew:DescribeRuleset",
                 "databrew:TagResource",
                 "databrew:UntagResource",
                 "iam:PassRole"

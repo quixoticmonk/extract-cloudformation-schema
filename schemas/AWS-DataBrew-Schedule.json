@@ -74,6 +74,7 @@
     "create": {
       "permissions": [
         "databrew:CreateSchedule",
+        "databrew:DescribeSchedule",
         "databrew:TagResource",
         "databrew:UntagResource",
         "iam:PassRole"

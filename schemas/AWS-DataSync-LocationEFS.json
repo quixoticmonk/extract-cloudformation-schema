@@ -138,11 +138,7 @@
   ],
   "createOnlyProperties": [
     "/properties/Ec2Config",
-    "/properties/EfsFilesystemArn",
-    "/properties/Subdirectory",
-    "/properties/FileSystemAccessRoleArn",
-    "/properties/InTransitEncryption",
-    "/properties/AccessPointArn"
+    "/properties/EfsFilesystemArn"
   ],
   "writeOnlyProperties": [
     "/properties/EfsFilesystemArn",
@@ -171,10 +167,13 @@
     },
     "update": {
       "permissions": [
+        "datasync:UpdateLocationEfs",
         "datasync:DescribeLocationEfs",
         "datasync:ListTagsForResource",
         "datasync:TagResource",
-        "datasync:UntagResource"
+        "datasync:UntagResource",
+        "elasticfilesystem:DescribeFileSystems",
+        "elasticfilesystem:DescribeAccessPoints"
       ]
     },
     "delete": {
