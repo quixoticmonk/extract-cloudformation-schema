@@ -84,7 +84,11 @@
         "tagOnCreate": true,
         "tagUpdatable": true,
         "cloudFormationSystemTags": true,
-        "tagProperty": "/properties/Tags"
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "connect:UntagResource",
+            "connect:TagResource"
+        ]
     },
     "required": [
         "TargetArn"
@@ -97,7 +101,9 @@
                 "connect:DescribePhoneNumber",
                 "connect:TagResource",
                 "connect:ImportPhoneNumber",
-                "sms-voice:DescribePhoneNumbers"
+                "sms-voice:DescribePhoneNumbers",
+                "social-messaging:GetLinkedWhatsAppBusinessAccountPhoneNumber",
+                "social-messaging:TagResource"
             ]
         },
         "read": {
