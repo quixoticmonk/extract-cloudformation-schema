@@ -141,7 +141,6 @@
                             "type": "string"
                         },
                         "SslMode": {
-                            "type": "object",
                             "$ref": "#/definitions/DmsSslModeValue"
                         },
                         "CertificateArn": {
@@ -167,7 +166,6 @@
                             "type": "integer"
                         },
                         "SslMode": {
-                            "type": "object",
                             "$ref": "#/definitions/DmsSslModeValue"
                         },
                         "CertificateArn": {
@@ -195,7 +193,6 @@
                             "type": "string"
                         },
                         "SslMode": {
-                            "type": "object",
                             "$ref": "#/definitions/DmsSslModeValue"
                         },
                         "CertificateArn": {
@@ -239,7 +236,6 @@
                             "type": "string"
                         },
                         "SslMode": {
-                            "type": "object",
                             "$ref": "#/definitions/DmsSslModeValue"
                         },
                         "CertificateArn": {
@@ -286,7 +282,6 @@
                             "type": "integer"
                         },
                         "SslMode": {
-                            "type": "object",
                             "$ref": "#/definitions/DmsSslModeValue"
                         },
                         "CertificateArn": {
@@ -314,7 +309,6 @@
                             "type": "string"
                         },
                         "SslMode": {
-                            "type": "object",
                             "$ref": "#/definitions/MongoDbSslModeValue"
                         },
                         "CertificateArn": {
@@ -342,21 +336,18 @@
                             "type": "string"
                         },
                         "SslMode": {
-                            "type": "object",
                             "$ref": "#/definitions/MongoDbSslModeValue"
                         },
                         "CertificateArn": {
                             "type": "string"
                         },
                         "AuthType": {
-                            "type": "object",
                             "$ref": "#/definitions/MongoDbAuthType"
                         },
                         "AuthSource": {
                             "type": "string"
                         },
                         "AuthMechanism": {
-                            "type": "object",
                             "$ref": "#/definitions/MongoDbAuthMechanism"
                         }
                     },
