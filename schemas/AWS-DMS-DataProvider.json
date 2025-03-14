@@ -47,6 +47,13 @@
                 "verify-full"
             ]
         },
+        "Db2SslModeValue": {
+            "type": "string",
+            "enum": [
+                "none",
+                "verify-ca"
+            ]
+        },
         "MongoDbSslModeValue": {
             "type": "string",
             "enum": [
@@ -115,7 +122,9 @@
                 "redshift",
                 "mariadb",
                 "mongodb",
-                "docdb"
+                "docdb",
+                "db2",
+                "db2_zos"
             ]
         },
         "ExactSettings": {
@@ -356,6 +365,62 @@
                         "Port"
                     ],
                     "additionalProperties": false
+                },
+                "IbmDb2LuwSettings": {
+                    "description": "IbmDb2LuwSettings property identifier.",
+                    "type": "object",
+                    "properties": {
+                        "ServerName": {
+                            "type": "string"
+                        },
+                        "Port": {
+                            "type": "integer"
+                        },
+                        "DatabaseName": {
+                            "type": "string"
+                        },
+                        "SslMode": {
+                            "$ref": "#/definitions/Db2SslModeValue"
+                        },
+                        "CertificateArn": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "ServerName",
+                        "Port",
+                        "SslMode",
+                        "DatabaseName"
+                    ],
+                    "additionalProperties": false
+                },
+                "IbmDb2zOsSettings": {
+                    "description": "IbmDb2zOsSettings property identifier.",
+                    "type": "object",
+                    "properties": {
+                        "ServerName": {
+                            "type": "string"
+                        },
+                        "Port": {
+                            "type": "integer"
+                        },
+                        "DatabaseName": {
+                            "type": "string"
+                        },
+                        "SslMode": {
+                            "$ref": "#/definitions/Db2SslModeValue"
+                        },
+                        "CertificateArn": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "ServerName",
+                        "Port",
+                        "SslMode",
+                        "DatabaseName"
+                    ],
+                    "additionalProperties": false
                 }
             },
             "anyOf": [
@@ -397,6 +462,16 @@
                 {
                     "required": [
                         "MongoDbSettings"
+                    ]
+                },
+                {
+                    "required": [
+                        "IbmDb2LuwSettings"
+                    ]
+                },
+                {
+                    "required": [
+                        "IbmDb2zOsSettings"
                     ]
                 }
             ],
