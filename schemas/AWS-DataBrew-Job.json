@@ -534,13 +534,12 @@
   "primaryIdentifier": ["/properties/Name"],
   "createOnlyProperties": [
     "/properties/Name",
-    "/properties/Type",
-    "/properties/Tags"
+    "/properties/Type"
   ],
   "tagging": {
     "taggable": true,
     "tagOnCreate": true,
-    "tagUpdatable": false,
+    "tagUpdatable": true,
     "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
     "permissions": ["databrew:TagResource", "databrew:UntagResource", "databrew:ListTagsForResource"]
@@ -559,7 +558,6 @@
     "read": {
       "permissions": [
         "databrew:DescribeJob",
-        "databrew:ListTagsForResource",
         "iam:ListRoles"
       ]
     },
@@ -567,6 +565,8 @@
       "permissions": [
         "databrew:UpdateProfileJob",
         "databrew:UpdateRecipeJob",
+        "databrew:TagResource",
+        "databrew:UntagResource",
         "iam:PassRole"
       ]
     },

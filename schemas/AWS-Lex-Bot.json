@@ -232,26 +232,26 @@
     },
     "S3BucketLogDestination": {
       "description": "Specifies an Amazon S3 bucket for logging audio conversations",
-      "type" : "object",
-      "properties" : {
-        "S3BucketArn" : {
-          "type" : "string",
-          "description" : "The Amazon Resource Name (ARN) of an Amazon S3 bucket where audio log files are stored.",
-          "minLength" : 1,
-          "maxLength" : 2048,
-          "pattern" : "^arn:[\\w\\-]+:s3:::[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]$"
+      "type": "object",
+      "properties": {
+        "S3BucketArn": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of an Amazon S3 bucket where audio log files are stored.",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^arn:[\\w\\-]+:s3:::[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]$"
         },
-        "LogPrefix" : {
-          "type" : "string",
-          "description" : "The Amazon S3 key of the deployment package.",
-          "minLength" : 0,
-          "maxLength" : 1024
+        "LogPrefix": {
+          "type": "string",
+          "description": "The Amazon S3 key of the deployment package.",
+          "minLength": 0,
+          "maxLength": 1024
         },
-        "KmsKeyArn" : {
-          "type" : "string",
-          "description" : "The Amazon Resource Name (ARN) of an AWS Key Management Service (KMS) key for encrypting audio log files stored in an S3 bucket.",
-          "minLength" : 20,
-          "maxLength" : 2048,
+        "KmsKeyArn": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of an AWS Key Management Service (KMS) key for encrypting audio log files stored in an S3 bucket.",
+          "minLength": 20,
+          "maxLength": 2048,
           "pattern": "^arn:[\\w\\-]+:kms:[\\w\\-]+:[\\d]{12}:(?:key\\/[\\w\\-]+|alias\\/[a-zA-Z0-9:\\/_\\-]{1,256})$"
         }
       },
@@ -408,7 +408,9 @@
           "description": "Indicates the type of Amazon Polly voice that Amazon Lex should use for voice interaction with the user. For more information, see the engine parameter of the SynthesizeSpeech operation in the Amazon Polly developer guide.",
           "enum": [
             "standard",
-            "neural"
+            "neural",
+            "long-form",
+            "generative"
           ]
         }
       },
@@ -418,7 +420,7 @@
       "additionalProperties": false
     },
     "ConfidenceThreshold": {
-      "description": "The specified confidence threshold for inserting the AMAZON.FallbackIntent and AMAZON.KendraSearchIntent intents.",
+      "description": "The specified confidence threshold for inserting the AMAZON.FallbackIntent, AMAZON.KendraSearchIntent intents and AMAZON.QnAIntent.",
       "type": "number",
       "minimum": 0,
       "maximum": 1
@@ -1143,6 +1145,52 @@
       "minLength": 1,
       "maxLength": 5000
     },
+    "BedrockModelSpecification": {
+      "description": "Contains information about the Amazon Bedrock model used to interpret the prompt used in descriptive bot building.",
+      "type": "object",
+      "properties": {
+        "ModelArn": {
+          "description": "The ARN of the foundation model used in descriptive bot building.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "BedrockGuardrailConfiguration": {
+          "description": "The guardrail configuration in the Bedrock model specification details.",
+          "type": "object",
+          "properties": {
+            "BedrockGuardrailIdentifier": {
+              "description": "The unique guardrail id for the Bedrock guardrail configuration.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "BedrockGuardrailVersion": {
+              "description": "The guardrail version for the Bedrock guardrail configuration.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            }
+          },
+          "additionalProperties": false
+        },
+        "BedrockTraceStatus": {
+          "description": "The Bedrock trace status in the Bedrock model specification details.",
+          "type": "string",
+          "enum": ["ENABLED", "DISABLED"]
+        },
+        "BedrockModelCustomPrompt": {
+          "description": "The custom prompt used in the Bedrock model specification details.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        }
+      },
+      "required": [
+        "ModelArn"
+      ],
+      "additionalProperties": false
+    },
     "KendraConfiguration": {
       "description": "Configuration for searching a Amazon Kendra index specified for the intent.",
       "type": "object",
@@ -1160,6 +1208,145 @@
       },
       "required": [
         "KendraIndex"
+      ],
+      "additionalProperties": false
+    },
+    "QnAIntentConfiguration": {
+      "description": "Details about the the configuration of the built-in Amazon.QnAIntent.",
+      "type": "object",
+      "properties": {
+        "DataSourceConfiguration": {
+          "description": "Contains details about the configuration of the data source used for the AMAZON.QnAIntent.",
+          "type": "object",
+          "properties": {
+            "OpensearchConfiguration": {
+              "description": "Contains details about the configuration of the Amazon OpenSearch Service database used for the AMAZON.QnAIntent.",
+              "type": "object",
+              "properties": {
+                "DomainEndpoint": {
+                  "description": "The endpoint of the Amazon OpenSearch Service domain.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 5000
+                },
+                "IndexName": {
+                  "description": "The name of the Amazon OpenSearch Service index.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 5000
+                },
+                "IncludeFields": {
+                  "description": "List of fields to include",
+                  "type": "array",
+                  "insertionOrder": false,
+                  "items": {
+                    "description": "Contains a list of fields from the Amazon OpenSearch Service that the model can use to generate the answer to the query.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 5000
+                  }
+                },
+                "ExactResponse": {
+                  "description": "Specifies whether to return an exact response or to return an answer generated by the model using the fields you specify from the database.",
+                  "type": "boolean"
+                },
+                "ExactResponseFields": {
+                  "description": "Contains the names of the fields used for an exact response to the user.",
+                  "type": "object",
+                  "properties": {
+                    "QuestionField": {
+                      "description": "The name of the field that contains the query made to the OpenSearch Service database.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5000
+                    },
+                    "AnswerField": {
+                      "description": "The name of the field that contains the answer to the query made to the OpenSearch Service database.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5000
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "BedrockKnowledgeStoreConfiguration": {
+              "description": "Contains details about the configuration of a Amazon Bedrock knowledge base.",
+              "type": "object",
+              "properties": {
+                "BedrockKnowledgeBaseArn": {
+                  "description": "The base ARN of the knowledge base used.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 5000
+                },
+                "ExactResponse": {
+                  "description": "Specifies whether to return an exact response, or to return an answer generated by the model, using the fields you specify from the database.",
+                  "type": "boolean"
+                },
+                "BKBExactResponseFields": {
+                  "description": "Contains the names of the fields used for an exact response to the user.",
+                  "type": "object",
+                  "properties": {
+                    "AnswerField": {
+                      "description": "The answer field used for an exact response from Bedrock Knowledge Store.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 5000
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "KendraConfiguration": {
+              "$ref": "#/definitions/QnAKendraConfiguration"
+            }
+          },
+          "additionalProperties": false
+        },
+        "BedrockModelConfiguration": {
+          "$ref": "#/definitions/BedrockModelSpecification"
+        }
+      },
+      "required": [
+        "DataSourceConfiguration",
+        "BedrockModelConfiguration"
+      ],
+      "additionalProperties": false
+    },
+    "QnAKendraConfiguration": {
+      "description": "Contains details about the configuration of the Amazon Kendra index used for the AMAZON.QnAIntent.",
+      "type": "object",
+      "properties": {
+        "KendraIndex": {
+          "description": "The ARN of the Amazon Kendra index to use.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "QueryFilterString": {
+          "description": "Contains the Amazon Kendra filter string to use if enabled.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "QueryFilterStringEnabled": {
+          "description": "Specifies whether to enable an Amazon Kendra filter string or not.",
+          "type": "boolean"
+        },
+        "ExactResponse": {
+          "description": "Specifies whether to return an exact response from the Amazon Kendra index or to let the Amazon Bedrock model you select generate a response based on the results.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "KendraIndex",
+        "QueryFilterStringEnabled",
+        "ExactResponse"
       ],
       "additionalProperties": false
     },
@@ -1238,6 +1425,9 @@
         },
         "KendraConfiguration": {
           "$ref": "#/definitions/KendraConfiguration"
+        },
+        "QnAIntentConfiguration": {
+          "$ref": "#/definitions/QnAIntentConfiguration"
         },
         "SlotPriorities": {
           "$ref": "#/definitions/SlotPrioritiesList"
@@ -1391,45 +1581,45 @@
       "description": "Describes the Amazon S3 bucket name and location for the grammar that is the source for the slot type.",
       "type": "object",
       "properties": {
-          "S3BucketName": {
-              "description": "The name of the S3 bucket that contains the grammar source.",
-              "$ref": "#/definitions/S3BucketName"
-          },
-          "S3ObjectKey": {
-              "description": "The path to the grammar in the S3 bucket.",
-              "$ref": "#/definitions/S3ObjectKey"
-          },
-          "KmsKeyArn": {
-              "description": "The Amazon KMS key required to decrypt the contents of the grammar, if any.",
-              "type": "string",
-              "minLength": 20,
-              "maxLength": 2048,
-              "pattern": "^arn:[\\w\\-]+:kms:[\\w\\-]+:[\\d]{12}:(?:key\\/[\\w\\-]+|alias\\/[a-zA-Z0-9:\\/_\\-]{1,256})$"
-          }
+        "S3BucketName": {
+          "description": "The name of the S3 bucket that contains the grammar source.",
+          "$ref": "#/definitions/S3BucketName"
+        },
+        "S3ObjectKey": {
+          "description": "The path to the grammar in the S3 bucket.",
+          "$ref": "#/definitions/S3ObjectKey"
+        },
+        "KmsKeyArn": {
+          "description": "The Amazon KMS key required to decrypt the contents of the grammar, if any.",
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 2048,
+          "pattern": "^arn:[\\w\\-]+:kms:[\\w\\-]+:[\\d]{12}:(?:key\\/[\\w\\-]+|alias\\/[a-zA-Z0-9:\\/_\\-]{1,256})$"
+        }
       },
       "required": [
-          "S3BucketName",
-          "S3ObjectKey"
+        "S3BucketName",
+        "S3ObjectKey"
       ],
       "additionalProperties": false
     },
     "GrammarSlotTypeSetting": {
-        "description": "Settings required for a slot type based on a grammar that you provide.",
-        "type": "object",
-        "properties": {
-            "Source": {
-                "$ref": "#/definitions/GrammarSlotTypeSource"
-            }
-        },
-        "additionalProperties": false
+      "description": "Settings required for a slot type based on a grammar that you provide.",
+      "type": "object",
+      "properties": {
+        "Source": {
+          "$ref": "#/definitions/GrammarSlotTypeSource"
+        }
+      },
+      "additionalProperties": false
     },
     "ExternalSourceSetting": {
       "description": "Provides information about the external source of the slot type's definition.",
       "type": "object",
       "properties": {
-          "GrammarSlotTypeSetting": {
-              "$ref": "#/definitions/GrammarSlotTypeSetting"
-          }
+        "GrammarSlotTypeSetting": {
+          "$ref": "#/definitions/GrammarSlotTypeSetting"
+        }
       },
       "additionalProperties": false
     },
@@ -1917,8 +2107,8 @@
           "description": "Indicates whether a Lambda function should be invoked for the dialog.",
           "type": "boolean"
         },
-         "InvocationLabel": {
-           "description": "A label that indicates the dialog step from which the dialog code hook is happening.",
+        "InvocationLabel": {
+          "description": "A label that indicates the dialog step from which the dialog code hook is happening.",
           "$ref": "#/definitions/Name"
         }
       },
@@ -2034,7 +2224,7 @@
       "description": "Key/value pair representing session-specific context information. It contains application information passed between Amazon Lex and a client application.",
       "type": "object",
       "properties": {
-        "Key":{
+        "Key": {
           "type": "string",
           "minLength": 1,
           "maxLength": 1024
@@ -2073,7 +2263,7 @@
       "description": "A map of slot names and their overridden values.",
       "type": "object",
       "properties": {
-        "SlotName":{
+        "SlotName": {
           "$ref": "#/definitions/Name"
         },
         "SlotValueOverride": {
@@ -2117,6 +2307,7 @@
     "SlotValues": {
       "description": "An array of values that slots should be set to",
       "type": "array",
+      "insertionOrder": false,
       "items": {
         "$ref": "#/definitions/SlotValueOverride"
       }

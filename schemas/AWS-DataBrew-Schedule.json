@@ -61,11 +61,11 @@
   "additionalProperties": false,
   "required": ["Name", "CronExpression"],
   "primaryIdentifier": ["/properties/Name"],
-  "createOnlyProperties": ["/properties/Name", "/properties/Tags"],
+  "createOnlyProperties": ["/properties/Name"],
   "tagging": {
     "taggable": true,
     "tagOnCreate": true,
-    "tagUpdatable": false,
+    "tagUpdatable": true,
     "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
     "permissions": ["databrew:TagResource", "databrew:UntagResource", "databrew:ListTagsForResource"]
@@ -83,12 +83,15 @@
     "read": {
       "permissions": [
         "databrew:DescribeSchedule",
-        "databrew:ListTagsForResource",
         "iam:ListRoles"
       ]
     },
     "update": {
-      "permissions": ["databrew:UpdateSchedule"]
+      "permissions": [
+        "databrew:UpdateSchedule",
+        "databrew:TagResource",
+        "databrew:UntagResource"
+      ]
     },
     "delete": {
       "permissions": ["databrew:DeleteSchedule"]
