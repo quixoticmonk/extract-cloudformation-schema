@@ -238,12 +238,16 @@
       "permissions": [
         "profile:GetProfileObjectType",
         "profile:PutProfileObjectType",
-        "profile:TagResource"
+        "profile:TagResource",
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
       ]
     },
     "read": {
       "permissions": [
-        "profile:GetProfileObjectType"
+        "profile:GetProfileObjectType",
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
       ]
     },
     "update": {
@@ -251,7 +255,9 @@
         "profile:GetProfileObjectType",
         "profile:PutProfileObjectType",
         "profile:UntagResource",
-        "profile:TagResource"
+        "profile:TagResource",
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
       ]
     },
     "delete": {
@@ -269,7 +275,9 @@
         "required": ["DomainName"]
       },
       "permissions": [
-        "profile:ListProfileObjectTypes"
+        "profile:ListProfileObjectTypes",
+        "kms:GenerateDataKey",
+        "kms:Decrypt"
       ]
     }
   }
