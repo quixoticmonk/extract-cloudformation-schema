@@ -12,6 +12,9 @@
     "Description": {
       "type": "string"
     },
+    "ClientRouteEnforcementOptions": {
+      "$ref": "#/definitions/ClientRouteEnforcementOptions"
+    },
     "TagSpecifications": {
       "type": "array",
       "uniqueItems": false,
@@ -122,6 +125,15 @@
       "required": [
         "SAMLProviderArn"
       ]
+    },
+    "ClientRouteEnforcementOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Enforced": {
+          "type": "boolean"
+        }
+      }
     },
     "ClientLoginBannerOptions": {
       "type": "object",

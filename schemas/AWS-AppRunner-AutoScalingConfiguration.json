@@ -97,8 +97,7 @@
         },
         "read": {
             "permissions": [
-                "apprunner:DescribeAutoScalingConfiguration",
-                "apprunner:ListTagsForResource"
+                "apprunner:DescribeAutoScalingConfiguration"
             ]
         },
         "delete": {
