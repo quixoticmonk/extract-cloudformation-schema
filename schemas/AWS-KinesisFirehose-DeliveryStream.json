@@ -1875,6 +1875,18 @@
       ]
     }
   },
+  "tagging": {
+    "taggable": true,
+    "tagOnCreate": true,
+    "tagUpdatable": true,
+    "cloudFormationSystemTags": false,
+    "tagProperty": "/properties/Tags",
+    "permissions": [
+      "firehose:TagDeliveryStream",
+      "firehose:ListTagsForDeliveryStream",
+      "firehose:UntagDeliveryStream"
+    ]
+  },
   "handlers": {
     "create": {
       "permissions": [
@@ -1883,7 +1895,8 @@
         "iam:GetRole",
         "iam:PassRole",
         "kms:CreateGrant",
-        "kms:DescribeKey"
+        "kms:DescribeKey",
+        "firehose:TagDeliveryStream"
       ]
     },
     "read": {
@@ -1903,7 +1916,8 @@
         "firehose:UntagDeliveryStream",
         "kms:CreateGrant",
         "kms:RevokeGrant",
-        "kms:DescribeKey"
+        "kms:DescribeKey",
+        "iam:PassRole"
       ]
     },
     "delete": {
@@ -1922,6 +1936,40 @@
   },
   "readOnlyProperties": [
     "/properties/Arn"
+  ],
+  "writeOnlyProperties": [
+    "/properties/HttpEndpointDestinationConfiguration/EndpointConfiguration/AccessKey",
+    "/properties/RedshiftDestinationConfiguration/Password",
+    "/properties/ElasticsearchDestinationConfiguration/CloudWatchLoggingOptions/Enabled",
+    "/properties/AmazonopensearchserviceDestinationConfiguration",
+    "/properties/ElasticsearchDestinationConfiguration",
+    "/properties/SnowflakeDestinationConfiguration",
+    "/properties/AmazonOpenSearchServerlessDestinationConfiguration",
+    "/properties/DatabaseSourceConfiguration",
+    "/properties/IcebergDestinationConfiguration",
+    "/properties/HttpEndpointDestinationConfiguration/SecretsManagerConfiguration",
+    "/properties/RedshiftDestinationConfiguration/ProcessingConfiguration",
+    "/properties/S3DestinationConfiguration",
+    "/properties/MSKSourceConfiguration",
+    "/properties/KinesisStreamSourceConfiguration",
+    "/properties/SnowflakeDestinationConfiguration/SnowflakeVpcConfiguration",
+    "/properties/HttpEndpointDestinationConfiguration/ProcessingConfiguration",
+    "/properties/RedshiftDestinationConfiguration/S3Configuration/EncryptionConfiguration/KMSEncryptionConfig/AWSKMSKeyARN",
+    "/properties/SplunkDestinationConfiguration/BufferingHints",
+    "/properties/SplunkDestinationConfiguration/SecretsManagerConfiguration",
+    "/properties/SplunkDestinationConfiguration/ProcessingConfiguration",
+    "/properties/SplunkDestinationConfiguration/CloudWatchLoggingOptions",
+    "/properties/SplunkDestinationConfiguration/S3Configuration/EncryptionConfiguration/NoEncryptionConfig",
+    "/properties/RedshiftDestinationConfiguration/S3BackupConfiguration/ErrorOutputPrefix",
+    "/properties/RedshiftDestinationConfiguration/S3BackupConfiguration/EncryptionConfiguration/KMSEncryptionConfig/AWSKMSKeyARN",
+    "/properties/ExtendedS3DestinationConfiguration/FileExtension",
+    "/properties/RedshiftDestinationConfiguration/S3Configuration/ErrorOutputPrefix",
+    "/properties/RedshiftDestinationConfiguration/SecretsManagerConfiguration/Enabled",
+    "/properties/RedshiftDestinationConfiguration/SecretsManagerConfiguration/SecretARN",
+    "/properties/HttpEndpointDestinationConfiguration/S3Configuration/EncryptionConfiguration/KMSEncryptionConfig/AWSKMSKeyARN",
+    "/properties/ExtendedS3DestinationConfiguration/CustomTimeZone",
+    "/properties/RedshiftDestinationConfiguration/SecretsManagerConfiguration/RoleARN",
+    "/properties/DirectPutSourceConfiguration/ThroughputHintInMBs"
   ],
   "createOnlyProperties": [
     "/properties/DeliveryStreamName",

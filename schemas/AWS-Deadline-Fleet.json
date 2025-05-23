@@ -323,6 +323,26 @@
                 "UPDATE_FAILED"
             ]
         },
+        "HostConfiguration": {
+            "type": "object",
+            "properties": {
+                "ScriptBody": {
+                    "type": "string",
+                    "maxLength": 15000,
+                    "minLength": 0
+                },
+                "ScriptTimeoutSeconds": {
+                    "type": "integer",
+                    "default": 300,
+                    "maximum": 3600,
+                    "minimum": 300
+                }
+            },
+            "required": [
+                "ScriptBody"
+            ],
+            "additionalProperties": false
+        },
         "MemoryMiBRange": {
             "type": "object",
             "properties": {
@@ -509,6 +529,9 @@
         "FleetId": {
             "type": "string",
             "pattern": "^fleet-[0-9a-f]{32}$"
+        },
+        "HostConfiguration": {
+            "$ref": "#/definitions/HostConfiguration"
         },
         "MaxWorkerCount": {
             "type": "integer",
