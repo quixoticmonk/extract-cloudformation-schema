@@ -98,7 +98,7 @@
         "tagUpdatable": false,
         "cloudFormationSystemTags": true,
         "tagProperty": "/properties/Tags",
-        "permissions": ["imagebuilder:TagResource", "imagebuilder:UnTagResource"]
+        "permissions": ["imagebuilder:TagResource", "imagebuilder:UntagResource"]
     },
     "handlers": {
         "create": {
@@ -127,7 +127,7 @@
         "delete": {
             "permissions": [
                 "imagebuilder:GetWorkflow",
-                "imagebuilder:UnTagResource",
+                "imagebuilder:UntagResource",
                 "imagebuilder:DeleteWorkflow"
             ]
         },

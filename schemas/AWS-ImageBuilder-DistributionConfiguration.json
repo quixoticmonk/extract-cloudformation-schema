@@ -326,7 +326,8 @@
         "tagOnCreate": true,
         "tagUpdatable": true,
         "cloudFormationSystemTags": true,
-        "tagProperty": "/properties/Tags"
+        "tagProperty": "/properties/Tags",
+        "permissions": ["imagebuilder:TagResource", "imagebuilder:UntagResource"]
     },
     "handlers": {
         "create": {
@@ -349,7 +350,9 @@
                 "ec2:ModifyLaunchTemplate",
                 "ssm:GetParameter",
                 "imagebuilder:GetDistributionConfiguration",
-                "imagebuilder:UpdateDistributionConfiguration"
+                "imagebuilder:UpdateDistributionConfiguration",
+                "imagebuilder:TagResource",
+                "imagebuilder:UntagResource"
             ]
         },
         "read": {
@@ -360,7 +363,7 @@
         "delete": {
             "permissions": [
                 "imagebuilder:GetDistributionConfiguration",
-                "imagebuilder:UnTagResource",
+                "imagebuilder:UntagResource",
                 "imagebuilder:DeleteDistributionConfiguration"
             ]
         },

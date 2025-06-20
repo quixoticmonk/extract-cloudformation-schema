@@ -228,7 +228,7 @@
         "tagUpdatable": false,
         "cloudFormationSystemTags": true,
         "tagProperty": "/properties/Tags",
-        "permissions": ["imagebuilder:TagResource", "imagebuilder:UnTagResource"]
+        "permissions": ["imagebuilder:TagResource", "imagebuilder:UntagResource"]
     },
     "handlers": {
         "create": {
@@ -250,7 +250,7 @@
         },
         "delete": {
             "permissions": [
-                "imagebuilder:UnTagResource",
+                "imagebuilder:UntagResource",
                 "imagebuilder:GetImageRecipe",
                 "imagebuilder:DeleteImageRecipe"
             ]

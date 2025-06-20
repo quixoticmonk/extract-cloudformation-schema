@@ -164,7 +164,14 @@
         "tagUpdatable": true,
         "cloudFormationSystemTags": false,
         "tagProperty": "/properties/Tags",
-        "permissions": ["kinesis:AddTagsToStream", "kinesis:RemoveTagsFromStream", "kinesis:ListTagsForStream"]
+        "permissions": [
+            "kinesis:AddTagsToStream", 
+            "kinesis:TagResource", 
+            "kinesis:RemoveTagsFromStream", 
+            "kinesis:UntagResource", 
+            "kinesis:ListTagsForStream",
+            "kinesis:ListTagsForResource"
+        ]
     },
     "handlers": {
         "create": {
@@ -175,13 +182,15 @@
                 "kinesis:IncreaseStreamRetentionPeriod",
                 "kinesis:StartStreamEncryption",
                 "kinesis:AddTagsToStream",
-                "kinesis:ListTagsForStream"
+                "kinesis:ListTagsForStream",
+                "kinesis:ListTagsForResource"
             ]
         },
         "read": {
             "permissions": [
                 "kinesis:DescribeStreamSummary",
-                "kinesis:ListTagsForStream"
+                "kinesis:ListTagsForStream",
+                "kinesis:ListTagsForResource"
             ]
         },
         "update": {
@@ -196,8 +205,11 @@
                 "kinesis:StartStreamEncryption",
                 "kinesis:StopStreamEncryption",
                 "kinesis:AddTagsToStream",
+                "kinesis:TagResource",
                 "kinesis:RemoveTagsFromStream",
-                "kinesis:ListTagsForStream"
+                "kinesis:UntagResource",
+                "kinesis:ListTagsForStream",
+                "kinesis:ListTagsForResource"
             ],
             "timeoutInMinutes": 240
         },
@@ -205,7 +217,8 @@
             "permissions": [
                 "kinesis:DescribeStreamSummary",
                 "kinesis:DeleteStream",
-                "kinesis:RemoveTagsFromStream"
+                "kinesis:RemoveTagsFromStream",
+                "kinesis:UntagResource"
             ]
         },
         "list": {
