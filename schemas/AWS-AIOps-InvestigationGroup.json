@@ -60,6 +60,15 @@
             },
             "additionalProperties": false
         },
+        "CrossAccountConfiguration": {
+            "type": "object",
+            "properties": {
+                "SourceRoleArn": {
+                    "$ref": "#/definitions/RoleArn"
+                }
+            },
+            "additionalProperties": false
+        },
         "EncryptionConfigMap": {
             "type": "object",
             "properties": {
@@ -148,6 +157,15 @@
             "insertionOrder": false,
             "items": {
                 "$ref": "#/definitions/ChatbotNotificationChannel"
+            }
+        },
+        "CrossAccountConfigurations": {
+            "description": "An array of cross account configurations.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/CrossAccountConfiguration"
             }
         },
         "Tags": {
