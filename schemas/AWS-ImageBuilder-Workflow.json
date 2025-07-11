@@ -63,14 +63,6 @@
         "Type",
         "Version"
     ],
-    "oneOf": [
-        { "required": [
-            "Data" ]
-        },
-        { "required": [
-            "Uri" ]
-        }
-    ],
     "primaryIdentifier": [
         "/properties/Arn"
     ],
@@ -89,13 +81,12 @@
         "/properties/Data",
         "/properties/Uri",
         "/properties/Type",
-        "/properties/KmsKeyId",
-        "/properties/Tags"
+        "/properties/KmsKeyId"
     ],
     "tagging": {
         "taggable": true,
         "tagOnCreate": true,
-        "tagUpdatable": false,
+        "tagUpdatable": true,
         "cloudFormationSystemTags": true,
         "tagProperty": "/properties/Tags",
         "permissions": ["imagebuilder:TagResource", "imagebuilder:UntagResource"]
@@ -122,6 +113,12 @@
             "permissions": [
                 "imagebuilder:GetWorkflow",
                 "kms:Decrypt"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "imagebuilder:TagResource",
+                "imagebuilder:UntagResource"
             ]
         },
         "delete": {

@@ -216,16 +216,12 @@
         "/properties/ParentImage",
         "/properties/Description",
         "/properties/BlockDeviceMappings",
-        "/properties/WorkingDirectory",
-        "/properties/Tags"
+        "/properties/WorkingDirectory"
     ],
-    "propertyTransform": {
-        "/properties/BlockDeviceMappings/*/Ebs/VolumeType": "$uppercase(VolumeType)"
-    },
     "tagging": {
         "taggable": true,
         "tagOnCreate": true,
-        "tagUpdatable": false,
+        "tagUpdatable": true,
         "cloudFormationSystemTags": true,
         "tagProperty": "/properties/Tags",
         "permissions": ["imagebuilder:TagResource", "imagebuilder:UntagResource"]
@@ -246,6 +242,12 @@
         "read": {
             "permissions": [
                 "imagebuilder:GetImageRecipe"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "imagebuilder:TagResource",
+                "imagebuilder:UntagResource"
             ]
         },
         "delete": {
