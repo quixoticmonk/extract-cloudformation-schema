@@ -91,6 +91,13 @@
     "Logs": {
       "$ref": "#/definitions/LogList"
     },
+    "ConsoleURLs": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "type": "string"
+      }
+    },
     "ConfigurationId": {
       "type": "string"
     },
@@ -206,6 +213,9 @@
         "ReplicationUser": {
           "type": "boolean"
         },
+        "ConsoleAccess": {
+          "type": "boolean"
+        },
         "Username": {
           "type": "string"
         },
@@ -215,12 +225,6 @@
           "items": {
             "type": "string"
           }
-        },
-        "ConsoleAccess": {
-          "type": "boolean"
-        },
-        "JolokiaApiAccess": {
-          "type": "string"
         },
         "Password": {
           "type": "string"
@@ -322,6 +326,7 @@
   ],
   "readOnlyProperties": [
     "/properties/IpAddresses",
+    "/properties/ConsoleURLs",
     "/properties/Id",
     "/properties/MqttEndpoints",
     "/properties/OpenWireEndpoints",

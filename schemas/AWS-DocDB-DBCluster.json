@@ -37,8 +37,14 @@
         "type": "string"
       }
     },
+    "NetworkType": {
+      "type": "string"
+    },
     "CopyTagsToSnapshot": {
       "type": "boolean"
+    },
+    "GlobalClusterIdentifier": {
+      "type": "string"
     },
     "RestoreType": {
       "type": "string"
@@ -155,6 +161,7 @@
     "/properties/KmsKeyId",
     "/properties/MasterUsername",
     "/properties/SourceDBClusterIdentifier",
+    "/properties/GlobalClusterIdentifier",
     "/properties/DBClusterIdentifier",
     "/properties/AvailabilityZones",
     "/properties/DBSubnetGroupName",
