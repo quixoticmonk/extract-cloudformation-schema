@@ -47,6 +47,9 @@
         "type": "string"
       }
     },
+    "NetworkType": {
+      "type": "string"
+    },
     "NodeType": {
       "type": "string"
     },
@@ -86,6 +89,7 @@
     "/properties/IAMRoleARN",
     "/properties/SSESpecification",
     "/properties/ClusterEndpointEncryptionType",
+    "/properties/NetworkType",
     "/properties/ClusterName",
     "/properties/NodeType",
     "/properties/SubnetGroupName"
