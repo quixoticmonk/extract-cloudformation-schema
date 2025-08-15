@@ -74,13 +74,15 @@
                 "iot:CreatePolicy",
                 "iot:GetPolicy",
                 "iot:TagResource",
-                "iot:ListTagsForResource"
+                "iot:ListTagsForResource",
+                "kms:Decrypt"
             ]
         },
         "read": {
             "permissions": [
                 "iot:GetPolicy",
-                "iot:ListTagsForResource"
+                "iot:ListTagsForResource",
+                "kms:Decrypt"
             ]
         },
         "delete": {
@@ -88,7 +90,8 @@
                 "iot:DeletePolicy",
                 "iot:GetPolicy",
                 "iot:ListPolicyVersions",
-                "iot:DeletePolicyVersion"
+                "iot:DeletePolicyVersion",
+                "kms:Decrypt"
             ]
         },
         "update": {
@@ -100,7 +103,8 @@
                 "iot:SetDefaultPolicyVersion",
                 "iot:TagResource",
                 "iot:UntagResource",
-                "iot:ListTagsForResource"
+                "iot:ListTagsForResource",
+                "kms:Decrypt"
             ]
         },
         "list": {

@@ -236,6 +236,25 @@
         "Type"
       ]
     },
+    "PullRequestBuildPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "RequiresCommentApproval": {
+          "type": "string"
+        },
+        "ApproverRoles": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "RequiresCommentApproval"
+      ]
+    },
     "ProjectCache": {
       "type": "object",
       "additionalProperties": false,
@@ -490,6 +509,9 @@
         },
         "ScopeConfiguration": {
           "$ref": "#/definitions/ScopeConfiguration"
+        },
+        "PullRequestBuildPolicy": {
+          "$ref": "#/definitions/PullRequestBuildPolicy"
         }
       }
     },

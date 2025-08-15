@@ -480,6 +480,11 @@
             "required": ["Enabled"]
         }
     },
+    "required": [
+        "KeySchema",
+        "AttributeDefinitions",
+        "Replicas"
+    ],
     "properties": {
         "MultiRegionConsistency": {
             "type": "string",
@@ -540,10 +545,5 @@
         "Arn": {"type": "string"},
         "StreamArn": {"type": "string"},
         "TimeToLiveSpecification": {"$ref": "#/definitions/TimeToLiveSpecification"}
-    },
-    "required": [
-        "KeySchema",
-        "AttributeDefinitions",
-        "Replicas"
-    ]
+    }
 }

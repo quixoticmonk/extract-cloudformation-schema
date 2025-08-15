@@ -15,6 +15,19 @@
       "description": "An endpoint Id.",
       "type": "string"
     },
+    "AvailabilityZoneMapping": {
+      "type": "object",
+      "properties": {
+        "AvailabilityZone": {
+          "description": "A AvailabilityZone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "AvailabilityZone"
+      ],
+      "additionalProperties": false
+    },
     "SubnetMapping": {
       "type": "object",
       "properties": {
@@ -85,11 +98,18 @@
     },
     "SubnetMappings": {
       "type": "array",
-      "minItems": 1,
       "insertionOrder": false,
       "uniqueItems": true,
       "items": {
         "$ref": "#/definitions/SubnetMapping"
+      }
+    },
+    "AvailabilityZoneMappings": {
+      "type": "array",
+      "insertionOrder": false,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/AvailabilityZoneMapping"
       }
     },
     "DeleteProtection": {
@@ -98,14 +118,23 @@
     "SubnetChangeProtection": {
       "type": "boolean"
     },
+    "AvailabilityZoneChangeProtection": {
+      "type": "boolean"
+    },
     "FirewallPolicyChangeProtection": {
       "type": "boolean"
+    },
+    "TransitGatewayId": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^tgw-[0-9a-z]+$"
     },
     "Description": {
       "type": "string",
       "maxLength": 512,
       "pattern": "^.*$"
     },
+
     "EndpointIds": {
       "type": "array",
       "insertionOrder": false,
@@ -144,9 +173,7 @@
   },
   "required": [
     "FirewallName",
-    "FirewallPolicyArn",
-    "VpcId",
-    "SubnetMappings"
+    "FirewallPolicyArn"
   ],
   "readOnlyProperties": [
     "/properties/FirewallArn",
@@ -173,6 +200,7 @@
         "network-firewall:DescribeRuleGroup",
         "network-firewall:TagResource",
         "network-firewall:AssociateSubnets",
+        "network-firewall:AssociateAvailabilityZones",
         "network-firewall:AssociateFirewallPolicy",
         "network-firewall:DescribeFirewall"
       ]
@@ -195,7 +223,10 @@
         "network-firewall:TagResource",
         "network-firewall:UntagResource",
         "network-firewall:DescribeFirewall",
-        "network-firewall:UpdateFirewallAnalysisSettings"
+        "network-firewall:UpdateFirewallAnalysisSettings",
+        "network-firewall:DisassociateAvailabilityZones",
+        "network-firewall:AssociateAvailabilityZones",
+        "network-firewall:UpdateAvailabilityZoneChangeProtection"
       ]
     },
     "delete": {
