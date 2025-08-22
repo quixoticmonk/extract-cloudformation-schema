@@ -53,6 +53,9 @@
     "ResourceARN": {
       "type": "string"
     },
+    "NetworkType": {
+      "type": "string"
+    },
     "FileSystemType": {
       "type": "string"
     },
@@ -352,6 +355,9 @@
         },
         "AutomaticBackupRetentionDays": {
           "type": "integer"
+        },
+        "EndpointIpv6AddressRange": {
+          "type": "string"
         },
         "PreferredSubnetId": {
           "type": "string"

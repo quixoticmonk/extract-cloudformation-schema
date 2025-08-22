@@ -580,6 +580,30 @@
                 "failover"
             ]
         },
+        "HealthCheckIds": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "RecordNames": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "Regions": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "HostedZoneIds": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
         "KubernetesResourceType": {
             "type": "object",
             "properties": {
@@ -1024,6 +1048,24 @@
                 }
             },
             "additionalProperties": false
+        },
+        "Route53HealthChecks": {
+            "type": "object",
+            "properties": {
+                "HealthCheckIds": {
+                    "$ref": "#/definitions/HealthCheckIds"
+                },
+                "RecordNames": {
+                    "$ref": "#/definitions/RecordNames"
+                },
+                "Regions": {
+                    "$ref": "#/definitions/Regions"
+                },
+                "HostedZoneIds": {
+                    "$ref": "#/definitions/HostedZoneIds"
+                }
+            },
+            "additionalProperties": false
         }
     },
     "required": [
@@ -1037,13 +1079,17 @@
         "/properties/Arn",
         "/properties/Owner",
         "/properties/Version",
-        "/properties/HealthChecksForPlan"
+        "/properties/HealthChecksForPlan",
+        "/properties/Route53HealthChecks"
     ],
     "createOnlyProperties": [
         "/properties/Name",
         "/properties/PrimaryRegion",
         "/properties/RecoveryApproach",
         "/properties/Regions"
+    ],
+    "deprecatedProperties": [
+        "/properties/HealthChecksForPlan"
     ],
     "primaryIdentifier": [
         "/properties/Arn"
