@@ -1,6 +1,6 @@
 {
   "typeName": "AWS::IVS::Stage",
-  "description": "Resource Definition for type AWS::IVS::Stage.",
+  "description": "Resource Type definition for AWS::IVS::Stage.",
   "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
   "definitions": {
     "Tag": {
@@ -50,14 +50,14 @@
         "HlsConfiguration": {
           "description": "HLS configuration object for individual participant recording.",
           "type": "object",
-          "additionalProperties":false,
-          "properties":{
+          "additionalProperties": false,
+          "properties": {
             "ParticipantRecordingHlsConfiguration": {
               "description": "An object representing a configuration of participant HLS recordings for individual participant recording.",
               "type": "object",
-              "additionalProperties":false,
-              "properties":{
-                "TargetSegmentDurationSeconds":{
+              "additionalProperties": false,
+              "properties": {
+                "TargetSegmentDurationSeconds": {
                   "description": "Defines the target duration for recorded segments generated when recording a stage participant. Segments may have durations longer than the specified value when needed to ensure each segment begins with a keyframe. Default: 6.",
                   "type": "integer",
                   "minimum": 2,
@@ -79,14 +79,14 @@
         "ThumbnailConfiguration": {
           "description": "A complex type that allows you to enable/disable the recording of thumbnails for individual participant recording and modify the interval at which thumbnails are generated for the live session.",
           "type": "object",
-          "additionalProperties":false,
-          "properties":{
-            "ParticipantThumbnailConfiguration":{
+          "additionalProperties": false,
+          "properties": {
+            "ParticipantThumbnailConfiguration": {
               "description": "An object representing a configuration of thumbnails for recorded video from an individual participant.",
               "type": "object",
-              "additionalProperties":false,
-              "properties":{
-                "RecordingMode":{
+              "additionalProperties": false,
+              "properties": {
+                "RecordingMode": {
                   "description": "Thumbnail recording mode. Default: DISABLED.",
                   "type": "string",
                   "enum": ["INTERVAL", "DISABLED"],
@@ -152,7 +152,6 @@
     "ActiveSessionId": {
       "description": "ID of the active session within the stage.",
       "type": "string",
-      "default": "",
       "minLength": 0,
       "maxLength": 128
     }
@@ -164,7 +163,11 @@
     "tagUpdatable": true,
     "cloudFormationSystemTags": false,
     "tagProperty": "/properties/Tags",
-    "permissions": ["ivs:TagResource", "ivs:UntagResource", "ivs:ListTagsForResource"]
+    "permissions": [
+      "ivs:TagResource",
+      "ivs:UntagResource",
+      "ivs:ListTagsForResource"
+    ]
   },
   "readOnlyProperties": ["/properties/Arn", "/properties/ActiveSessionId"],
   "primaryIdentifier": ["/properties/Arn"],

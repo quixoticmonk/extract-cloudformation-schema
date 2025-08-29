@@ -92,7 +92,8 @@
     "tagOnCreate": true,
     "tagUpdatable": true,
     "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
+    "tagProperty": "/properties/Tags",
+    "permissions": ["elasticache:AddTagsToResource", "elasticache:RemoveTagsFromResource"]
   },
   "handlers": {
     "create": {

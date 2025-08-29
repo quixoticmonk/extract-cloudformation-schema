@@ -338,7 +338,16 @@
         "ContributorInsightsSpecification": {
             "additionalProperties": false,
             "type": "object",
-            "properties": {"Enabled": {"type": "boolean"}},
+            "properties": {
+                "Mode": {
+                    "type": "string",
+                    "enum": [
+                        "ACCESSED_AND_THROTTLED_KEYS",
+                        "THROTTLED_KEYS"
+                    ]
+                },
+                "Enabled": {"type": "boolean"}
+            },
             "required": ["Enabled"]
         },
         "CapacityAutoScalingSettings": {
@@ -480,11 +489,6 @@
             "required": ["Enabled"]
         }
     },
-    "required": [
-        "KeySchema",
-        "AttributeDefinitions",
-        "Replicas"
-    ],
     "properties": {
         "MultiRegionConsistency": {
             "type": "string",
@@ -545,5 +549,10 @@
         "Arn": {"type": "string"},
         "StreamArn": {"type": "string"},
         "TimeToLiveSpecification": {"$ref": "#/definitions/TimeToLiveSpecification"}
-    }
+    },
+    "required": [
+        "KeySchema",
+        "AttributeDefinitions",
+        "Replicas"
+    ]
 }
