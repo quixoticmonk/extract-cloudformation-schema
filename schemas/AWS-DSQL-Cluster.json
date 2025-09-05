@@ -84,22 +84,22 @@
         "type": "string"
       },
       "EncryptionDetails": {
-          "description": "The encryption configuration details for the cluster.",
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "EncryptionStatus": {
-              "description": "The status of encryption for the cluster.",
-              "type": "string"
-            },
-            "EncryptionType": {
-              "description": "The type of encryption that protects data in the cluster.",
-              "type": "string"
-            },
-            "KmsKeyArn": {
-              "description": "The Amazon Resource Name (ARN) of the KMS key that encrypts data in the cluster.",
-              "type": "string"
-            }
+        "description": "The encryption configuration details for the cluster.",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "EncryptionStatus": {
+            "description": "The status of encryption for the cluster.",
+            "type": "string"
+          },
+          "EncryptionType": {
+            "description": "The type of encryption that protects data in the cluster.",
+            "type": "string"
+          },
+          "KmsKeyArn": {
+            "description": "The Amazon Resource Name (ARN) of the KMS key that encrypts data in the cluster.",
+            "type": "string"
+          }
         }
       }
     },

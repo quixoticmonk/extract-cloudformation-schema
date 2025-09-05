@@ -64,6 +64,21 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "TimePeriod": {
+          "$ref": "#/definitions/TimePeriod"
+        },
+        "PlannedBudgetLimits": {
+          "type": "object"
+        },
+        "CostFilters": {
+          "type": "object"
+        },
+        "CostTypes": {
+          "$ref": "#/definitions/CostTypes"
+        },
+        "BudgetType": {
+          "type": "string"
+        },
         "Metrics": {
           "type": "array",
           "uniqueItems": false,
@@ -74,8 +89,8 @@
         "BudgetLimit": {
           "$ref": "#/definitions/Spend"
         },
-        "TimePeriod": {
-          "$ref": "#/definitions/TimePeriod"
+        "BillingViewArn": {
+          "type": "string"
         },
         "AutoAdjustData": {
           "$ref": "#/definitions/AutoAdjustData"
@@ -83,22 +98,10 @@
         "TimeUnit": {
           "type": "string"
         },
-        "PlannedBudgetLimits": {
-          "type": "object"
-        },
-        "CostFilters": {
-          "type": "object"
-        },
         "FilterExpression": {
           "$ref": "#/definitions/Expression"
         },
         "BudgetName": {
-          "type": "string"
-        },
-        "CostTypes": {
-          "$ref": "#/definitions/CostTypes"
-        },
-        "BudgetType": {
           "type": "string"
         }
       },

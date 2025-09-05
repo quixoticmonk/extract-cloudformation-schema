@@ -233,7 +233,6 @@
     }
   },
   "required": [
-    "ClientCidrBlock",
     "ConnectionLogOptions",
     "AuthenticationOptions",
     "ServerCertificateArn"
