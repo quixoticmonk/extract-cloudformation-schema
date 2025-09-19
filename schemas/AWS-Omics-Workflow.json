@@ -248,7 +248,6 @@
     "/properties/WorkflowBucketOwnerId",
     "/properties/ParameterTemplatePath",
     "/properties/DefinitionRepository",
-    "/properties/readmePath",
     "/properties/readmeUri",
     "/properties/readmeMarkdown"
   ],
