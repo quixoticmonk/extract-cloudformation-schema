@@ -12,6 +12,7 @@
             "dynamodb:CreateTable",
             "dynamodb:CreateTableReplica",
             "dynamodb:Describe*",
+            "dynamodb:UpdateTable",
             "dynamodb:UpdateTimeToLive",
             "dynamodb:UpdateContributorInsights",
             "dynamodb:UpdateContinuousBackups",
@@ -27,7 +28,6 @@
             "dynamodb:EnableKinesisStreamingDestination",
             "dynamodb:DisableKinesisStreamingDestination",
             "dynamodb:UpdateTableReplicaAutoScaling",
-            "dynamodb:TagResource",
             "dynamodb:GetResourcePolicy",
             "dynamodb:PutResourcePolicy",
             "application-autoscaling:DeleteScalingPolicy",
@@ -125,12 +125,14 @@
         "/properties/Replicas/*/ReadProvisionedThroughputSettings/ReadCapacityAutoScalingSettings/SeedCapacity",
         "/properties/Replicas/*/GlobalSecondaryIndexes/*/ReadProvisionedThroughputSettings/ReadCapacityAutoScalingSettings/SeedCapacity",
         "/properties/WriteProvisionedThroughputSettings/WriteCapacityAutoScalingSettings/SeedCapacity",
-        "/properties/GlobalSecondaryIndexes/*/WriteProvisionedThroughputSettings/WriteCapacityAutoScalingSettings/SeedCapacity"
+        "/properties/GlobalSecondaryIndexes/*/WriteProvisionedThroughputSettings/WriteCapacityAutoScalingSettings/SeedCapacity",
+        "/properties/GlobalTableSourceArn"
     ],
     "createOnlyProperties": [
         "/properties/LocalSecondaryIndexes",
         "/properties/TableName",
-        "/properties/KeySchema"
+        "/properties/KeySchema",
+        "/properties/GlobalTableSourceArn"
     ],
     "additionalProperties": false,
     "primaryIdentifier": ["/properties/TableName"],
@@ -500,6 +502,13 @@
         "TableId": {"type": "string"},
         "SSESpecification": {"$ref": "#/definitions/SSESpecification"},
         "StreamSpecification": {"$ref": "#/definitions/StreamSpecification"},
+        "GlobalTableSettingsReplicationMode": {
+            "type": "string",
+            "enum": [
+                "ENABLED",
+                "DISABLED"
+            ]
+        },
         "WarmThroughput": {"$ref": "#/definitions/WarmThroughput"},
         "Replicas": {
             "minItems": 1,
@@ -509,6 +518,7 @@
             "items": {"$ref": "#/definitions/ReplicaSpecification"}
         },
         "WriteProvisionedThroughputSettings": {"$ref": "#/definitions/WriteProvisionedThroughputSettings"},
+        "GlobalTableSourceArn": {"type": "string"},
         "WriteOnDemandThroughputSettings": {"$ref": "#/definitions/WriteOnDemandThroughputSettings"},
         "GlobalTableWitnesses": {
             "minItems": 1,
