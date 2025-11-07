@@ -8,13 +8,19 @@
     },
     "handlers": {
         "read": {"permissions": ["ec2:DescribeVpcEndpointConnectionNotifications"]},
-        "create": {"permissions": ["ec2:CreateVpcEndpointConnectionNotification"]},
+        "create": {"permissions": [
+            "ec2:CreateVpcEndpointConnectionNotification",
+            "ec2:DescribeVpcEndpointConnectionNotifications"
+        ]},
         "update": {"permissions": [
             "ec2:ModifyVpcEndpointConnectionNotification",
             "ec2:DescribeVpcEndpointConnectionNotifications"
         ]},
         "list": {"permissions": ["ec2:DescribeVpcEndpointConnectionNotifications"]},
-        "delete": {"permissions": ["ec2:DeleteVpcEndpointConnectionNotifications"]}
+        "delete": {"permissions": [
+            "ec2:DeleteVpcEndpointConnectionNotifications",
+            "ec2:DescribeVpcEndpointConnectionNotifications"
+        ]}
     },
     "typeName": "AWS::EC2::VPCEndpointConnectionNotification",
     "readOnlyProperties": ["/properties/VPCEndpointConnectionNotificationId"],

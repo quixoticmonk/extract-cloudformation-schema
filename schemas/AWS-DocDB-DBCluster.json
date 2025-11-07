@@ -161,7 +161,6 @@
     "/properties/KmsKeyId",
     "/properties/MasterUsername",
     "/properties/SourceDBClusterIdentifier",
-    "/properties/GlobalClusterIdentifier",
     "/properties/DBClusterIdentifier",
     "/properties/AvailabilityZones",
     "/properties/DBSubnetGroupName",
