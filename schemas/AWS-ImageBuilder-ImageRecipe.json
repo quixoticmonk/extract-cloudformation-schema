@@ -210,7 +210,6 @@
     "required": [
         "Name",
         "Version",
-        "Components",
         "ParentImage"
     ],
     "primaryIdentifier": [

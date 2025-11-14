@@ -95,7 +95,11 @@
         "tagOnCreate": true,
         "tagUpdatable": false,
         "cloudFormationSystemTags": false,
-        "tagProperty": "/properties/Tags"
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "apprunner:TagResource",
+            "apprunner:UntagResource",
+            "apprunner:ListTagsForResource"]
     },
     "additionalProperties": false,
     "required": [
@@ -107,13 +111,13 @@
         "/properties/ServiceArn",
         "/properties/Tags"
     ],
+    "writeOnlyProperties": [
+        "/properties/Tags"
+    ],
     "readOnlyProperties": [
         "/properties/VpcIngressConnectionArn",
         "/properties/DomainName",
         "/properties/Status"
-    ],
-    "writeOnlyProperties": [
-        "/properties/Tags"
     ],
     "primaryIdentifier": [
         "/properties/VpcIngressConnectionArn"
@@ -136,12 +140,17 @@
         },
         "update": {
             "permissions": [
-                "apprunner:UpdateVpcIngressConnection"
+                "apprunner:UpdateVpcIngressConnection",
+                "apprunner:DescribeVpcIngressConnection",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeVpcEndpoints",
+                "ec2:DescribeSubnets"
             ]
         },
         "delete": {
             "permissions": [
-                "apprunner:DeleteVpcIngressConnection"
+                "apprunner:DeleteVpcIngressConnection",
+                "apprunner:DescribeVpcIngressConnection"
             ]
         },
         "list": {

@@ -145,6 +145,12 @@
             "items": {
                 "$ref": "#/definitions/Tag"
             }
+        },
+        "MaxRecordSizeInKiB": {
+            "description": "Maximum size of a data record in KiB allowed to be put into Kinesis stream.",
+            "type": "integer",
+            "minimum": 1024,
+            "maximum": 10240
         }
     },
     "additionalProperties": false,
@@ -183,7 +189,8 @@
                 "kinesis:StartStreamEncryption",
                 "kinesis:AddTagsToStream",
                 "kinesis:ListTagsForStream",
-                "kinesis:ListTagsForResource"
+                "kinesis:ListTagsForResource",
+                "kinesis:UpdateMaxRecordSize"
             ]
         },
         "read": {
@@ -209,7 +216,8 @@
                 "kinesis:RemoveTagsFromStream",
                 "kinesis:UntagResource",
                 "kinesis:ListTagsForStream",
-                "kinesis:ListTagsForResource"
+                "kinesis:ListTagsForResource",
+                "kinesis:UpdateMaxRecordSize"
             ],
             "timeoutInMinutes": 240
         },

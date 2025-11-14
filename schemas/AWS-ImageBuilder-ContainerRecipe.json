@@ -241,7 +241,6 @@
             "required": [
                 "Name",
                 "Version",
-                "Components",
                 "ParentImage",
                 "TargetRepository",
                 "ContainerType"

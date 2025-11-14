@@ -259,6 +259,53 @@
                 }
             },
             "additionalProperties": false
+        },
+        "LifecycleConfiguration": {
+            "type": "object",
+            "description": "Configuration for managing the lifecycle of runtime sessions and resources",
+            "properties": {
+                "IdleRuntimeSessionTimeout": {
+                    "type": "integer",
+                    "minimum": 60,
+                    "maximum": 28800,
+                    "description": "Timeout in seconds for idle runtime sessions"
+                },
+                "MaxLifetime": {
+                    "type": "integer",
+                    "minimum": 60,
+                    "maximum": 28800,
+                    "description": "Maximum lifetime in seconds for runtime sessions"
+                }
+            },
+            "additionalProperties": false
+        },
+        "RequestHeaderConfiguration": {
+            "type": "object",
+            "description": "Configuration for HTTP request headers",
+            "properties": {
+                "RequestHeaderAllowlist": {
+                    "$ref": "#/definitions/RequestHeaderAllowlist"
+                }
+            },
+            "additionalProperties": false
+        },
+        "RequestHeaderAllowlist": {
+            "type": "array",
+            "description": "List of allowed HTTP headers for agent runtime requests",
+            "minItems": 1,
+            "maxItems": 20,
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/HeaderName"
+            }
+        },
+        "HeaderName": {
+            "type": "string",
+            "description": "HTTP header name",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^(Authorization|X-Amzn-Bedrock-AgentCore-Runtime-Custom-[a-zA-Z0-9_-]+)$"
         }
     },
     "properties": {
@@ -301,6 +348,14 @@
         "AuthorizerConfiguration": {
             "$ref": "#/definitions/AuthorizerConfiguration",
             "description": "Authorizer configuration for the agent runtime"
+        },
+        "LifecycleConfiguration": {
+            "$ref": "#/definitions/LifecycleConfiguration",
+            "description": "Lifecycle configuration for managing runtime sessions"
+        },
+        "RequestHeaderConfiguration": {
+            "$ref": "#/definitions/RequestHeaderConfiguration",
+            "description": "Configuration for HTTP request headers"
         },
         "AgentRuntimeVersion": {
             "$ref": "#/definitions/AgentRuntimeVersion",
