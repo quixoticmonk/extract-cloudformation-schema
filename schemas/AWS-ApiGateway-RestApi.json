@@ -211,6 +211,10 @@
             "description": "",
             "type": "array",
             "items": {"$ref": "#/definitions/Tag"}
+        },
+        "EndpointAccessMode": {
+            "description": "",
+            "type": "string"
         }
     }
 }

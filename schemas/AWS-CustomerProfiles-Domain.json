@@ -340,6 +340,35 @@
         "Enabled"
       ],
       "additionalProperties": false
+    },
+    "Readiness": {
+      "description": "Progress information for data store setup.",
+      "type": "object",
+      "properties": {
+        "ProgressPercentage": {
+          "description": "The percentage of progress completed.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "Message": {
+          "description": "A message describing the current progress.",
+          "type": "string"
+        }
+      }
+    },
+    "DataStore": {
+      "description": "Configuration and status of the data store for the domain.",
+      "type": "object",
+      "properties": {
+        "Enabled": {
+          "description": "Whether the data store is enabled.",
+          "type": "boolean"
+        },
+        "Readiness": {
+          "$ref": "#/definitions/Readiness"
+        }
+      }
     }
   },
   "properties": {
@@ -373,6 +402,9 @@
     },
     "RuleBasedMatching": {
       "$ref": "#/definitions/RuleBasedMatching"
+    },
+    "DataStore": {
+      "$ref": "#/definitions/DataStore"
     },
     "Stats": {
       "$ref": "#/definitions/DomainStats"
@@ -412,7 +444,8 @@
     "/properties/LastUpdatedAt",
     "/properties/CreatedAt",
     "/properties/RuleBasedMatching/Status",
-    "/properties/Stats"
+    "/properties/Stats",
+    "/properties/DataStore/Readiness"
   ],
   "createOnlyProperties": [
     "/properties/DomainName"
@@ -424,12 +457,22 @@
     "create": {
       "permissions": [
         "profile:CreateDomain",
-        "profile:TagResource"
+        "profile:TagResource",
+        "kms:CreateGrant",
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:PutKeyPolicy",
+        "kms:ListGrants"
       ]
     },
     "read": {
       "permissions": [
-        "profile:GetDomain"
+        "profile:GetDomain",
+        "kms:CreateGrant",
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:PutKeyPolicy",
+        "kms:ListGrants"
       ]
     },
     "update": {
@@ -437,17 +480,32 @@
         "profile:GetDomain",
         "profile:UpdateDomain",
         "profile:UntagResource",
-        "profile:TagResource"
+        "profile:TagResource",
+        "kms:CreateGrant",
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:PutKeyPolicy",
+        "kms:ListGrants"
       ]
     },
     "delete": {
       "permissions": [
-        "profile:DeleteDomain"
+        "profile:DeleteDomain",
+        "kms:CreateGrant",
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:PutKeyPolicy",
+        "kms:ListGrants"
       ]
     },
     "list": {
       "permissions": [
-        "profile:ListDomains"
+        "profile:ListDomains",
+        "kms:CreateGrant",
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:PutKeyPolicy",
+        "kms:ListGrants"
       ]
     }
   }

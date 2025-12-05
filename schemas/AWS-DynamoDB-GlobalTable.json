@@ -287,13 +287,10 @@
             }}
         },
         "ReplicaStreamSpecification": {
-            "anyOf": [
-                {"required": ["ResourcePolicy"]},
-                {"required": ["Tags"]}
-            ],
             "additionalProperties": false,
             "type": "object",
-            "properties": {"ResourcePolicy": {"$ref": "#/definitions/ResourcePolicy"}}
+            "properties": {"ResourcePolicy": {"$ref": "#/definitions/ResourcePolicy"}},
+            "required": ["ResourcePolicy"]
         },
         "GlobalTableWitness": {
             "additionalProperties": false,
