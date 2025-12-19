@@ -265,6 +265,9 @@
             },
             "ModelInference": {
               "$ref": "#/definitions/ModelInferencePaymentConfig"
+            },
+            "SyntheticDataGeneration": {
+              "$ref": "#/definitions/SyntheticDataGenerationPaymentConfig"
             }
           }
         },
@@ -286,6 +289,18 @@
           "properties": {
             "IsResponsible": {
             "type": "boolean"
+            }
+          },
+          "required": [
+            "IsResponsible"
+          ]
+        },
+        "SyntheticDataGenerationPaymentConfig": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "IsResponsible": {
+              "type": "boolean"
             }
           },
           "required": [
