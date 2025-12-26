@@ -1,6 +1,6 @@
 {
   "typeName": "AWS::Lex::Bot",
-  "description": "Amazon Lex conversational bot performing automated tasks such as ordering a pizza, booking a hotel, and so on.",
+  "description": "Resource Type definition for an Amazon Lex conversational bot performing automated tasks such as ordering a pizza, booking a hotel, and so on.",
   "sourceUrl": "https://docs.aws.amazon.com/lexv2/latest/dg/build-create.html",
   "definitions": {
     "ReplicaRegion": {
@@ -286,6 +286,11 @@
       "maxLength": 100,
       "pattern": "^([0-9a-zA-Z][_-]?)+$"
     },
+    "DisplayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
     "Description": {
       "description": "A description of the resource",
       "type": "string",
@@ -388,6 +393,30 @@
       ],
       "additionalProperties": false
     },
+    "UnifiedSpeechSettings": {
+      "type": "object",
+      "properties": {
+        "SpeechFoundationModel": {
+          "type": "object",
+          "properties": {
+            "ModelArn": {
+              "type": "string"
+            },
+            "VoiceId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ModelArn"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "SpeechFoundationModel"
+      ],
+      "additionalProperties": false
+    },
     "GenerativeAISettings": {
       "type": "object",
       "properties": {
@@ -431,6 +460,16 @@
               "properties": {
                 "Enabled": {
                   "type": "boolean"
+                },
+                "AssistedNluMode": {
+                  "type": "string",
+                  "enum": [
+                    "Primary",
+                    "Fallback"
+                  ]
+                },
+                "IntentDisambiguationSettings": {
+                  "$ref": "#/definitions/IntentDisambiguationSettings"
                 }
               },
               "required": ["Enabled"],
@@ -459,6 +498,14 @@
       "type": "number",
       "minimum": 0,
       "maximum": 1
+    },
+    "SpeechDetectionSensitivity": {
+      "type": "string",
+      "enum": [
+          "Default",
+          "HighNoiseTolerance",
+          "MaximumNoiseTolerance"
+      ]
     },
     "ParentIntentSignature": {
       "type": "string"
@@ -1122,6 +1169,28 @@
       ],
       "additionalProperties": false
     },
+    "IntentDisambiguationSettings": {
+      "type": "object",
+      "properties": {
+        "Enabled": {
+          "type": "boolean"
+        },
+        "MaxDisambiguationIntents": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 5
+        },
+        "CustomDisambiguationMessage": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "Enabled"
+      ],
+      "additionalProperties": false
+    },
     "KendraConfiguration": {
       "type": "object",
       "properties": {
@@ -1353,8 +1422,11 @@
         "Name": {
           "$ref": "#/definitions/Name"
         },
+        "DisplayName": {
+          "$ref": "#/definitions/DisplayName"
+        },
         "Description": {
-          "description": "Description of thr intent.",
+          "description": "Resource Type definition for the intent.",
           "$ref": "#/definitions/Description"
         },
         "ParentIntentSignature": {
@@ -1599,11 +1671,21 @@
         },
         "SlotTypeId": {
           "$ref": "#/definitions/SlotTypeId"
+        },
+        "SlotTypeName": {
+          "$ref": "#/definitions/SlotTypeName"
         }
       },
       "required": [
-        "Name",
-        "SlotTypeId"
+        "Name"
+      ],
+      "oneOf": [
+        {
+          "required": ["SlotTypeId"]
+        },
+        {
+          "required": ["SlotTypeName"]
+        }
       ],
       "additionalProperties": false
     },
@@ -1636,13 +1718,23 @@
         "SlotTypeId": {
           "$ref": "#/definitions/SlotTypeId"
         },
+        "SlotTypeName": {
+          "$ref": "#/definitions/SlotTypeName"
+        },
         "ValueElicitationSetting": {
           "$ref": "#/definitions/SubSlotValueElicitationSetting"
         }
       },
       "required": [
-        "SlotTypeId",
         "ValueElicitationSetting"
+      ],
+      "oneOf": [
+        {
+          "required": ["SlotTypeId"]
+        },
+        {
+          "required": ["SlotTypeName"]
+        }
       ],
       "additionalProperties": false
     },
@@ -1902,11 +1994,17 @@
         "VoiceSettings": {
           "$ref": "#/definitions/VoiceSettings"
         },
+        "UnifiedSpeechSettings": {
+          "$ref": "#/definitions/UnifiedSpeechSettings"
+        },
         "GenerativeAISettings": {
           "$ref": "#/definitions/GenerativeAISettings"
         },
         "NluConfidenceThreshold": {
           "$ref": "#/definitions/ConfidenceThreshold"
+        },
+        "SpeechDetectionSensitivity": {
+          "$ref": "#/definitions/SpeechDetectionSensitivity"
         },
         "Intents": {
           "type": "array",
@@ -2396,7 +2494,6 @@
       "$ref": "#/definitions/Replication"
     }
   },
-  "taggable": true,
   "additionalProperties": false,
   "required": [
     "Name",
@@ -2415,9 +2512,9 @@
     "/properties/BotLocales",
     "/properties/BotFileS3Location",
     "/properties/AutoBuildBotLocales",
-    "/properties/BotTags",
     "/properties/TestBotAliasTags",
-    "/properties/Replication"
+    "/properties/Replication",
+    "/properties/TestBotAliasSettings"
   ],
   "handlers": {
     "create": {
@@ -2429,6 +2526,7 @@
         "lex:DescribeImport",
         "lex:ListTagsForResource",
         "lex:TagResource",
+        "lex:UntagResource",
         "lex:CreateBot",
         "lex:CreateBotLocale",
         "lex:CreateIntent",
@@ -2456,14 +2554,33 @@
         "iam:GetRole",
         "lex:CreateBotReplica",
         "lex:DescribeBotReplica",
-        "lex:DeleteBotReplica"
+        "lex:DeleteBotReplica",
+        "lex:CreateBotAlias",
+        "lex:DescribeBotAlias",
+        "lex:ListBotAliases",
+        "lex:BuildBotLocale",
+        "s3:PutObject",
+        "kms:GenerateDataKey",
+        "kms:Decrypt",
+        "cloudwatch:PutMetricData",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
       ]
     },
     "read": {
       "permissions": [
         "lex:DescribeBot",
         "lex:ListTagsForResource",
-        "lex:DescribeBotReplica"
+        "lex:DescribeBotReplica",
+        "lex:ListBotAliases",
+        "lex:ListBotLocales",
+        "lex:ListIntents",
+        "lex:ListSlots",
+        "lex:ListSlotTypes",
+        "lex:ListCustomVocabularies",
+        "lex:DescribeBotAlias",
+        "lex:GetBotAlias"
       ]
     },
     "update": {
@@ -2501,13 +2618,20 @@
         "lex:UpdateBotAlias",
         "lex:CreateBotReplica",
         "lex:DescribeBotReplica",
-        "lex:DeleteBotReplica"
+        "lex:DeleteBotReplica",
+        "lex:CreateBotAlias",
+        "lex:DescribeBotAlias",
+        "lex:ListBotAliases",
+        "lex:UpdateBotAlias",
+        "s3:PutObject"
       ]
     },
     "delete": {
       "permissions": [
         "lex:DeleteBot",
+        "lex:BatchDeleteCustomVocabularyItem",
         "lex:DescribeBot",
+        "lex:DescribeBotAlias",
         "lex:DeleteBotLocale",
         "lex:DeleteIntent",
         "lex:DeleteSlotType",
@@ -2516,14 +2640,39 @@
         "lex:DeleteBotChannel",
         "lex:DeleteBotAlias",
         "lex:DeleteCustomVocabulary",
-        "lex:DeleteBotReplica"
+        "lex:DeleteBotReplica",
+        "lex:DeleteExport",
+        "lex:DeleteUtterances",
+        "lex:DeleteImport",
+				"lex:DeleteSession",
+				"lex:DeleteTestSet",
+				"lex:DeleteResourcePolicyStatement",
+				"lex:DeleteResourcePolicy",
+        "lex:UntagResource"
       ]
     },
     "list": {
       "permissions": [
         "lex:ListBots",
-        "lex:ListBotReplicas"
+        "lex:ListBotReplicas",
+        "lex:ListBotAliases",
+        "lex:ListBotLocales",
+        "lex:ListIntents",
+        "lex:ListSlots",
+        "lex:ListSlotTypes",
+        "lex:ListCustomVocabularies",
+        "lex:ListTagsForResource"
       ]
     }
+  },
+  "tagging": {
+    "taggable": true,
+    "tagProperty": "/properties/BotTags", 
+    "tagOnCreate": true,
+        "permissions": ["lex:ListTagsForResource", 
+                        "lex:TagResource",
+                        "lex:UntagResource"],
+    "cloudFormationSystemTags": true,
+    "tagUpdatable": true
   }
 }

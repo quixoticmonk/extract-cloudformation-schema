@@ -122,6 +122,18 @@
                 "s3:ListBucket"
             ]
         },
+        "delete": {
+            "permissions": [
+                "gameliftstreams:DeleteApplication",
+                "gameliftstreams:GetApplication"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "gameliftstreams:ListApplications",
+                "gameliftstreams:ListTagsForResource"
+            ]
+        },
         "read": {
             "permissions": [
                 "gameliftstreams:GetApplication",
@@ -134,18 +146,6 @@
                 "gameliftstreams:GetApplication",
                 "gameliftstreams:TagResource",
                 "gameliftstreams:UntagResource",
-                "gameliftstreams:ListTagsForResource"
-            ]
-        },
-        "delete": {
-            "permissions": [
-                "gameliftstreams:DeleteApplication",
-                "gameliftstreams:GetApplication"
-            ]
-        },
-        "list": {
-            "permissions": [
-                "gameliftstreams:ListApplications",
                 "gameliftstreams:ListTagsForResource"
             ]
         }

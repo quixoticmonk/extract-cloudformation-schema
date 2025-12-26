@@ -58,6 +58,9 @@
     "SplitTunnel": {
       "type": "boolean"
     },
+    "TrafficIpAddressType": {
+      "type": "string"
+    },
     "ClientLoginBannerOptions": {
       "$ref": "#/definitions/ClientLoginBannerOptions"
     },
@@ -71,6 +74,9 @@
       "type": "string"
     },
     "Id": {
+      "type": "string"
+    },
+    "EndpointIpAddressType": {
       "type": "string"
     },
     "VpnPort": {
@@ -241,7 +247,9 @@
     "/properties/TransportProtocol",
     "/properties/ClientCidrBlock",
     "/properties/TagSpecifications",
-    "/properties/AuthenticationOptions"
+    "/properties/AuthenticationOptions",
+    "/properties/EndpointIpAddressType",
+    "/properties/TrafficIpAddressType"
   ],
   "primaryIdentifier": [
     "/properties/Id"
