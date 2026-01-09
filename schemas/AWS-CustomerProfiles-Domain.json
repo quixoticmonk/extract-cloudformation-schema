@@ -355,7 +355,8 @@
           "description": "A message describing the current progress.",
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "DataStore": {
       "description": "Configuration and status of the data store for the domain.",
@@ -368,7 +369,8 @@
         "Readiness": {
           "$ref": "#/definitions/Readiness"
         }
-      }
+      },
+      "additionalProperties": false
     }
   },
   "properties": {
@@ -500,12 +502,7 @@
     },
     "list": {
       "permissions": [
-        "profile:ListDomains",
-        "kms:CreateGrant",
-        "kms:DescribeKey",
-        "kms:GetKeyPolicy",
-        "kms:PutKeyPolicy",
-        "kms:ListGrants"
+        "profile:ListDomains"
       ]
     }
   }
