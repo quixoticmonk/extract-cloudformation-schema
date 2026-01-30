@@ -96,9 +96,13 @@
     "taggable": true,
     "tagOnCreate": true,
     "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
+    "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
-    "permissions": ["ivs:TagResource", "ivs:UntagResource", "ivs:ListTagsForResource"]
+    "permissions": [
+      "ivs:TagResource",
+      "ivs:UntagResource",
+      "ivs:ListTagsForResource"
+    ]
   },
   "createOnlyProperties": [
     "/properties/InsecureIngest",

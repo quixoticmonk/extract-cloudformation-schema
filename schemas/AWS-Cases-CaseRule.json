@@ -367,6 +367,7 @@
     "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
     "permissions": [
+      "cases:BatchGetCaseRule",
       "cases:TagResource",
       "cases:UntagResource"
     ]

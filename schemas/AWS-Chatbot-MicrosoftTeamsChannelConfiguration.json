@@ -18,10 +18,7 @@
           "minLength": 0
         }
       },
-      "required": [
-        "Key",
-        "Value"
-      ]
+      "required": ["Key", "Value"]
     }
   },
   "properties": {
@@ -130,12 +127,8 @@
     "/properties/TeamsTenantId",
     "/properties/ConfigurationName"
   ],
-  "readOnlyProperties": [
-    "/properties/Arn"
-  ],
-  "primaryIdentifier": [
-    "/properties/Arn"
-  ],
+  "readOnlyProperties": ["/properties/Arn"],
+  "primaryIdentifier": ["/properties/Arn"],
   "additionalProperties": false,
   "handlers": {
     "create": {
@@ -151,7 +144,8 @@
     "read": {
       "permissions": [
         "chatbot:GetMicrosoftTeamsChannelConfiguration",
-        "chatbot:ListAssociations"
+        "chatbot:ListAssociations",
+        "chatbot:ListTagsForResource"
       ]
     },
     "update": {
