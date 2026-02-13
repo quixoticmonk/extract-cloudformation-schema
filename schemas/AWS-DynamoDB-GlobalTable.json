@@ -11,6 +11,7 @@
     "required": ["Replicas"],
     "conditionalCreateOnlyProperties": [
         "/properties/LocalSecondaryIndexes",
+        "/properties/GlobalTableSourceArn",
         "/properties/KeySchema"
     ],
     "propertyTransform": {"/properties/Replicas/*/GlobalTableSettingsReplicationMode": "GlobalTableSettingsReplicationMode $OR ($exists(GlobalTableSettingsReplicationMode) ? null : \"DISABLED\") $OR ($exists(GlobalTableSettingsReplicationMode) ? null : \"ENABLED_WITH_OVERRIDES\")"},
@@ -133,7 +134,8 @@
         "/properties/Replicas/*/ReadProvisionedThroughputSettings/ReadCapacityAutoScalingSettings/SeedCapacity",
         "/properties/Replicas/*/GlobalSecondaryIndexes/*/ReadProvisionedThroughputSettings/ReadCapacityAutoScalingSettings/SeedCapacity",
         "/properties/WriteProvisionedThroughputSettings/WriteCapacityAutoScalingSettings/SeedCapacity",
-        "/properties/GlobalSecondaryIndexes/*/WriteProvisionedThroughputSettings/WriteCapacityAutoScalingSettings/SeedCapacity"
+        "/properties/GlobalSecondaryIndexes/*/WriteProvisionedThroughputSettings/WriteCapacityAutoScalingSettings/SeedCapacity",
+        "/properties/GlobalTableSourceArn"
     ],
     "additionalProperties": false,
     "definitions": {
@@ -167,6 +169,13 @@
                 "SSESpecification": {"$ref": "#/definitions/ReplicaSSESpecification"},
                 "KinesisStreamSpecification": {"$ref": "#/definitions/KinesisStreamSpecification"},
                 "ContributorInsightsSpecification": {"$ref": "#/definitions/ContributorInsightsSpecification"},
+                "GlobalTableSettingsReplicationMode": {
+                    "type": "string",
+                    "enum": [
+                        "ENABLED",
+                        "DISABLED"
+                    ]
+                },
                 "PointInTimeRecoverySpecification": {"$ref": "#/definitions/PointInTimeRecoverySpecification"},
                 "ReplicaStreamSpecification": {"$ref": "#/definitions/ReplicaStreamSpecification"},
                 "GlobalSecondaryIndexes": {
@@ -266,7 +275,9 @@
                     "items": {"$ref": "#/definitions/KeySchema"}
                 },
                 "WarmThroughput": {"$ref": "#/definitions/WarmThroughput"},
+                "ReadProvisionedThroughputSettings": {"$ref": "#/definitions/GlobalReadProvisionedThroughputSettings"},
                 "WriteProvisionedThroughputSettings": {"$ref": "#/definitions/WriteProvisionedThroughputSettings"},
+                "ReadOnDemandThroughputSettings": {"$ref": "#/definitions/ReadOnDemandThroughputSettings"},
                 "WriteOnDemandThroughputSettings": {"$ref": "#/definitions/WriteOnDemandThroughputSettings"}
             },
             "required": [
@@ -510,7 +521,6 @@
         "TableId": {"type": "string"},
         "SSESpecification": {"$ref": "#/definitions/SSESpecification"},
         "StreamSpecification": {"$ref": "#/definitions/StreamSpecification"},
-        "GlobalTableReadOnDemandThroughputSettings": {"$ref": "#/definitions/ReadOnDemandThroughputSettings"},
         "WarmThroughput": {"$ref": "#/definitions/WarmThroughput"},
         "Replicas": {
             "minItems": 1,
@@ -520,6 +530,7 @@
             "items": {"$ref": "#/definitions/ReplicaSpecification"}
         },
         "WriteProvisionedThroughputSettings": {"$ref": "#/definitions/WriteProvisionedThroughputSettings"},
+        "GlobalTableSourceArn": {"type": "string"},
         "WriteOnDemandThroughputSettings": {"$ref": "#/definitions/WriteOnDemandThroughputSettings"},
         "GlobalTableWitnesses": {
             "minItems": 1,
@@ -537,7 +548,6 @@
             "type": "array",
             "items": {"$ref": "#/definitions/AttributeDefinition"}
         },
-        "GlobalTableReadProvisionedThroughputSettings": {"$ref": "#/definitions/GlobalReadProvisionedThroughputSettings"},
         "BillingMode": {"type": "string"},
         "GlobalSecondaryIndexes": {
             "uniqueItems": true,
@@ -560,6 +570,8 @@
         },
         "Arn": {"type": "string"},
         "StreamArn": {"type": "string"},
+        "ReadProvisionedThroughputSettings": {"$ref": "#/definitions/GlobalReadProvisionedThroughputSettings"},
+        "ReadOnDemandThroughputSettings": {"$ref": "#/definitions/ReadOnDemandThroughputSettings"},
         "TimeToLiveSpecification": {"$ref": "#/definitions/TimeToLiveSpecification"}
     }
 }
