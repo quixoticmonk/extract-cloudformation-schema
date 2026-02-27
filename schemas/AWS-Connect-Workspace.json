@@ -312,6 +312,7 @@
                 "$ref": "#/definitions/MediaItem"
             }
         },
+        
         "Pages": {
             "description": "The pages associated with the workspace",
             "type": "array",
@@ -320,6 +321,7 @@
                 "$ref": "#/definitions/WorkspacePage"
             }
         },
+        
         "Associations": {
             "description": "The resource ARNs associated with the workspace",
             "type": "array",
