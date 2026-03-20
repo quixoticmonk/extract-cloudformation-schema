@@ -53,7 +53,8 @@
                 "direct-connect-gateway",
                 "peering",
                 "network-function",
-                "vpn-concentrator"
+                "vpn-concentrator",
+                "client-vpn"
             ]
         },
         "TransitGatewayMeteringPayerType": {

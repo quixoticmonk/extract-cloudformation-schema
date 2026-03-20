@@ -45,6 +45,9 @@
                 "MaximumCapacity": {
                     "type": "integer",
                     "minimum": 0
+                },
+                "VpcTransitConfiguration": {
+                    "$ref": "#/definitions/VpcTransitConfiguration"
                 }
             },
             "required": [
@@ -67,6 +70,31 @@
         },
         "Unit": {
             "type": "object",
+            "additionalProperties": false
+        },
+        "VpcTransitConfiguration": {
+            "type": "object",
+            "properties": {
+                "VpcId": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 1
+                },
+                "Ipv4CidrBlocks": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[1-2][0-9]|3[0-2])$"
+                    },
+                    "maxItems": 5,
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            },
+            "required": [
+                "Ipv4CidrBlocks",
+                "VpcId"
+            ],
             "additionalProperties": false
         },
         "StreamClass": {
@@ -138,7 +166,8 @@
                 "gameliftstreams:GetStreamGroup",
                 "gameliftstreams:TagResource",
                 "gameliftstreams:ListTagsForResource",
-                "gameliftstreams:AssociateApplications"
+                "gameliftstreams:AssociateApplications",
+                "ec2:DescribeVpcs"
             ]
         },
         "delete": {
@@ -167,7 +196,8 @@
                 "gameliftstreams:RemoveStreamGroupLocations",
                 "gameliftstreams:TagResource",
                 "gameliftstreams:UntagResource",
-                "gameliftstreams:ListTagsForResource"
+                "gameliftstreams:ListTagsForResource",
+                "ec2:DescribeVpcs"
             ]
         }
     },
