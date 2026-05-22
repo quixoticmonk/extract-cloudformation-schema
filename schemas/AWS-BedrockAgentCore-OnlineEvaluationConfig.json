@@ -325,6 +325,8 @@
                 "bedrock-agentcore:GetOnlineEvaluationConfig",
                 "bedrock-agentcore:TagResource",
                 "iam:PassRole",
+                "lambda:GetFunction",
+                "lambda:InvokeFunction",
                 "logs:DescribeLogGroups",
                 "logs:DescribeIndexPolicies",
                 "logs:PutIndexPolicy"
@@ -343,6 +345,8 @@
                 "bedrock-agentcore:TagResource",
                 "bedrock-agentcore:UntagResource",
                 "iam:PassRole",
+                "lambda:GetFunction",
+                "lambda:InvokeFunction",
                 "logs:DescribeLogGroups",
                 "logs:DescribeIndexPolicies",
                 "logs:PutIndexPolicy"

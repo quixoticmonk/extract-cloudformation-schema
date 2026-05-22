@@ -66,8 +66,8 @@
   "tagging": {
     "taggable": true,
     "tagOnCreate": true,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false,
+    "tagUpdatable": true,
+    "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
     "permissions": ["Batch:TagResource", "Batch:UntagResource"]
   },
@@ -76,8 +76,7 @@
   ],
   "createOnlyProperties": [
     "/properties/ConsumableResourceName",
-    "/properties/ResourceType",
-    "/properties/Tags"
+    "/properties/ResourceType"
   ],
   "readOnlyProperties": [
     "/properties/ConsumableResourceArn",
@@ -101,7 +100,7 @@
       "permissions": [
         "Batch:UpdateConsumableResource",
         "Batch:TagResource",
-        "Batch:UnTagResource"
+        "Batch:UntagResource"
       ]
     },
     "delete": {

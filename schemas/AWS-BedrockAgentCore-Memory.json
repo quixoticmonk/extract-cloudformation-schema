@@ -9,7 +9,7 @@
         },
         "MemoryArn": {
             "type": "string",
-            "pattern": "^arn:aws:bedrock-agentcore:[a-z0-9-]+:[0-9]{12}:memory/[a-zA-Z][a-zA-Z0-9-_]{0,99}-[a-zA-Z0-9]{10}$",
+            "pattern": "^arn:(aws(?:-cn|-us-gov|-iso(?:-[bef])?)?):bedrock-agentcore:[a-z0-9-]+:[0-9]{12}:memory/[a-zA-Z][a-zA-Z0-9-_]{0,99}-[a-zA-Z0-9]{10}$",
             "description": "ARN of the Memory resource"
         },
         "MemoryId": {
@@ -24,7 +24,7 @@
         },
         "Arn": {
             "type": "string",
-            "pattern": "^arn:aws:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}$",
+            "pattern": "^arn:(aws(?:-cn|-us-gov|-iso(?:-[bef])?)?):[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}$",
             "description": "ARN format"
         },
         "MemoryStatus": {
@@ -48,6 +48,12 @@
                 },
                 "Namespaces": {
                     "$ref": "#/definitions/NamespacesList"
+                },
+                "NamespaceTemplates": {
+                    "$ref": "#/definitions/NamespacesList"
+                },
+                "MemoryRecordSchema": {
+                    "$ref": "#/definitions/MemoryRecordSchema"
                 },
                 "StrategyId": {
                     "type": "string",
@@ -92,6 +98,12 @@
                 "Namespaces": {
                     "$ref": "#/definitions/NamespacesList"
                 },
+                "NamespaceTemplates": {
+                    "$ref": "#/definitions/NamespacesList"
+                },
+                "MemoryRecordSchema": {
+                    "$ref": "#/definitions/MemoryRecordSchema"
+                },
                 "StrategyId": {
                     "type": "string",
                     "minLength": 12,
@@ -134,6 +146,12 @@
                 },
                 "Namespaces": {
                     "$ref": "#/definitions/NamespacesList"
+                },
+                "NamespaceTemplates": {
+                    "$ref": "#/definitions/NamespacesList"
+                },
+                "MemoryRecordSchema": {
+                    "$ref": "#/definitions/MemoryRecordSchema"
                 },
                 "StrategyId": {
                     "type": "string",
@@ -178,8 +196,14 @@
                 "Namespaces": {
                     "$ref": "#/definitions/NamespacesList"
                 },
+                "NamespaceTemplates": {
+                    "$ref": "#/definitions/NamespacesList"
+                },
                 "Configuration": {
                     "$ref": "#/definitions/CustomConfigurationInput"
+                },
+                "MemoryRecordSchema": {
+                    "$ref": "#/definitions/MemoryRecordSchema"
                 },
                 "StrategyId": {
                     "type": "string",
@@ -224,8 +248,14 @@
                 "Namespaces": {
                     "$ref": "#/definitions/NamespacesList"
                 },
+                "NamespaceTemplates": {
+                    "$ref": "#/definitions/NamespacesList"
+                },
                 "ReflectionConfiguration": {
                     "$ref": "#/definitions/EpisodicReflectionConfigurationInput"
+                },
+                "MemoryRecordSchema": {
+                    "$ref": "#/definitions/MemoryRecordSchema"
                 },
                 "StrategyId": {
                     "type": "string",
@@ -409,9 +439,14 @@
             "properties": {
                 "Namespaces": {
                     "$ref": "#/definitions/NamespacesList"
+                },
+                "NamespaceTemplates": {
+                    "$ref": "#/definitions/NamespacesList"
+                },
+                "MemoryRecordSchema": {
+                    "$ref": "#/definitions/MemoryRecordSchema"
                 }
             },
-            "required": ["Namespaces"],
             "additionalProperties": false
         },
         
@@ -702,6 +737,12 @@
                 },
                 "Namespaces": {
                     "$ref": "#/definitions/NamespacesList"
+                },
+                "NamespaceTemplates": {
+                    "$ref": "#/definitions/NamespacesList"
+                },
+                "MemoryRecordSchema": {
+                    "$ref": "#/definitions/MemoryRecordSchema"
                 }
             },
             "required": ["AppendToPrompt", "ModelId"],
@@ -770,6 +811,176 @@
             "required": ["Resources"],
             "additionalProperties": false
         },
+        "MetadataKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[a-zA-Z0-9\\s._:/=+@-]*$",
+            "description": "Key name for metadata fields"
+        },
+        "MetadataValueType": {
+            "type": "string",
+            "enum": ["STRING", "STRINGLIST", "NUMBER"],
+            "description": "Supported data types for metadata values"
+        },
+        "IndexedKey": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "$ref": "#/definitions/MetadataKey"
+                },
+                "Type": {
+                    "$ref": "#/definitions/MetadataValueType"
+                }
+            },
+            "required": ["Key", "Type"],
+            "additionalProperties": false
+        },
+        "IndexedKeysList": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/IndexedKey"
+            },
+            "minItems": 1,
+            "maxItems": 10,
+            "insertionOrder": false,
+            "description": "List of indexed keys for the memory"
+        },
+        "Definition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "description": "Definition for the metadata schema entry"
+        },
+        "LlmExtractionInstruction": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "description": "LLM extraction instruction"
+        },
+        "StringValidation": {
+            "type": "object",
+            "properties": {
+                "AllowedValues": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "insertionOrder": false
+                }
+            },
+            "required": ["AllowedValues"],
+            "additionalProperties": false
+        },
+        "StringListValidation": {
+            "type": "object",
+            "properties": {
+                "AllowedValues": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "insertionOrder": false
+                },
+                "MaxItems": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                }
+            },
+            "additionalProperties": false
+        },
+        "NumberValidation": {
+            "type": "object",
+            "properties": {
+                "MinValue": {
+                    "type": "number"
+                },
+                "MaxValue": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": false
+        },
+        "Validation": {
+            "type": "object",
+            "properties": {
+                "StringValidation": {
+                    "$ref": "#/definitions/StringValidation"
+                },
+                "StringListValidation": {
+                    "$ref": "#/definitions/StringListValidation"
+                },
+                "NumberValidation": {
+                    "$ref": "#/definitions/NumberValidation"
+                }
+            },
+            "additionalProperties": false,
+            "maxProperties": 1,
+            "minProperties": 1
+        },
+        "LlmExtractionConfig": {
+            "type": "object",
+            "properties": {
+                "LlmExtractionInstruction": {
+                    "$ref": "#/definitions/LlmExtractionInstruction"
+                },
+                "Definition": {
+                    "$ref": "#/definitions/Definition"
+                },
+                "Validation": {
+                    "$ref": "#/definitions/Validation"
+                }
+            },
+            "required": ["Definition"],
+            "additionalProperties": false
+        },
+        "ExtractionConfig": {
+            "type": "object",
+            "properties": {
+                "LlmExtractionConfig": {
+                    "$ref": "#/definitions/LlmExtractionConfig"
+                }
+            },
+            "additionalProperties": false,
+            "maxProperties": 1,
+            "minProperties": 1
+        },
+        "MetadataSchemaEntry": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "$ref": "#/definitions/MetadataKey"
+                },
+                "Type": {
+                    "$ref": "#/definitions/MetadataValueType"
+                },
+                "ExtractionConfig": {
+                    "$ref": "#/definitions/ExtractionConfig"
+                }
+            },
+            "required": ["Key"],
+            "additionalProperties": false
+        },
+        "MetadataSchemaList": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/MetadataSchemaEntry"
+            },
+            "minItems": 1,
+            "maxItems": 20,
+            "insertionOrder": false,
+            "description": "List of metadata schema entries"
+        },
+        "MemoryRecordSchema": {
+            "type": "object",
+            "properties": {
+                "MetadataSchema": {
+                    "$ref": "#/definitions/MetadataSchemaList"
+                }
+            },
+            "additionalProperties": false
+        },
         "TagsMap": {
             "type": "object",
             "description": "A map of tag keys and values",
@@ -828,6 +1039,9 @@
         },
         "MemoryStrategies": {
             "$ref": "#/definitions/MemoryStrategies"
+        },
+        "IndexedKeys": {
+            "$ref": "#/definitions/IndexedKeysList"
         },
         "StreamDeliveryResources": {
             "$ref": "#/definitions/StreamDeliveryResources"

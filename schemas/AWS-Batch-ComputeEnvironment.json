@@ -162,6 +162,9 @@
         },
         "ImageKubernetesVersion" : {
           "type" : "string"
+        },
+        "BatchImageStatus" : {
+          "type" : "string"
         }
       },
       "required" : [ "ImageType" ]
@@ -291,7 +294,10 @@
     "/properties/UpdatePolicy"
   ],
   "primaryIdentifier" : [ "/properties/ComputeEnvironmentArn" ],
-  "readOnlyProperties" : [ "/properties/ComputeEnvironmentArn" ],
+  "readOnlyProperties" : [
+    "/properties/ComputeEnvironmentArn",
+    "/properties/ComputeResources/Ec2Configuration/*/BatchImageStatus"
+  ],
   "additionalIdentifiers": [ ["/properties/ComputeEnvironmentName" ]],
   "handlers": {
     "create": {
