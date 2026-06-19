@@ -6,7 +6,7 @@
     "taggable": true,
     "tagOnCreate": true,
     "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
+    "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags"
   },
   "properties": {
@@ -146,11 +146,14 @@
           "type": "array",
           "insertionOrder": false,
           "items": {
-            "$ref":"#/definitions/CFNFeatureAdditionalConfiguration"
+            "$ref": "#/definitions/CFNFeatureAdditionalConfiguration"
           }
         }
       },
-      "required": ["Name", "Status"]
+      "required": [
+        "Name",
+        "Status"
+      ]
     },
     "CFNFeatureAdditionalConfiguration": {
       "type": "object",

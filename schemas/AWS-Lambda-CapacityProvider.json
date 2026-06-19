@@ -141,6 +141,32 @@
       },
       "additionalProperties" : false
     },
+    "PropagateTagsConfig" : {
+      "description" : "",
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "Mode" : {
+          "$ref" : "#/definitions/PropagateTagsMode"
+        },
+        "ExplicitTags" : {
+          "description" : "A list of tags to explicitly propagate to managed resources.",
+          "type" : "array",
+          "uniqueItems" : true,
+          "insertionOrder" : false,
+          "maxItems" : 40,
+          "minItems" : 0,
+          "items" : {
+            "$ref" : "#/definitions/Tag"
+          }
+        }
+      }
+    },
+    "PropagateTagsMode" : {
+      "description" : "The mode for tag propagation.",
+      "type" : "string",
+      "enum" : [ "None", "Explicit" ]
+    },
     "Tag" : {
       "description" : "A key-value pair that provides metadata for the capacity provider.",
       "type" : "object",
@@ -229,6 +255,10 @@
     "VpcConfig" : {
       "description" : "The VPC configuration for the capacity provider.",
       "$ref" : "#/definitions/CapacityProviderVpcConfig"
+    },
+    "PropagateTags" : {
+      "description" : "",
+      "$ref" : "#/definitions/PropagateTagsConfig"
     }
   },
   "required" : [ "PermissionsConfig", "VpcConfig" ],

@@ -17,16 +17,29 @@
                     "maxLength": 256
                 }
             },
-            "required": ["Key", "Value"],
+            "required": [
+                "Key",
+                "Value"
+            ],
             "additionalProperties": false
         },
         "OnlineEvaluationConfigStatus": {
             "type": "string",
-            "enum": ["ACTIVE", "CREATING", "CREATE_FAILED", "UPDATING", "UPDATE_FAILED", "DELETING"]
+            "enum": [
+                "ACTIVE",
+                "CREATING",
+                "CREATE_FAILED",
+                "UPDATING",
+                "UPDATE_FAILED",
+                "DELETING"
+            ]
         },
         "ExecutionStatus": {
             "type": "string",
-            "enum": ["ENABLED", "DISABLED"]
+            "enum": [
+                "ENABLED",
+                "DISABLED"
+            ]
         },
         "DataSourceConfig": {
             "type": "object",
@@ -36,7 +49,9 @@
                     "$ref": "#/definitions/CloudWatchLogsInputConfig"
                 }
             },
-            "required": ["CloudWatchLogs"],
+            "required": [
+                "CloudWatchLogs"
+            ],
             "additionalProperties": false
         },
         "CloudWatchLogsInputConfig": {
@@ -70,7 +85,10 @@
                     "insertionOrder": false
                 }
             },
-            "required": ["LogGroupNames", "ServiceNames"],
+            "required": [
+                "LogGroupNames",
+                "ServiceNames"
+            ],
             "additionalProperties": false
         },
         "EvaluatorReference": {
@@ -83,7 +101,9 @@
                     "pattern": "^(Builtin\\.[a-zA-Z0-9_-]+|[a-zA-Z][a-zA-Z0-9-_]{0,99}-[a-zA-Z0-9]{10})$"
                 }
             },
-            "required": ["EvaluatorId"],
+            "required": [
+                "EvaluatorId"
+            ],
             "additionalProperties": false
         },
         "Rule": {
@@ -107,7 +127,9 @@
                     "$ref": "#/definitions/SessionConfig"
                 }
             },
-            "required": ["SamplingConfig"],
+            "required": [
+                "SamplingConfig"
+            ],
             "additionalProperties": false
         },
         "SamplingConfig": {
@@ -121,7 +143,9 @@
                     "maximum": 100
                 }
             },
-            "required": ["SamplingPercentage"],
+            "required": [
+                "SamplingPercentage"
+            ],
             "additionalProperties": false
         },
         "Filter": {
@@ -138,13 +162,26 @@
                 "Operator": {
                     "type": "string",
                     "description": "The comparison operator to use for filtering.",
-                    "enum": ["Equals", "NotEquals", "GreaterThan", "LessThan", "GreaterThanOrEqual", "LessThanOrEqual", "Contains", "NotContains"]
+                    "enum": [
+                        "Equals",
+                        "NotEquals",
+                        "GreaterThan",
+                        "LessThan",
+                        "GreaterThanOrEqual",
+                        "LessThanOrEqual",
+                        "Contains",
+                        "NotContains"
+                    ]
                 },
                 "Value": {
                     "$ref": "#/definitions/FilterValue"
                 }
             },
-            "required": ["Key", "Operator", "Value"],
+            "required": [
+                "Key",
+                "Operator",
+                "Value"
+            ],
             "additionalProperties": false
         },
         "FilterValue": {
@@ -179,7 +216,9 @@
                     "maximum": 1440
                 }
             },
-            "required": ["SessionTimeoutMinutes"],
+            "required": [
+                "SessionTimeoutMinutes"
+            ],
             "additionalProperties": false
         },
         "OutputConfig": {
@@ -201,6 +240,52 @@
                     "description": "The CloudWatch log group name for evaluation results."
                 }
             },
+            "additionalProperties": false
+        },
+        "Insight": {
+            "type": "object",
+            "description": "An insight configuration for failure analysis.",
+            "properties": {
+                "InsightId": {
+                    "type": "string",
+                    "description": "The unique identifier of the insight.",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9._]+$"
+                }
+            },
+            "required": [
+                "InsightId"
+            ],
+            "additionalProperties": false
+        },
+        "ClusteringFrequency": {
+            "type": "string",
+            "description": "The frequency at which clustering reports are generated.",
+            "enum": [
+                "DAILY",
+                "WEEKLY",
+                "MONTHLY"
+            ]
+        },
+        "ClusteringConfig": {
+            "type": "object",
+            "description": "The configuration for clustering analysis of evaluation results.",
+            "properties": {
+                "Frequencies": {
+                    "type": "array",
+                    "description": "The list of frequencies at which clustering reports are generated.",
+                    "items": {
+                        "$ref": "#/definitions/ClusteringFrequency"
+                    },
+                    "minItems": 0,
+                    "maxItems": 3,
+                    "insertionOrder": false
+                }
+            },
+            "required": [
+                "Frequencies"
+            ],
             "additionalProperties": false
         }
     },
@@ -243,7 +328,7 @@
             "items": {
                 "$ref": "#/definitions/EvaluatorReference"
             },
-            "minItems": 1,
+            "minItems": 0,
             "maxItems": 10,
             "insertionOrder": false
         },
@@ -279,6 +364,20 @@
             "items": {
                 "$ref": "#/definitions/Tag"
             }
+        },
+        "Insights": {
+            "type": "array",
+            "description": "The list of insights to enable for failure analysis.",
+            "items": {
+                "$ref": "#/definitions/Insight"
+            },
+            "minItems": 0,
+            "maxItems": 10,
+            "insertionOrder": false
+        },
+        "ClusteringConfig": {
+            "$ref": "#/definitions/ClusteringConfig",
+            "description": "The configuration for clustering analysis of evaluation results."
         }
     },
     "additionalProperties": false,
@@ -286,7 +385,6 @@
         "OnlineEvaluationConfigName",
         "DataSourceConfig",
         "EvaluationExecutionRoleArn",
-        "Evaluators",
         "Rule"
     ],
     "readOnlyProperties": [
@@ -304,7 +402,9 @@
         "/properties/OnlineEvaluationConfigArn"
     ],
     "additionalIdentifiers": [
-        ["/properties/OnlineEvaluationConfigId"]
+        [
+            "/properties/OnlineEvaluationConfigId"
+        ]
     ],
     "tagging": {
         "taggable": true,
@@ -313,9 +413,9 @@
         "cloudFormationSystemTags": false,
         "tagProperty": "/properties/Tags",
         "permissions": [
-          "bedrock-agentcore:TagResource",
-          "bedrock-agentcore:UntagResource",
-          "bedrock-agentcore:ListTagsForResource"
+            "bedrock-agentcore:TagResource",
+            "bedrock-agentcore:UntagResource",
+            "bedrock-agentcore:ListTagsForResource"
         ]
     },
     "handlers": {

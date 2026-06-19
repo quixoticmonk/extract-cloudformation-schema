@@ -263,6 +263,9 @@
                 "glue:TagResource",
                 "glue:GetTags",
                 "iam:PassRole",
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:GenerateDataKey",
                 "redshift-serverless:CreateNamespace",
                 "redshift-serverless:GetNamespace",
                 "redshift-serverless:CreateWorkgroup",
@@ -283,7 +286,7 @@
             ]
         },
         "read": {
-            "permissions": ["glue:GetCatalog", "glue:GetTags"]
+            "permissions": ["glue:GetCatalog", "glue:GetTags", "kms:Decrypt"]
         },
         "update": {
             "permissions": [
@@ -293,6 +296,9 @@
                 "glue:UntagResource",
                 "glue:GetTags",
                 "iam:PassRole",
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:GenerateDataKey",
                 "redshift-serverless:UpdateNamespace",
                 "redshift-serverless:GetNamespace",
                 "redshift-serverless:UpdateWorkgroup",
@@ -307,6 +313,7 @@
             "permissions": [
                 "glue:DeleteCatalog",
                 "glue:GetCatalog",
+                "kms:Decrypt",
                 "redshift-serverless:DeleteNamespace",
                 "redshift-serverless:GetNamespace",
                 "redshift-serverless:DeleteWorkgroup",
@@ -317,7 +324,7 @@
             ]
         },
         "list": {
-            "permissions": ["glue:GetCatalogs"]
+            "permissions": ["glue:GetCatalogs", "kms:Decrypt"]
         }
     }
 }

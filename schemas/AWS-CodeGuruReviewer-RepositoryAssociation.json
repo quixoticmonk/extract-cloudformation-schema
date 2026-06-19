@@ -99,6 +99,10 @@
   "readOnlyProperties": [
     "/properties/AssociationArn"
   ],
+  "writeOnlyProperties": [
+    "/properties/Owner",
+    "/properties/ConnectionArn"
+  ],
   "createOnlyProperties": [
     "/properties/Name",
     "/properties/Type",

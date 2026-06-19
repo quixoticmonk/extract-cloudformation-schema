@@ -62,7 +62,10 @@
     "NetworkType": {
       "description": "The network type of the Connector.",
       "type": "string",
-      "enum": ["IPV4", "DUAL"]
+      "enum": [
+        "IPV4",
+        "DUAL"
+      ]
     },
     "LogDelivery": {
       "$ref": "#/definitions/LogDelivery"
@@ -300,7 +303,7 @@
           "type": "integer"
         }
       },
-      "required": ["WorkerCount"]
+      "required": ["McuCount", "WorkerCount"]
     },
     "S3LogDelivery": {
       "description": "Details about delivering logs to Amazon S3.",

@@ -125,6 +125,9 @@
       }
     }
   },
+  "tagging": {
+    "taggable": false
+  },
   "additionalProperties": false,
   "readOnlyProperties": [
     "/properties/GlobalReplicationGroupId",
@@ -134,6 +137,7 @@
     "/properties/GlobalReplicationGroupIdSuffix",
     "/properties/AutomaticFailoverEnabled",
     "/properties/CacheNodeType",
+    "/properties/CacheParameterGroupName",
     "/properties/EngineVersion",
     "/properties/GlobalNodeGroupCount",
     "/properties/RegionalConfigurations"

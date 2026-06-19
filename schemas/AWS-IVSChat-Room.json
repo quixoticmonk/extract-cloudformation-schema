@@ -21,10 +21,7 @@
           "maxLength": 256
         }
       },
-      "required": [
-        "Value",
-        "Key"
-      ]
+      "required": ["Value", "Key"]
     },
     "MessageReviewHandler": {
       "description": "Configuration information for optional review of messages.",
@@ -34,10 +31,7 @@
         "FallbackResult": {
           "description": "Specifies the fallback behavior if the handler does not return a valid response, encounters an error, or times out.",
           "type": "string",
-          "enum": [
-            "ALLOW",
-            "DENY"
-          ],
+          "enum": ["ALLOW", "DENY"],
           "default": "ALLOW"
         },
         "Uri": {
@@ -119,7 +113,7 @@
     "taggable": true,
     "tagOnCreate": true,
     "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
+    "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
     "permissions": [
       "ivschat:TagResource",
@@ -128,25 +122,14 @@
     ]
   },
   "required": [],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/Id"
-  ],
-  "primaryIdentifier": [
-    "/properties/Arn"
-  ],
+  "readOnlyProperties": ["/properties/Arn", "/properties/Id"],
+  "primaryIdentifier": ["/properties/Arn"],
   "handlers": {
     "create": {
-      "permissions": [
-        "ivschat:CreateRoom",
-        "ivschat:TagResource"
-      ]
+      "permissions": ["ivschat:CreateRoom", "ivschat:TagResource"]
     },
     "read": {
-      "permissions": [
-        "ivschat:GetRoom",
-        "ivschat:ListTagsForResource"
-      ]
+      "permissions": ["ivschat:GetRoom", "ivschat:ListTagsForResource"]
     },
     "update": {
       "permissions": [
@@ -157,16 +140,10 @@
       ]
     },
     "delete": {
-      "permissions": [
-        "ivschat:DeleteRoom",
-        "ivschat:UntagResource"
-      ]
+      "permissions": ["ivschat:DeleteRoom", "ivschat:UntagResource"]
     },
     "list": {
-      "permissions": [
-        "ivschat:ListRooms",
-        "ivschat:ListTagsForResource"
-      ]
+      "permissions": ["ivschat:ListRooms", "ivschat:ListTagsForResource"]
     }
   }
 }

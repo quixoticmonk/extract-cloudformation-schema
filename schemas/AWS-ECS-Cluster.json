@@ -11,7 +11,7 @@
         "tagProperty": "/properties/Tags",
         "cloudFormationSystemTags": true
     },
-    "propertyTransform": {"/properties/Configuration/ManagedStorageConfiguration/FargateEphemeralStorageKmsKeyId": "$join([\"arn:aws[-a-z]*:kms:[a-z0-9-]+:[0-9]{12}:key/\", FargateEphemeralStorageKmsKeyId])"},
+    "propertyTransform": {"/properties/Configuration/ManagedStorageConfiguration/FargateEphemeralStorageKmsKeyId": "FargateEphemeralStorageKmsKeyId $OR $join([\"arn:aws[-a-z]*:kms:[a-z0-9-]+:[0-9]{12}:key/\", FargateEphemeralStorageKmsKeyId])"},
     "handlers": {
         "read": {"permissions": [
             "ecs:DescribeClusters",

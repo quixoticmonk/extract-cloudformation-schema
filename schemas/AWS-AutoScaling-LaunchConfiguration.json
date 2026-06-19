@@ -16,7 +16,13 @@
     },
     "typeName": "AWS::AutoScaling::LaunchConfiguration",
     "description": "The AWS::AutoScaling::LaunchConfiguration resource specifies the launch configuration that can be used by an Auto Scaling group to configure Amazon EC2 instances.",
-    "writeOnlyProperties": ["/properties/InstanceId"],
+    "writeOnlyProperties": [
+        "/properties/InstanceId",
+        "/properties/ClassicLinkVPCId",
+        "/properties/ClassicLinkVPCSecurityGroups",
+        "/properties/KernelId",
+        "/properties/RamDiskId"
+    ],
     "createOnlyProperties": [
         "/properties/AssociatePublicIpAddress",
         "/properties/BlockDeviceMappings",

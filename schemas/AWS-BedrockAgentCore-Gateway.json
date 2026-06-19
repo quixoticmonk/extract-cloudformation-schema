@@ -24,7 +24,8 @@
       "enum": [
         "CUSTOM_JWT",
         "AWS_IAM",
-        "NONE"
+        "NONE",
+        "AUTHENTICATE_ONLY"
       ]
     },
     "CustomJWTAuthorizerConfiguration": {
@@ -87,7 +88,11 @@
           "$ref": "#/definitions/InboundTokenClaimValueType"
         }
       },
-      "required": ["AuthorizingClaimMatchValue", "InboundTokenClaimName", "InboundTokenClaimValueType"],
+      "required": [
+        "AuthorizingClaimMatchValue",
+        "InboundTokenClaimName",
+        "InboundTokenClaimValueType"
+      ],
       "additionalProperties": false
     },
     "InboundTokenClaimName": {
@@ -98,7 +103,10 @@
     "InboundTokenClaimValueType": {
       "type": "string",
       "description": "Token claim data type",
-      "enum": ["STRING", "STRING_ARRAY"]
+      "enum": [
+        "STRING",
+        "STRING_ARRAY"
+      ]
     },
     "AuthorizingClaimMatchValueType": {
       "type": "object",
@@ -111,20 +119,35 @@
           "$ref": "#/definitions/ClaimMatchValueType"
         }
       },
-      "required": ["ClaimMatchOperator", "ClaimMatchValue"],
+      "required": [
+        "ClaimMatchOperator",
+        "ClaimMatchValue"
+      ],
       "additionalProperties": false
     },
     "ClaimMatchOperator": {
       "type": "string",
       "description": "The relationship between the claim field value and the value or values being matched",
-      "enum": ["EQUALS", "CONTAINS", "CONTAINS_ANY"]
+      "enum": [
+        "EQUALS",
+        "CONTAINS",
+        "CONTAINS_ANY"
+      ]
     },
     "ClaimMatchValueType": {
       "type": "object",
       "description": "The value or values in the custom claim to match for",
       "oneOf": [
-        {"required": ["MatchValueString"]},
-        {"required": ["MatchValueStringList"]}
+        {
+          "required": [
+            "MatchValueString"
+          ]
+        },
+        {
+          "required": [
+            "MatchValueStringList"
+          ]
+        }
       ],
       "properties": {
         "MatchValueString": {
@@ -312,6 +335,32 @@
         },
         "SearchType": {
           "$ref": "#/definitions/SearchType"
+        },
+        "SessionConfiguration": {
+          "$ref": "#/definitions/SessionConfiguration"
+        },
+        "StreamingConfiguration": {
+          "$ref": "#/definitions/StreamingConfiguration"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SessionConfiguration": {
+      "type": "object",
+      "properties": {
+        "SessionTimeoutInSeconds": {
+          "type": "integer",
+          "minimum": 900,
+          "maximum": 28800
+        }
+      },
+      "additionalProperties": false
+    },
+    "StreamingConfiguration": {
+      "type": "object",
+      "properties": {
+        "EnableResponseStreaming": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false
@@ -408,7 +457,14 @@
       "$ref": "#/definitions/GatewayProtocolConfiguration"
     },
     "ProtocolType": {
-      "$ref": "#/definitions/GatewayProtocolType"
+      "allOf": [
+        {
+          "$ref": "#/definitions/GatewayProtocolType"
+        },
+        {
+          "default": "MCP"
+        }
+      ]
     },
     "RoleArn": {
       "type": "string",
@@ -441,7 +497,6 @@
   "required": [
     "AuthorizerType",
     "Name",
-    "ProtocolType",
     "RoleArn"
   ],
   "readOnlyProperties": [
@@ -512,7 +567,7 @@
     "taggable": true,
     "tagOnCreate": true,
     "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
+    "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
     "permissions": [
       "bedrock-agentcore:ListTagsForResource",

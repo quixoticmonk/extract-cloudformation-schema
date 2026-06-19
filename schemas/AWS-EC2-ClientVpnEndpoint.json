@@ -70,6 +70,9 @@
     "SelfServicePortal": {
       "type": "string"
     },
+    "TransitGatewayConfiguration": {
+      "$ref": "#/definitions/TransitGatewayConfiguration"
+    },
     "TransportProtocol": {
       "type": "string"
     },
@@ -168,6 +171,32 @@
         "DirectoryId"
       ]
     },
+    "TransitGatewayConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "TransitGatewayId": {
+          "type": "string"
+        },
+        "AvailabilityZoneIds": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string"
+          }
+        },
+        "AvailabilityZones": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "TransitGatewayId"
+      ]
+    },
     "CertificateAuthenticationRequest": {
       "type": "object",
       "additionalProperties": false,
@@ -248,6 +277,7 @@
     "/properties/ClientCidrBlock",
     "/properties/TagSpecifications",
     "/properties/AuthenticationOptions",
+    "/properties/TransitGatewayConfiguration",
     "/properties/EndpointIpAddressType",
     "/properties/TrafficIpAddressType"
   ],
