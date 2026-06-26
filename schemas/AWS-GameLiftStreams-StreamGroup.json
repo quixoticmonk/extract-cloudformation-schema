@@ -68,10 +68,6 @@
             },
             "additionalProperties": false
         },
-        "Unit": {
-            "type": "object",
-            "additionalProperties": false
-        },
         "VpcTransitConfiguration": {
             "type": "object",
             "properties": {
@@ -206,7 +202,7 @@
         "taggable": true,
         "tagOnCreate": true,
         "tagUpdatable": true,
-        "cloudFormationSystemTags": false,
+        "cloudFormationSystemTags": true,
         "tagProperty": "/properties/Tags",
         "permissions": [
             "gameliftstreams:TagResource",

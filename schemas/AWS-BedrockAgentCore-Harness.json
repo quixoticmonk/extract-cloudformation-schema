@@ -1,6 +1,6 @@
 {
     "typeName": "AWS::BedrockAgentCore::Harness",
-    "description": "Definition of AWS::BedrockAgentCore::Harness resource type - a managed agentic loop service that provides a turnkey solution for running stateful, tool-equipped AI agents.",
+    "description": "Resource Type definition for AWS::BedrockAgentCore::Harness - a managed agentic loop service that provides a turnkey solution for running stateful, tool-equipped AI agents.",
     "definitions": {
         "HarnessStatus": {
             "type": "string",
@@ -77,7 +77,7 @@
                         "$ref": "#/definitions/FilesystemConfiguration"
                     },
                     "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 5
                 }
             },
             "additionalProperties": false
@@ -150,11 +150,14 @@
             "properties": {
                 "SessionStorage": {
                     "$ref": "#/definitions/SessionStorageConfiguration"
+                },
+                "S3FilesAccessPoint": {
+                    "$ref": "#/definitions/S3FilesAccessPointConfiguration"
+                },
+                "EfsAccessPoint": {
+                    "$ref": "#/definitions/EfsAccessPointConfiguration"
                 }
             },
-            "required": [
-                "SessionStorage"
-            ],
             "additionalProperties": false
         },
         "SessionStorageConfiguration": {
@@ -172,6 +175,50 @@
             ],
             "additionalProperties": false
         },
+        "S3FilesAccessPointConfiguration": {
+            "type": "object",
+            "description": "Configuration for an Amazon S3 Files access point to mount into the AgentCore Runtime.",
+            "properties": {
+                "AccessPointArn": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "pattern": "^arn:aws[-a-z]*:s3files:[0-9a-z-:]+:file-system/fs-[0-9a-f]{17,40}/access-point/fsap-[0-9a-f]{17,40}$"
+                },
+                "MountPath": {
+                    "type": "string",
+                    "minLength": 6,
+                    "maxLength": 200,
+                    "pattern": "^/mnt/[a-zA-Z0-9._-]+/?$"
+                }
+            },
+            "required": [
+                "AccessPointArn",
+                "MountPath"
+            ],
+            "additionalProperties": false
+        },
+        "EfsAccessPointConfiguration": {
+            "type": "object",
+            "description": "Configuration for an Amazon EFS access point to mount into the AgentCore Runtime.",
+            "properties": {
+                "AccessPointArn": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "pattern": "^arn:aws[-a-z]*:elasticfilesystem:[0-9a-z-:]+:access-point/fsap-[0-9a-f]{8,40}$"
+                },
+                "MountPath": {
+                    "type": "string",
+                    "minLength": 6,
+                    "maxLength": 200,
+                    "pattern": "^/mnt/[a-zA-Z0-9._-]+/?$"
+                }
+            },
+            "required": [
+                "AccessPointArn",
+                "MountPath"
+            ],
+            "additionalProperties": false
+        },
         "HarnessModelConfiguration": {
             "type": "object",
             "properties": {
@@ -183,6 +230,9 @@
                 },
                 "GeminiModelConfig": {
                     "$ref": "#/definitions/HarnessGeminiModelConfig"
+                },
+                "LiteLlmModelConfig": {
+                    "$ref": "#/definitions/HarnessLiteLlmModelConfig"
                 }
             },
             "oneOf": [
@@ -199,6 +249,11 @@
                 {
                     "required": [
                         "GeminiModelConfig"
+                    ]
+                },
+                {
+                    "required": [
+                        "LiteLlmModelConfig"
                     ]
                 }
             ],
@@ -223,6 +278,22 @@
                     "type": "number",
                     "minimum": 0,
                     "maximum": 1
+                },
+                "ApiFormat": {
+                    "type": "string",
+                    "enum": [
+                        "converse_stream",
+                        "responses",
+                        "chat_completions"
+                    ]
+                },
+                "AdditionalParams": {
+                    "type": "object",
+                    "description": "Provider-specific parameters passed through to the model provider unchanged.",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[\\s\\S]{1,256}$": {}
+                    }
                 }
             },
             "required": [
@@ -253,11 +324,69 @@
                     "type": "number",
                     "minimum": 0,
                     "maximum": 1
+                },
+                "ApiFormat": {
+                    "type": "string",
+                    "enum": [
+                        "chat_completions",
+                        "responses"
+                    ]
+                },
+                "AdditionalParams": {
+                    "type": "object",
+                    "description": "Provider-specific parameters passed through to the model provider unchanged.",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[\\s\\S]{1,256}$": {}
+                    }
                 }
             },
             "required": [
                 "ModelId",
                 "ApiKeyArn"
+            ],
+            "additionalProperties": false
+        },
+        "HarnessLiteLlmModelConfig": {
+            "type": "object",
+            "properties": {
+                "ModelId": {
+                    "type": "string"
+                },
+                "ApiKeyArn": {
+                    "type": "string",
+                    "pattern": "^arn:aws:bedrock-agentcore:[a-z0-9-]+:[0-9]{12}:token-vault/[a-zA-Z0-9-.]+/apikeycredentialprovider/[a-zA-Z0-9-.]+$"
+                },
+                "ApiBase": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 16383
+                },
+                "MaxTokens": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "Temperature": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 2
+                },
+                "TopP": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "AdditionalParams": {
+                    "type": "object",
+                    "description": "Provider-specific parameters passed through to LiteLLM unchanged.",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[\\s\\S]{1,256}$": {}
+                    }
+                }
+            },
+            "required": [
+                "ModelId"
             ],
             "additionalProperties": false
         },
@@ -343,10 +472,124 @@
                         "$ref": "#/definitions/CustomClaimValidationType"
                     },
                     "minItems": 1
+                },
+                "PrivateEndpoint": {
+                    "$ref": "#/definitions/PrivateEndpoint"
+                },
+                "PrivateEndpointOverrides": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PrivateEndpointOverride"
+                    },
+                    "maxItems": 5
                 }
             },
             "required": [
                 "DiscoveryUrl"
+            ],
+            "additionalProperties": false
+        },
+        "PrivateEndpoint": {
+            "type": "object",
+            "description": "Private endpoint configuration for connecting to the OpenID Connect discovery endpoint over a private network.",
+            "properties": {
+                "SelfManagedLatticeResource": {
+                    "$ref": "#/definitions/SelfManagedLatticeResource"
+                },
+                "ManagedVpcResource": {
+                    "$ref": "#/definitions/ManagedVpcResource"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SelfManagedLatticeResource": {
+            "type": "object",
+            "description": "Configuration for connecting to a private resource using a self-managed VPC Lattice resource configuration.",
+            "properties": {
+                "ResourceConfigurationIdentifier": {
+                    "type": "string",
+                    "minLength": 20,
+                    "maxLength": 2048,
+                    "pattern": "^((rcfg-[0-9a-z]{17})|(arn:[a-z0-9\\-]+:vpc-lattice:[a-zA-Z0-9\\-]+:\\d{12}:resourceconfiguration/rcfg-[0-9a-z]{17}))$"
+                }
+            },
+            "required": [
+                "ResourceConfigurationIdentifier"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedVpcResource": {
+            "type": "object",
+            "description": "Configuration for a service-managed VPC endpoint.",
+            "properties": {
+                "VpcIdentifier": {
+                    "type": "string",
+                    "pattern": "^vpc-(([0-9a-z]{8})|([0-9a-z]{17}))$"
+                },
+                "SubnetIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^subnet-[0-9a-zA-Z]{8,17}$"
+                    }
+                },
+                "EndpointIpAddressType": {
+                    "type": "string",
+                    "enum": [
+                        "IPV4",
+                        "IPV6"
+                    ]
+                },
+                "SecurityGroupIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^sg-(([0-9a-z]{8})|([0-9a-z]{17}))$"
+                    },
+                    "minItems": 0,
+                    "maxItems": 5
+                },
+                "Tags": {
+                    "type": "object",
+                    "maxProperties": 50,
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[a-zA-Z0-9\\s_.:/=+\\-@]{1,128}$": {
+                            "type": "string",
+                            "maxLength": 256,
+                            "pattern": "^[a-zA-Z0-9\\s_.:/=+\\-@]*$"
+                        }
+                    }
+                },
+                "RoutingDomain": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 255
+                }
+            },
+            "required": [
+                "VpcIdentifier",
+                "SubnetIds",
+                "EndpointIpAddressType"
+            ],
+            "additionalProperties": false
+        },
+        "PrivateEndpointOverride": {
+            "type": "object",
+            "description": "Maps a domain to a private endpoint for resolving that domain over a private network.",
+            "properties": {
+                "Domain": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 253
+                },
+                "PrivateEndpoint": {
+                    "$ref": "#/definitions/PrivateEndpoint"
+                }
+            },
+            "required": [
+                "Domain",
+                "PrivateEndpoint"
             ],
             "additionalProperties": false
         },
@@ -692,10 +935,71 @@
                     "type": "string",
                     "description": "The filesystem path to the skill definition.",
                     "minLength": 1
+                },
+                "S3": {
+                    "$ref": "#/definitions/HarnessSkillS3Source"
+                },
+                "Git": {
+                    "$ref": "#/definitions/HarnessSkillGitSource"
+                }
+            },
+            "additionalProperties": false
+        },
+        "HarnessSkillS3Source": {
+            "type": "object",
+            "description": "An S3 source containing the skill.",
+            "properties": {
+                "Uri": {
+                    "type": "string",
+                    "description": "The S3 URI pointing to the skill directory (e.g., s3://bucket/skills/my-skill/).",
+                    "minLength": 5,
+                    "pattern": "^s3://"
                 }
             },
             "required": [
-                "Path"
+                "Uri"
+            ],
+            "additionalProperties": false
+        },
+        "HarnessSkillGitSource": {
+            "type": "object",
+            "description": "A git repository containing the skill, cloned over HTTPS.",
+            "properties": {
+                "Url": {
+                    "type": "string",
+                    "description": "The HTTPS URL of the git repository.",
+                    "minLength": 8,
+                    "pattern": "^https://"
+                },
+                "Path": {
+                    "type": "string",
+                    "description": "Subdirectory within the repository containing the skill."
+                },
+                "Auth": {
+                    "$ref": "#/definitions/HarnessSkillGitAuth"
+                }
+            },
+            "required": [
+                "Url"
+            ],
+            "additionalProperties": false
+        },
+        "HarnessSkillGitAuth": {
+            "type": "object",
+            "description": "Authentication configuration for accessing a private git repository.",
+            "properties": {
+                "CredentialArn": {
+                    "type": "string",
+                    "description": "The ARN of the credential in AgentCore Identity containing the password or personal access token.",
+                    "pattern": "^arn:aws:bedrock-agentcore:[a-z0-9-]+:[0-9]{12}:token-vault/[a-zA-Z0-9-.]+/apikeycredentialprovider/[a-zA-Z0-9-.]+$"
+                },
+                "Username": {
+                    "type": "string",
+                    "description": "Username for authentication. Defaults to 'oauth2' if not specified."
+                }
+            },
+            "required": [
+                "CredentialArn"
             ],
             "additionalProperties": false
         },
@@ -740,10 +1044,18 @@
             "type": "object",
             "properties": {
                 "TopK": {
-                    "type": "integer"
+                    "description": "Maximum number of memory records to retrieve. Typed as both integer and string because CloudFormation marshals scalars nested in dynamic-key (patternProperties) maps as strings, while direct API/CDK callers send a JSON integer; both forms must validate.",
+                    "type": [
+                        "integer",
+                        "string"
+                    ]
                 },
                 "RelevanceScore": {
-                    "type": "number"
+                    "description": "Minimum relevance score for retrieved memories. Typed as both number and string because CloudFormation marshals scalars nested in dynamic-key (patternProperties) maps as strings, while direct API/CDK callers send a JSON number; both forms must validate.",
+                    "type": [
+                        "number",
+                        "string"
+                    ]
                 },
                 "StrategyId": {
                     "type": "string"
@@ -974,8 +1286,7 @@
         "/properties/Environment/AgentCoreRuntimeEnvironment/AgentRuntimeId"
     ],
     "createOnlyProperties": [
-        "/properties/HarnessName",
-        "/properties/Environment/AgentCoreRuntimeEnvironment/NetworkConfiguration"
+        "/properties/HarnessName"
     ],
     "primaryIdentifier": [
         "/properties/Arn"
@@ -1013,6 +1324,7 @@
                 "bedrock-agentcore:TagResource",
                 "bedrock-agentcore:UpdateAgentRuntime",
                 "bedrock-agentcore:UpdateAgentRuntimeEndpoint",
+                "iam:CreateServiceLinkedRole",
                 "iam:PassRole"
             ]
         },
@@ -1039,6 +1351,7 @@
                 "bedrock-agentcore:UpdateAgentRuntime",
                 "bedrock-agentcore:UpdateAgentRuntimeEndpoint",
                 "bedrock-agentcore:UpdateHarness",
+                "iam:CreateServiceLinkedRole",
                 "iam:PassRole"
             ]
         },
