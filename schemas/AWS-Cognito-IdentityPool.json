@@ -7,9 +7,9 @@
         "taggable": true,
         "tagOnCreate": true,
         "tagUpdatable": true,
-        "cloudFormationSystemTags": false,
+        "cloudFormationSystemTags": true,
         "tagProperty": "/properties/IdentityPoolTags",
-        "permissions": ["cognito-identity:TagResource", "cognito-identity:UntagResource"]
+        "permissions": ["cognito-identity:TagResource", "cognito-identity:UntagResource", "cognito-identity:ListTagsForResource"]
     },
     "definitions": {
         "Tag": {
@@ -179,7 +179,8 @@
         },
         "read": {
             "permissions": [
-                "cognito-identity:DescribeIdentityPool"
+                "cognito-identity:DescribeIdentityPool",
+                "cognito-identity:ListTagsForResource"
             ]
         },
         "update": {

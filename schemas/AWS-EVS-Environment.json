@@ -187,7 +187,8 @@
             "type": "string",
             "enum": [
                 "VCF-5.2.1",
-                "VCF-5.2.2"
+                "VCF-5.2.2",
+                "SELF_DEPLOYED"
             ]
         },
         "TermsAccepted": {
@@ -405,11 +406,7 @@
         "VpcId",
         "ServiceAccessSubnetId",
         "VcfVersion",
-        "TermsAccepted",
-        "LicenseInfo",
-        "ConnectivityInfo",
-        "VcfHostnames",
-        "SiteId"
+        "TermsAccepted"
     ],
     "additionalProperties": false,
     "primaryIdentifier": [

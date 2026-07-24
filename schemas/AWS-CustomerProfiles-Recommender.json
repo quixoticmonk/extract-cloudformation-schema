@@ -249,6 +249,7 @@
     "read": {
       "permissions": [
         "profile:GetRecommender",
+        "profile:ListTagsForResource",
         "kms:GenerateDataKey",
         "kms:Decrypt"
       ]

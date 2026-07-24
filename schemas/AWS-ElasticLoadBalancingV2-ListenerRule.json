@@ -43,12 +43,35 @@
       },
       "description" : ""
     },
+    "Tags" : {
+      "type" : "array",
+      "description" : "",
+      "uniqueItems" : false,
+      "insertionOrder" : false,
+      "items" : {
+        "$ref" : "#/definitions/Tag"
+      }
+    },
     "IsDefault" : {
       "type" : "boolean",
       "description" : ""
     }
   },
   "definitions" : {
+    "Tag" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "Value" : {
+          "type" : "string"
+        },
+        "Key" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "Value", "Key" ],
+      "description" : ""
+    },
     "TargetGroupTuple" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -502,6 +525,10 @@
             "type" : "string"
           },
           "description" : "The source IP addresses, in CIDR format. You can use both IPv4 and IPv6 addresses. Wildcards are not supported.\n If you specify multiple addresses, the condition is satisfied if the source IP address of the request matches one of the CIDR blocks. This condition is not satisfied by the addresses in the X-Forwarded-For header."
+        },
+        "IpAddressType" : {
+          "type" : "string",
+          "description" : ""
         }
       },
       "description" : "Information about a source IP condition.\n You can use this condition to route based on the IP address of the source that connects to the load balancer. If a client is behind a proxy, this is the IP address of the proxy not the IP address of the client."
@@ -582,14 +609,16 @@
   "readOnlyProperties" : [ "/properties/RuleArn", "/properties/IsDefault" ],
   "writeOnlyProperties" : [ "/properties/Actions/*/AuthenticateOidcConfig/ClientSecret", "/properties/ListenerArn" ],
   "tagging" : {
-    "taggable" : false,
-    "tagOnCreate" : false,
-    "tagUpdatable" : false,
-    "cloudFormationSystemTags" : false
+    "taggable" : true,
+    "tagOnCreate" : true,
+    "tagUpdatable" : true,
+    "cloudFormationSystemTags" : true,
+    "tagProperty" : "/properties/Tags",
+    "permissions" : [ "elasticloadbalancing:AddTags", "elasticloadbalancing:DescribeTags", "elasticloadbalancing:RemoveTags" ]
   },
   "handlers" : {
     "create" : {
-      "permissions" : [ "elasticloadbalancing:CreateRule", "elasticloadbalancing:DescribeRules", "cognito-idp:DescribeUserPoolClient" ]
+      "permissions" : [ "elasticloadbalancing:CreateRule", "elasticloadbalancing:DescribeRules", "elasticloadbalancing:AddTags", "cognito-idp:DescribeUserPoolClient" ]
     },
     "delete" : {
       "permissions" : [ "elasticloadbalancing:DeleteRule", "elasticloadbalancing:DescribeRules" ]
@@ -618,10 +647,10 @@
       "permissions" : [ "elasticloadbalancing:DescribeRules" ]
     },
     "read" : {
-      "permissions" : [ "elasticloadbalancing:DescribeRules" ]
+      "permissions" : [ "elasticloadbalancing:DescribeRules", "elasticloadbalancing:DescribeTags" ]
     },
     "update" : {
-      "permissions" : [ "elasticloadbalancing:ModifyRule", "elasticloadbalancing:SetRulePriorities", "elasticloadbalancing:DescribeRules" ]
+      "permissions" : [ "elasticloadbalancing:ModifyRule", "elasticloadbalancing:SetRulePriorities", "elasticloadbalancing:DescribeRules", "elasticloadbalancing:AddTags", "elasticloadbalancing:RemoveTags", "elasticloadbalancing:DescribeTags" ]
     }
   }
 }

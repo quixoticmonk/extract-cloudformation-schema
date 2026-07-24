@@ -195,6 +195,7 @@
         "profile:PutDomainObjectType",
         "profile:UntagResource",
         "profile:TagResource",
+        "profile:ListTagsForResource",
         "kms:GenerateDataKey",
         "kms:Decrypt"
       ]
