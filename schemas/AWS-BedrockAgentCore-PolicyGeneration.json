@@ -1,0 +1,113 @@
+{
+    "typeName": "AWS::BedrockAgentCore::PolicyGeneration",
+    "description": "Represents a policy generation request within the Amazon Bedrock AgentCore Policy system that converts natural language descriptions into Cedar policy statements.",
+    "properties": {
+        "PolicyGenerationArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the policy generation.",
+            "minLength": 103,
+            "maxLength": 210,
+            "pattern": "^arn:aws[-a-z]{0,7}:bedrock-agentcore:[a-z0-9-]{9,15}:[0-9]{12}:policy-engine/[a-zA-Z][a-zA-Z0-9-_]{0,47}-[a-zA-Z0-9_]{10}/policy-generation/[a-zA-Z][a-zA-Z0-9-_]{0,47}-[a-zA-Z0-9_]{10}$"
+        },
+        "PolicyGenerationId": {
+            "type": "string",
+            "description": "The unique identifier of the policy generation.",
+            "minLength": 12,
+            "maxLength": 59,
+            "pattern": "^[A-Za-z][A-Za-z0-9_]*-[a-z0-9_]{10}$"
+        },
+        "PolicyEngineId": {
+            "type": "string",
+            "description": "The identifier of the policy engine associated with this policy generation.",
+            "minLength": 12,
+            "maxLength": 59,
+            "pattern": "^[A-Za-z][A-Za-z0-9_]*-[a-z0-9_]{10}$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "A customer-assigned name for the policy generation request.",
+            "minLength": 1,
+            "maxLength": 48,
+            "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+        },
+        "Resource": {
+            "type": "object",
+            "description": "The resource information that provides context for policy generation.",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the resource.",
+                    "minLength": 20,
+                    "maxLength": 1011
+                }
+            },
+            "required": ["Arn"],
+            "additionalProperties": false
+        },
+        "Status": {
+            "type": "string",
+            "description": "The current status of the policy generation.",
+            "enum": ["GENERATING", "GENERATED", "GENERATE_FAILED", "DELETE_FAILED"]
+        },
+        "StatusReasons": {
+            "type": "array",
+            "description": "Additional information about the generation status.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "CreatedAt": {
+            "type": "string",
+            "description": "The timestamp when the policy generation request was created.",
+            "format": "date-time"
+        },
+        "UpdatedAt": {
+            "type": "string",
+            "description": "The timestamp when the policy generation was last updated.",
+            "format": "date-time"
+        }
+    },
+    "required": ["Name", "PolicyEngineId", "Resource"],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/Name",
+        "/properties/PolicyEngineId",
+        "/properties/Resource"
+    ],
+    "readOnlyProperties": [
+        "/properties/PolicyGenerationArn",
+        "/properties/PolicyGenerationId",
+        "/properties/Status",
+        "/properties/StatusReasons",
+        "/properties/CreatedAt",
+        "/properties/UpdatedAt"
+    ],
+    "primaryIdentifier": ["/properties/PolicyGenerationArn"],
+    "additionalIdentifiers": [["/properties/PolicyEngineId", "/properties/PolicyGenerationId"]],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "bedrock-agentcore:GetPolicyGeneration"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "PolicyEngineId": {
+                        "type": "string",
+                        "minLength": 12,
+                        "maxLength": 59,
+                        "pattern": "^[A-Za-z][A-Za-z0-9_]*-[a-z0-9_]{10}$"
+                    }
+                },
+                "required": ["PolicyEngineId"]
+            },
+            "permissions": [
+                "bedrock-agentcore:ListPolicyGenerations"
+            ]
+        }
+    }
+}

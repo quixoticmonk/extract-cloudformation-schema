@@ -26,7 +26,7 @@
             ]
         },
         "ServiceDetails": {
-            "description": "Service-specific configuration details - only MCPServerSigV4 supports in-place updates, all other service types require replacement when modified",
+            "description": "Service-specific configuration details - MCPServerSigV4 supports in-place updates; GitLab (TokenValue), MCPServer (ApiKey or BearerToken credential rotation), MCPServerNewRelic (ApiKey rotation), and MCPServerGrafana (BearerToken rotation) support in-place credential rotation; all other service types and fields require replacement when modified",
             "type": "object",
             "oneOf": [
                 {
@@ -35,7 +35,9 @@
                             "$ref": "#/definitions/DynatraceServiceDetails"
                         }
                     },
-                    "required": ["Dynatrace"],
+                    "required": [
+                        "Dynatrace"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -44,17 +46,20 @@
                             "$ref": "#/definitions/MCPServerDetails"
                         }
                     },
-                    "required": ["MCPServer"],
+                    "required": [
+                        "MCPServer"
+                    ],
                     "additionalProperties": false
                 },
-
                 {
                     "properties": {
                         "MCPServerSplunk": {
                             "$ref": "#/definitions/MCPServerSplunkDetails"
                         }
                     },
-                    "required": ["MCPServerSplunk"],
+                    "required": [
+                        "MCPServerSplunk"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -63,7 +68,9 @@
                             "$ref": "#/definitions/NewRelicServiceDetails"
                         }
                     },
-                    "required": ["MCPServerNewRelic"],
+                    "required": [
+                        "MCPServerNewRelic"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -72,7 +79,9 @@
                             "$ref": "#/definitions/GitLabDetails"
                         }
                     },
-                    "required": ["GitLab"],
+                    "required": [
+                        "GitLab"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -81,7 +90,9 @@
                             "$ref": "#/definitions/ServiceNowServiceDetails"
                         }
                     },
-                    "required": ["ServiceNow"],
+                    "required": [
+                        "ServiceNow"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -90,7 +101,9 @@
                             "$ref": "#/definitions/PagerDutyDetails"
                         }
                     },
-                    "required": ["PagerDuty"],
+                    "required": [
+                        "PagerDuty"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -99,7 +112,9 @@
                             "$ref": "#/definitions/AzureIdentityServiceDetails"
                         }
                     },
-                    "required": ["AzureIdentity"],
+                    "required": [
+                        "AzureIdentity"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -108,7 +123,9 @@
                             "$ref": "#/definitions/MCPServerSigV4Details"
                         }
                     },
-                    "required": ["MCPServerSigV4"],
+                    "required": [
+                        "MCPServerSigV4"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -117,7 +134,9 @@
                             "$ref": "#/definitions/MCPServerGrafanaDetails"
                         }
                     },
-                    "required": ["MCPServerGrafana"],
+                    "required": [
+                        "MCPServerGrafana"
+                    ],
                     "additionalProperties": false
                 }
             ]
@@ -134,7 +153,9 @@
                     "$ref": "#/definitions/DynatraceAuthorizationConfig"
                 }
             },
-            "required": ["AccountUrn"],
+            "required": [
+                "AccountUrn"
+            ],
             "additionalProperties": false
         },
         "DynatraceAuthorizationConfig": {
@@ -160,7 +181,9 @@
                     "$ref": "#/definitions/ServiceNowAuthorizationConfig"
                 }
             },
-            "required": ["InstanceUrl"],
+            "required": [
+                "InstanceUrl"
+            ],
             "additionalProperties": false
         },
         "ServiceNowAuthorizationConfig": {
@@ -188,7 +211,10 @@
                     "$ref": "#/definitions/PagerDutyAuthorizationConfig"
                 }
             },
-            "required": ["Scopes", "AuthorizationConfig"],
+            "required": [
+                "Scopes",
+                "AuthorizationConfig"
+            ],
             "additionalProperties": false
         },
         "PagerDutyAuthorizationConfig": {
@@ -201,7 +227,6 @@
             },
             "additionalProperties": false
         },
-
         "MCPServerSigV4Details": {
             "description": "SigV4-authenticated MCP server configuration",
             "type": "object",
@@ -225,7 +250,11 @@
                     "$ref": "#/definitions/MCPServerSigV4AuthorizationConfig"
                 }
             },
-            "required": ["Name", "Endpoint", "AuthorizationConfig"],
+            "required": [
+                "Name",
+                "Endpoint",
+                "AuthorizationConfig"
+            ],
             "additionalProperties": false
         },
         "MCPServerSigV4AuthorizationConfig": {
@@ -265,10 +294,12 @@
                     "additionalProperties": false
                 }
             },
-            "required": ["Region", "Service"],
+            "required": [
+                "Region",
+                "Service"
+            ],
             "additionalProperties": false
         },
-
         "MCPServerDetails": {
             "description": "MCP server configuration",
             "type": "object",
@@ -292,7 +323,11 @@
                     "$ref": "#/definitions/MCPServerAuthorizationConfig"
                 }
             },
-            "required": ["Name", "Endpoint", "AuthorizationConfig"],
+            "required": [
+                "Name",
+                "Endpoint",
+                "AuthorizationConfig"
+            ],
             "additionalProperties": false
         },
         "MCPServerAuthorizationConfig": {
@@ -305,7 +340,9 @@
                             "$ref": "#/definitions/MCPServerOAuthClientCredentialsConfig"
                         }
                     },
-                    "required": ["OAuthClientCredentials"],
+                    "required": [
+                        "OAuthClientCredentials"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -314,7 +351,20 @@
                             "$ref": "#/definitions/ApiKeyDetails"
                         }
                     },
-                    "required": ["ApiKey"],
+                    "required": [
+                        "ApiKey"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "BearerToken": {
+                            "$ref": "#/definitions/BearerTokenDetails"
+                        }
+                    },
+                    "required": [
+                        "BearerToken"
+                    ],
                     "additionalProperties": false
                 }
             ]
@@ -329,7 +379,9 @@
                             "$ref": "#/definitions/BearerTokenDetails"
                         }
                     },
-                    "required": ["BearerToken"],
+                    "required": [
+                        "BearerToken"
+                    ],
                     "additionalProperties": false
                 }
             ]
@@ -367,10 +419,13 @@
                     "type": "object"
                 }
             },
-            "required": ["ClientId", "ClientSecret", "ExchangeUrl"],
+            "required": [
+                "ClientId",
+                "ClientSecret",
+                "ExchangeUrl"
+            ],
             "additionalProperties": false
         },
-
         "GitLabDetails": {
             "description": "GitLab service configuration",
             "type": "object",
@@ -383,7 +438,10 @@
                 "TokenType": {
                     "description": "Type of GitLab access token",
                     "type": "string",
-                    "enum": ["personal", "group"]
+                    "enum": [
+                        "personal",
+                        "group"
+                    ]
                 },
                 "TokenValue": {
                     "description": "GitLab access token value",
@@ -395,7 +453,11 @@
                     "type": "string"
                 }
             },
-            "required": ["TargetUrl", "TokenType", "TokenValue"],
+            "required": [
+                "TargetUrl",
+                "TokenType",
+                "TokenValue"
+            ],
             "additionalProperties": false
         },
         "OAuthClientDetails": {
@@ -419,7 +481,10 @@
                     "type": "object"
                 }
             },
-            "required": ["ClientId", "ClientSecret"],
+            "required": [
+                "ClientId",
+                "ClientSecret"
+            ],
             "additionalProperties": false
         },
         "ApiKeyDetails": {
@@ -442,7 +507,11 @@
                     "pattern": "^[a-zA-Z0-9-]+$"
                 }
             },
-            "required": ["ApiKeyName", "ApiKeyValue", "ApiKeyHeader"],
+            "required": [
+                "ApiKeyName",
+                "ApiKeyValue",
+                "ApiKeyHeader"
+            ],
             "additionalProperties": false
         },
         "BearerTokenDetails": {
@@ -466,10 +535,12 @@
                     "default": "Authorization"
                 }
             },
-            "required": ["TokenName", "TokenValue"],
+            "required": [
+                "TokenName",
+                "TokenValue"
+            ],
             "additionalProperties": false
         },
-
         "MCPServerSplunkDetails": {
             "description": "Splunk MCP server configuration",
             "type": "object",
@@ -493,7 +564,11 @@
                     "$ref": "#/definitions/MCPServerSplunkAuthorizationConfig"
                 }
             },
-            "required": ["Name", "Endpoint", "AuthorizationConfig"],
+            "required": [
+                "Name",
+                "Endpoint",
+                "AuthorizationConfig"
+            ],
             "additionalProperties": false
         },
         "MCPServerGrafanaDetails": {
@@ -519,7 +594,11 @@
                     "$ref": "#/definitions/MCPServerGrafanaAuthorizationConfig"
                 }
             },
-            "required": ["Name", "Endpoint", "AuthorizationConfig"],
+            "required": [
+                "Name",
+                "Endpoint",
+                "AuthorizationConfig"
+            ],
             "additionalProperties": false
         },
         "MCPServerGrafanaAuthorizationConfig": {
@@ -532,7 +611,9 @@
                             "$ref": "#/definitions/BearerTokenDetails"
                         }
                     },
-                    "required": ["BearerToken"],
+                    "required": [
+                        "BearerToken"
+                    ],
                     "additionalProperties": false
                 }
             ]
@@ -545,7 +626,9 @@
                     "$ref": "#/definitions/NewRelicAuthorizationConfig"
                 }
             },
-            "required": ["AuthorizationConfig"],
+            "required": [
+                "AuthorizationConfig"
+            ],
             "additionalProperties": false
         },
         "NewRelicAuthorizationConfig": {
@@ -556,7 +639,9 @@
                     "$ref": "#/definitions/NewRelicApiKeyConfig"
                 }
             },
-            "required": ["ApiKey"],
+            "required": [
+                "ApiKey"
+            ],
             "additionalProperties": false
         },
         "NewRelicApiKeyConfig": {
@@ -576,7 +661,10 @@
                 "Region": {
                     "description": "New Relic region",
                     "type": "string",
-                    "enum": ["US", "EU"]
+                    "enum": [
+                        "US",
+                        "EU"
+                    ]
                 },
                 "ApplicationIds": {
                     "description": "List of monitored APM application IDs",
@@ -603,7 +691,11 @@
                     }
                 }
             },
-            "required": ["ApiKey", "AccountId", "Region"],
+            "required": [
+                "ApiKey",
+                "AccountId",
+                "Region"
+            ],
             "additionalProperties": false
         },
         "AzureIdentityServiceDetails": {
@@ -634,7 +726,12 @@
                     }
                 }
             },
-            "required": ["TenantId", "ClientId", "WebIdentityRoleArn", "WebIdentityTokenAudiences"],
+            "required": [
+                "TenantId",
+                "ClientId",
+                "WebIdentityRoleArn",
+                "WebIdentityTokenAudiences"
+            ],
             "additionalProperties": false
         },
         "AdditionalServiceDetails": {
@@ -647,7 +744,9 @@
                             "$ref": "#/definitions/RegisteredMCPServerDetails"
                         }
                     },
-                    "required": ["MCPServer"],
+                    "required": [
+                        "MCPServer"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -656,17 +755,20 @@
                             "$ref": "#/definitions/RegisteredGitLabServiceDetails"
                         }
                     },
-                    "required": ["GitLab"],
+                    "required": [
+                        "GitLab"
+                    ],
                     "additionalProperties": false
                 },
-
                 {
                     "properties": {
                         "MCPServerSplunk": {
                             "$ref": "#/definitions/RegisteredMCPServerDetails"
                         }
                     },
-                    "required": ["MCPServerSplunk"],
+                    "required": [
+                        "MCPServerSplunk"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -675,7 +777,9 @@
                             "$ref": "#/definitions/RegisteredNewRelicDetails"
                         }
                     },
-                    "required": ["MCPServerNewRelic"],
+                    "required": [
+                        "MCPServerNewRelic"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -684,7 +788,9 @@
                             "$ref": "#/definitions/RegisteredDynatraceDetails"
                         }
                     },
-                    "required": ["Dynatrace"],
+                    "required": [
+                        "Dynatrace"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -693,7 +799,9 @@
                             "$ref": "#/definitions/RegisteredServiceNowDetails"
                         }
                     },
-                    "required": ["ServiceNow"],
+                    "required": [
+                        "ServiceNow"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -702,7 +810,9 @@
                             "$ref": "#/definitions/RegisteredPagerDutyDetails"
                         }
                     },
-                    "required": ["PagerDuty"],
+                    "required": [
+                        "PagerDuty"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -711,7 +821,9 @@
                             "$ref": "#/definitions/RegisteredAzureIdentityDetails"
                         }
                     },
-                    "required": ["AzureIdentity"],
+                    "required": [
+                        "AzureIdentity"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -720,7 +832,9 @@
                             "$ref": "#/definitions/RegisteredMCPServerSigV4Details"
                         }
                     },
-                    "required": ["MCPServerSigV4"],
+                    "required": [
+                        "MCPServerSigV4"
+                    ],
                     "additionalProperties": false
                 },
                 {
@@ -729,12 +843,13 @@
                             "$ref": "#/definitions/RegisteredMCPServerGrafanaDetails"
                         }
                     },
-                    "required": ["MCPServerGrafana"],
+                    "required": [
+                        "MCPServerGrafana"
+                    ],
                     "additionalProperties": false
                 }
             ]
         },
-
         "RegisteredMCPServerDetails": {
             "description": "MCP server details returned after registration",
             "type": "object",
@@ -750,7 +865,11 @@
                 "AuthorizationMethod": {
                     "description": "MCP server authorization method",
                     "type": "string",
-                    "enum": ["oauth-client-credentials", "api-key", "bearer-token"]
+                    "enum": [
+                        "oauth-client-credentials",
+                        "api-key",
+                        "bearer-token"
+                    ]
                 },
                 "Description": {
                     "description": "Optional description for the MCP server",
@@ -761,7 +880,11 @@
                     "type": "string"
                 }
             },
-            "required": ["Name", "Endpoint", "AuthorizationMethod"],
+            "required": [
+                "Name",
+                "Endpoint",
+                "AuthorizationMethod"
+            ],
             "additionalProperties": false
         },
         "RegisteredMCPServerGrafanaDetails": {
@@ -779,14 +902,19 @@
                 "AuthorizationMethod": {
                     "description": "MCP server authorization method",
                     "type": "string",
-                    "enum": ["bearer-token"]
+                    "enum": [
+                        "bearer-token"
+                    ]
                 },
                 "Description": {
                     "description": "Optional description for the MCP server",
                     "type": "string"
                 }
             },
-            "required": ["Endpoint", "AuthorizationMethod"],
+            "required": [
+                "Endpoint",
+                "AuthorizationMethod"
+            ],
             "additionalProperties": false
         },
         "RegisteredNewRelicDetails": {
@@ -800,17 +928,22 @@
                 "Region": {
                     "description": "New Relic region",
                     "type": "string",
-                    "enum": ["US", "EU"]
+                    "enum": [
+                        "US",
+                        "EU"
+                    ]
                 },
                 "Description": {
                     "description": "Optional user description",
                     "type": "string"
                 }
             },
-            "required": ["AccountId", "Region"],
+            "required": [
+                "AccountId",
+                "Region"
+            ],
             "additionalProperties": false
         },
-
         "RegisteredGitLabServiceDetails": {
             "description": "GitLab service details returned after registration",
             "type": "object",
@@ -822,14 +955,20 @@
                 "TokenType": {
                     "description": "Type of GitLab access token",
                     "type": "string",
-                    "enum": ["personal", "group"]
+                    "enum": [
+                        "personal",
+                        "group"
+                    ]
                 },
                 "GroupId": {
                     "description": "Optional GitLab group ID for group-level access tokens",
                     "type": "string"
                 }
             },
-            "required": ["TargetUrl", "TokenType"],
+            "required": [
+                "TargetUrl",
+                "TokenType"
+            ],
             "additionalProperties": false
         },
         "RegisteredDynatraceDetails": {
@@ -841,7 +980,9 @@
                     "type": "string"
                 }
             },
-            "required": ["AccountUrn"],
+            "required": [
+                "AccountUrn"
+            ],
             "additionalProperties": false
         },
         "RegisteredServiceNowDetails": {
@@ -853,7 +994,9 @@
                     "type": "string"
                 }
             },
-            "required": ["InstanceUrl"],
+            "required": [
+                "InstanceUrl"
+            ],
             "additionalProperties": false
         },
         "RegisteredPagerDutyDetails": {
@@ -868,7 +1011,9 @@
                     }
                 }
             },
-            "required": ["Scopes"],
+            "required": [
+                "Scopes"
+            ],
             "additionalProperties": false
         },
         "RegisteredAzureIdentityDetails": {
@@ -898,7 +1043,12 @@
                     }
                 }
             },
-            "required": ["TenantId", "ClientId", "WebIdentityRoleArn", "WebIdentityTokenAudiences"],
+            "required": [
+                "TenantId",
+                "ClientId",
+                "WebIdentityRoleArn",
+                "WebIdentityTokenAudiences"
+            ],
             "additionalProperties": false
         },
         "RegisteredMCPServerSigV4Details": {
@@ -944,7 +1094,13 @@
                     "additionalProperties": false
                 }
             },
-            "required": ["Name", "Endpoint", "Region", "Service", "RoleArn"],
+            "required": [
+                "Name",
+                "Endpoint",
+                "Region",
+                "Service",
+                "RoleArn"
+            ],
             "additionalProperties": false
         },
         "Tag": {
@@ -1006,6 +1162,27 @@
             "minLength": 1,
             "maxLength": 2048
         },
+        "PrivateConnectionName": {
+            "description": "The name of the private connection to use for VPC connectivity.",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+        },
+        "TargetUrlPrivateConnectionName": {
+            "description": "The name of the private connection to use for API calls (target URL) only. Cannot be specified when PrivateConnectionName is provided.",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+        },
+        "ExchangeUrlPrivateConnectionName": {
+            "description": "The name of the private connection to use for OAuth token exchange requests only. Cannot be specified when PrivateConnectionName is provided.",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30,
+            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+        },
         "Arn": {
             "description": "The Amazon Resource Name (ARN) of the Service.",
             "type": "string"
@@ -1043,20 +1220,21 @@
         "/properties/Arn"
     ],
     "writeOnlyProperties": [
-        "/properties/ServiceDetails"
+        "/properties/ServiceDetails",
+        "/properties/TargetUrlPrivateConnectionName",
+        "/properties/ExchangeUrlPrivateConnectionName"
     ],
     "createOnlyProperties": [
         "/properties/ServiceType",
         "/properties/ServiceDetails/Dynatrace",
-        "/properties/ServiceDetails/MCPServer",
         "/properties/ServiceDetails/MCPServerSplunk",
-        "/properties/ServiceDetails/MCPServerNewRelic",
-        "/properties/ServiceDetails/GitLab",
         "/properties/ServiceDetails/ServiceNow",
         "/properties/ServiceDetails/PagerDuty",
         "/properties/ServiceDetails/AzureIdentity",
-        "/properties/ServiceDetails/MCPServerGrafana",
-        "/properties/KmsKeyArn"
+        "/properties/KmsKeyArn",
+        "/properties/PrivateConnectionName",
+        "/properties/TargetUrlPrivateConnectionName",
+        "/properties/ExchangeUrlPrivateConnectionName"
     ],
     "primaryIdentifier": [
         "/properties/ServiceId"
@@ -1094,7 +1272,16 @@
                 "aidevops:TagResource",
                 "aidevops:UntagResource",
                 "aidevops:ListTagsForResource",
-                "iam:PassRole"
+                "iam:PassRole",
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:GenerateDataKey",
+                "kms:GenerateDataKeyPair",
+                "kms:GenerateDataKeyPairWithoutPlaintext",
+                "kms:GenerateDataKeyWithoutPlaintext",
+                "kms:ReEncryptFrom",
+                "kms:ReEncryptTo"
             ]
         },
         "delete": {

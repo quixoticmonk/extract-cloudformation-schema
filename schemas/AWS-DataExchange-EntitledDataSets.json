@@ -1,54 +1,88 @@
 {
-  "typeName": "AWS::DataExchange::EntitledDataSets",
-  "description": "Resource Type definition for AWS::DataExchange::EntitledDataSets",
-  "additionalProperties": false,
-  "properties": {
-    "Origin": {
-      "type": "string"
+    "typeName": "AWS::DataExchange::EntitledDataSets",
+    "description": "Definition of AWS::DataExchange::EntitledDataSets Resource Type",
+    "properties": {
+        "Arn": {
+            "description": "The ARN for the data set.",
+            "type": "string"
+        },
+        "DataSetId": {
+            "description": "The unique identifier for the data set.",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9]{30,40}$"
+        },
+        "AssetType": {
+            "description": "The type of asset that is added to a data set.",
+            "type": "string",
+            "enum": [
+                "S3_SNAPSHOT",
+                "REDSHIFT_DATA_SHARE",
+                "API_GATEWAY_API",
+                "S3_DATA_ACCESS",
+                "LAKE_FORMATION_DATA_PERMISSION"
+            ]
+        },
+        "Description": {
+            "description": "A description for the data set.",
+            "type": "string"
+        },
+        "Name": {
+            "description": "The name of the data set.",
+            "type": "string"
+        },
+        "Origin": {
+            "description": "A property that defines the data set as OWNED by the account (for providers) or ENTITLED to the account (for subscribers).",
+            "type": "string",
+            "enum": ["OWNED", "ENTITLED"]
+        },
+        "SourceId": {
+            "description": "The data set ID of the owned data set corresponding to the entitled data set being viewed.",
+            "type": "string"
+        },
+        "CreatedAt": {
+            "description": "The date and time that the data set was created, in ISO 8601 format.",
+            "type": "string",
+            "format": "date-time"
+        },
+        "UpdatedAt": {
+            "description": "The date and time that the data set was last updated, in ISO 8601 format.",
+            "type": "string",
+            "format": "date-time"
+        }
     },
-    "AssetType": {
-      "type": "string"
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/AssetType",
+        "/properties/Description",
+        "/properties/Name"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/DataSetId",
+        "/properties/Origin",
+        "/properties/SourceId",
+        "/properties/CreatedAt",
+        "/properties/UpdatedAt"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        ["/properties/DataSetId"]
+    ],
+    "tagging": {
+        "taggable": false
     },
-    "Description": {
-      "type": "string"
-    },
-    "SourceId": {
-      "type": "string"
-    },
-    "CreatedAt": {
-      "type": "string"
-    },
-    "DataSetId": {
-      "type": "string"
-    },
-    "Id": {
-      "type": "string"
-    },
-    "Arn": {
-      "type": "string"
-    },
-    "UpdatedAt": {
-      "type": "string"
-    },
-    "Name": {
-      "type": "string"
+    "handlers": {
+        "read": {
+            "permissions": [
+                "dataexchange:GetDataSet"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "dataexchange:ListDataSets"
+            ]
+        }
     }
-  },
-  "createOnlyProperties": [
-    "/properties/AssetType",
-    "/properties/Name",
-    "/properties/Description"
-  ],
-  "primaryIdentifier": [
-    "/properties/Id"
-  ],
-  "readOnlyProperties": [
-    "/properties/CreatedAt",
-    "/properties/Id",
-    "/properties/UpdatedAt",
-    "/properties/SourceId",
-    "/properties/Origin",
-    "/properties/Arn",
-    "/properties/DataSetId"
-  ]
 }

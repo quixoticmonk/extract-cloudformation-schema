@@ -1,0 +1,168 @@
+{
+    "typeName": "AWS::BedrockAgentCore::ConfigurationBundleVersion",
+    "description": "Resource Type definition for AWS::BedrockAgentCore::ConfigurationBundleVersion",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A tag consisting of a key-value pair.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9\\s._:/=+@-]*$"
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z0-9\\s._:/=+@-]*$"
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        },
+        "ComponentConfiguration": {
+            "type": "object",
+            "description": "The configuration for a component within a configuration bundle.",
+            "properties": {
+                "Configuration": {
+                    "type": "object",
+                    "description": "The configuration values as a flexible JSON document."
+                }
+            },
+            "required": ["Configuration"],
+            "additionalProperties": false
+        },
+        "VersionCreatedBySource": {
+            "type": "object",
+            "description": "The source that created a configuration bundle version.",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the source (for example, user, optimization-job, or system)."
+                },
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the source, if applicable."
+                }
+            },
+            "required": ["Name"],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "BundleId": {
+            "type": "string",
+            "description": "The unique identifier of the configuration bundle.",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9-_]{0,99}-[a-zA-Z0-9]{10}$"
+        },
+        "VersionId": {
+            "type": "string",
+            "description": "The version identifier of the configuration bundle version.",
+            "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+        },
+        "BundleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the configuration bundle.",
+            "pattern": "^arn:aws:bedrock-agentcore:[a-z0-9-]+:[0-9]{12}:configuration-bundle/[a-zA-Z][a-zA-Z0-9-_]{0,99}-[a-zA-Z0-9]{10}$"
+        },
+        "Components": {
+            "type": "object",
+            "description": "A map of component identifiers to their configurations.",
+            "patternProperties": {
+                "^[a-zA-Z][a-zA-Z0-9_:/.\\-]{0,2047}$": {
+                    "$ref": "#/definitions/ComponentConfiguration"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ParentVersionIds": {
+            "type": "array",
+            "description": "A list of parent version identifiers for lineage tracking.",
+            "items": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+            }
+        },
+        "BranchName": {
+            "type": "string",
+            "description": "The branch name for this version.",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_/-]{0,127}$"
+        },
+        "CommitMessage": {
+            "type": "string",
+            "description": "A commit message describing the changes in this version.",
+            "minLength": 1,
+            "maxLength": 500
+        },
+        "CreatedBy": {
+            "$ref": "#/definitions/VersionCreatedBySource"
+        },
+        "VersionCreatedAt": {
+            "type": "string",
+            "description": "The timestamp when this version was created.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the configuration bundle version.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50,
+            "insertionOrder": false
+        }
+    },
+    "required": ["Components"],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/BranchName",
+        "/properties/CommitMessage",
+        "/properties/Components",
+        "/properties/CreatedBy"
+    ],
+    "readOnlyProperties": [
+        "/properties/BundleId",
+        "/properties/VersionId",
+        "/properties/BundleArn",
+        "/properties/VersionCreatedAt",
+        "/properties/Tags",
+        "/properties/ParentVersionIds"
+    ],
+    "primaryIdentifier": ["/properties/BundleId", "/properties/VersionId"],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "bedrock-agentcore:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "bedrock-agentcore:GetConfigurationBundleVersion",
+                "bedrock-agentcore:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "BundleId": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9-_]{0,99}-[a-zA-Z0-9]{10}$"
+                    }
+                },
+                "required": ["BundleId"]
+            },
+            "permissions": [
+                "bedrock-agentcore:ListConfigurationBundleVersions"
+            ]
+        }
+    }
+}

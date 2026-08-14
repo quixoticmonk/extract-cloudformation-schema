@@ -91,7 +91,7 @@
         "tagUpdatable": true,
         "cloudFormationSystemTags": true,
         "tagProperty": "/properties/Tags",
-        "permissions": ["connect:TagResource", "connect:UntagResource", "connect:ListTagsForResource"]
+        "permissions": ["connect:TagResource", "connect:UntagResource", "connect:ListTagsForResource", "connect:ListIntegrationAssociations"]
     },
     "additionalProperties": false,
     "required": [

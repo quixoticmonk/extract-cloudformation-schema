@@ -1,70 +1,114 @@
 {
-  "typeName": "AWS::CodeBuild::Build",
-  "description": "Resource Type definition for AWS::CodeBuild::Build",
-  "additionalProperties": false,
-  "properties": {
-    "CurrentPhase": {
-      "type": "string"
+    "typeName": "AWS::CodeBuild::Build",
+    "description": "Represents an AWS CodeBuild build, which is a single execution of a build project.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the build.",
+            "minLength": 1
+        },
+        "Id": {
+            "type": "string",
+            "description": "The unique ID for the build (format: projectName:buildId).",
+            "minLength": 1
+        },
+        "ProjectName": {
+            "type": "string",
+            "description": "The name of the CodeBuild build project.",
+            "minLength": 1
+        },
+        "BuildNumber": {
+            "type": "integer",
+            "description": "The number of the build."
+        },
+        "BuildStatus": {
+            "type": "string",
+            "description": "The current status of the build.",
+            "enum": [
+                "SUCCEEDED",
+                "FAILED",
+                "FAULT",
+                "TIMED_OUT",
+                "IN_PROGRESS",
+                "STOPPED"
+            ]
+        },
+        "BuildComplete": {
+            "type": "boolean",
+            "description": "Whether the build is complete."
+        },
+        "CurrentPhase": {
+            "type": "string",
+            "description": "The current build phase."
+        },
+        "StartTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the build process started, in ISO 8601 format."
+        },
+        "EndTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the build process ended, in ISO 8601 format."
+        },
+        "ServiceRole": {
+            "type": "string",
+            "description": "The name of a service role used for this build.",
+            "minLength": 1
+        },
+        "EncryptionKey": {
+            "type": "string",
+            "description": "The KMS key used to encrypt the build output artifacts.",
+            "minLength": 1
+        },
+        "TimeoutInMinutes": {
+            "type": "integer",
+            "description": "How long, in minutes, from 5 to 2160 (36 hours), for CodeBuild to wait before timing out the build."
+        },
+        "QueuedTimeoutInMinutes": {
+            "type": "integer",
+            "description": "The number of minutes a build is allowed to be queued before it times out."
+        },
+        "Initiator": {
+            "type": "string",
+            "description": "The entity that started the build."
+        }
     },
-    "EndTime": {
-      "type": "string"
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/ProjectName"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/Id",
+        "/properties/BuildNumber",
+        "/properties/BuildStatus",
+        "/properties/BuildComplete",
+        "/properties/CurrentPhase",
+        "/properties/StartTime",
+        "/properties/EndTime",
+        "/properties/ServiceRole",
+        "/properties/EncryptionKey",
+        "/properties/TimeoutInMinutes",
+        "/properties/QueuedTimeoutInMinutes",
+        "/properties/Initiator"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/Id"]],
+    "tagging": {
+        "taggable": false
     },
-    "ProjectName": {
-      "type": "string"
-    },
-    "StartTime": {
-      "type": "string"
-    },
-    "EncryptionKey": {
-      "type": "string"
-    },
-    "BuildNumber": {
-      "type": "integer"
-    },
-    "ServiceRole": {
-      "type": "string"
-    },
-    "QueuedTimeoutInMinutes": {
-      "type": "integer"
-    },
-    "Initiator": {
-      "type": "string"
-    },
-    "BuildStatus": {
-      "type": "string"
-    },
-    "Id": {
-      "type": "string"
-    },
-    "BuildComplete": {
-      "type": "boolean"
-    },
-    "Arn": {
-      "type": "string"
-    },
-    "TimeoutInMinutes": {
-      "type": "integer"
+    "handlers": {
+        "read": {
+            "permissions": [
+                "codebuild:BatchGetBuilds"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "codebuild:ListBuilds",
+                "codebuild:BatchGetBuilds"
+            ]
+        }
     }
-  },
-  "createOnlyProperties": [
-    "/properties/ProjectName"
-  ],
-  "primaryIdentifier": [
-    "/properties/Id"
-  ],
-  "readOnlyProperties": [
-    "/properties/BuildComplete",
-    "/properties/TimeoutInMinutes",
-    "/properties/EndTime",
-    "/properties/CurrentPhase",
-    "/properties/StartTime",
-    "/properties/ServiceRole",
-    "/properties/BuildNumber",
-    "/properties/Id",
-    "/properties/EncryptionKey",
-    "/properties/QueuedTimeoutInMinutes",
-    "/properties/Arn",
-    "/properties/Initiator",
-    "/properties/BuildStatus"
-  ]
 }

@@ -1,0 +1,140 @@
+{
+    "typeName": "AWS::BedrockAgentCore::HarnessVersion",
+    "description": "Resource Type definition for AWS::BedrockAgentCore::HarnessVersion - a read-only view of a specific published version of an AWS::BedrockAgentCore::Harness. Versions are immutable point-in-time snapshots of a harness; they are created implicitly as the parent harness is created and updated, and are surfaced here for read and list access only.",
+    "definitions": {
+        "HarnessStatus": {
+            "type": "string",
+            "enum": [
+                "CREATING",
+                "CREATE_FAILED",
+                "UPDATING",
+                "UPDATE_FAILED",
+                "READY",
+                "DELETING",
+                "DELETE_FAILED"
+            ]
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A tag consisting of a key-value pair.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9\\s_.:/=+\\-@]*$"
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z0-9\\s_.:/=+\\-@]*$"
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "HarnessId": {
+            "type": "string",
+            "description": "The ID of the harness that this version belongs to.",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,39}-[a-zA-Z0-9]{10}$"
+        },
+        "HarnessVersion": {
+            "type": "string",
+            "description": "The version number of the harness.",
+            "minLength": 1,
+            "maxLength": 5,
+            "pattern": "^([1-9][0-9]{0,4})$"
+        },
+        "HarnessName": {
+            "type": "string",
+            "description": "The name of the harness that this version belongs to."
+        },
+        "HarnessArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the parent harness.",
+            "pattern": "^arn:([^:]+)?:bedrock-agentcore:[a-z0-9-]+:[0-9]{12}:harness/[a-zA-Z][a-zA-Z0-9_]{0,39}-[a-zA-Z0-9]{10}$"
+        },
+        "Status": {
+            "$ref": "#/definitions/HarnessStatus"
+        },
+        "CreatedAt": {
+            "type": "string",
+            "description": "The timestamp when this harness version was created.",
+            "format": "date-time"
+        },
+        "UpdatedAt": {
+            "type": "string",
+            "description": "The timestamp when this harness version was last updated.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the parent harness.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50,
+            "insertionOrder": false
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "HarnessId"
+    ],
+    "createOnlyProperties": [
+        "/properties/HarnessId"
+    ],
+    "readOnlyProperties": [
+        "/properties/HarnessVersion",
+        "/properties/HarnessName",
+        "/properties/HarnessArn",
+        "/properties/Status",
+        "/properties/CreatedAt",
+        "/properties/UpdatedAt",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/HarnessId",
+        "/properties/HarnessVersion"
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "bedrock-agentcore:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "bedrock-agentcore:GetHarness",
+                "bedrock-agentcore:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "HarnessId": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,39}-[a-zA-Z0-9]{10}$"
+                    }
+                },
+                "required": [
+                    "HarnessId"
+                ]
+            },
+            "permissions": [
+                "bedrock-agentcore:ListHarnessVersions"
+            ]
+        }
+    }
+}
