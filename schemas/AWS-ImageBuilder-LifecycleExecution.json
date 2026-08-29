@@ -1,0 +1,112 @@
+{
+    "typeName": "AWS::ImageBuilder::LifecycleExecution",
+    "description": "Represents a runtime instance of an EC2 Image Builder lifecycle policy. Lifecycle executions are created automatically when a lifecycle policy runs or when StartResourceStateUpdate is called.",
+    "definitions": {
+        "LifecycleExecutionState": {
+            "type": "object",
+            "description": "The current state of the lifecycle execution.",
+            "properties": {
+                "Status": {
+                    "type": "string",
+                    "description": "The runtime status of the lifecycle execution.",
+                    "enum": [
+                        "IN_PROGRESS",
+                        "CANCELLED",
+                        "CANCELLING",
+                        "FAILED",
+                        "SUCCESS",
+                        "PENDING"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "LifecycleExecutionResourcesImpactedSummary": {
+            "type": "object",
+            "description": "Contains details for an image resource that was identified for a lifecycle action.",
+            "properties": {
+                "HasImpactedResources": {
+                    "type": "boolean",
+                    "description": "Indicates whether an image resource that was identified for a lifecycle action has associated resources that are also impacted."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the lifecycle execution."
+        },
+        "LifecycleExecutionId": {
+            "type": "string",
+            "description": "The unique identifier for the lifecycle execution.",
+            "pattern": "^lce-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "ResourceArn": {
+            "type": "string",
+            "description": "The ARN of the Image Builder resource for which to list lifecycle executions."
+        },
+        "ResourcesImpactedSummary": {
+            "$ref": "#/definitions/LifecycleExecutionResourcesImpactedSummary"
+        },
+        "State": {
+            "$ref": "#/definitions/LifecycleExecutionState"
+        },
+        "StartTime": {
+            "type": "string",
+            "description": "The timestamp when the lifecycle runtime instance started.",
+            "format": "date-time"
+        },
+        "EndTime": {
+            "type": "string",
+            "description": "The timestamp when the lifecycle runtime instance completed.",
+            "format": "date-time"
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/ResourceArn"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/LifecycleExecutionId",
+        "/properties/ResourcesImpactedSummary",
+        "/properties/State",
+        "/properties/StartTime",
+        "/properties/EndTime"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        ["/properties/LifecycleExecutionId"]
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "imagebuilder:GetLifecycleExecution",
+                "imagebuilder:ListLifecycleExecutionResources"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "ResourceArn": {
+                        "type": "string",
+                        "description": "The ARN of the Image Builder resource for which to list lifecycle executions."
+                    }
+                },
+                "required": [
+                    "ResourceArn"
+                ]
+            },
+            "permissions": [
+                "imagebuilder:ListLifecycleExecutions"
+            ]
+        }
+    }
+}

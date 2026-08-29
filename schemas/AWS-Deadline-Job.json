@@ -1,0 +1,201 @@
+{
+    "typeName": "AWS::Deadline::Job",
+    "description": "Definition of AWS::Deadline::Job Resource Type",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the job.",
+            "pattern": "^arn:aws[a-z-]*:deadline:[a-z0-9-]+:[0-9]+:farm/farm-[0-9a-f]{32}/queue/queue-[0-9a-f]{32}/job/job-[0-9a-f]{32}$"
+        },
+        "FarmId": {
+            "type": "string",
+            "description": "The farm ID.",
+            "pattern": "^farm-[0-9a-f]{32}$"
+        },
+        "QueueId": {
+            "type": "string",
+            "description": "The queue ID.",
+            "pattern": "^queue-[0-9a-f]{32}$"
+        },
+        "JobId": {
+            "type": "string",
+            "description": "The job ID.",
+            "pattern": "^job-[0-9a-f]{32}$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The name of the job.",
+            "minLength": 1,
+            "maxLength": 128
+        },
+        "Priority": {
+            "type": "integer",
+            "description": "The priority of the job.",
+            "minimum": 0,
+            "maximum": 100
+        },
+        "MaxFailedTasksCount": {
+            "type": "integer",
+            "description": "The number of task failures before the job stops running and is marked as FAILED.",
+            "minimum": 0,
+            "maximum": 2147483647
+        },
+        "MaxRetriesPerTask": {
+            "type": "integer",
+            "description": "The maximum number of retries for each task.",
+            "minimum": 0,
+            "maximum": 2147483647
+        },
+        "MaxWorkerCount": {
+            "type": "integer",
+            "description": "The maximum number of worker hosts that can concurrently process a job.",
+            "minimum": -1,
+            "maximum": 2147483647
+        },
+        "LifecycleStatus": {
+            "type": "string",
+            "description": "The life cycle status for the job.",
+            "enum": [
+                "CREATE_IN_PROGRESS",
+                "CREATE_FAILED",
+                "CREATE_COMPLETE",
+                "UPLOAD_IN_PROGRESS",
+                "UPLOAD_FAILED",
+                "UPDATE_IN_PROGRESS",
+                "UPDATE_FAILED",
+                "UPDATE_SUCCEEDED",
+                "ARCHIVED"
+            ]
+        },
+        "LifecycleStatusMessage": {
+            "type": "string",
+            "description": "A message that communicates the status of the life cycle for the job."
+        },
+        "TaskRunStatus": {
+            "type": "string",
+            "description": "The task run status for the job.",
+            "enum": [
+                "PENDING",
+                "READY",
+                "ASSIGNED",
+                "STARTING",
+                "SCHEDULED",
+                "INTERRUPTING",
+                "RUNNING",
+                "SUSPENDED",
+                "CANCELED",
+                "FAILED",
+                "SUCCEEDED",
+                "NOT_COMPATIBLE"
+            ]
+        },
+        "CreatedAt": {
+            "type": "string",
+            "description": "The date and time the resource was created.",
+            "format": "date-time"
+        },
+        "CreatedBy": {
+            "type": "string",
+            "description": "The user or system that created this resource."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags associated with the job.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/FarmId",
+        "/properties/MaxFailedTasksCount",
+        "/properties/MaxRetriesPerTask",
+        "/properties/MaxWorkerCount",
+        "/properties/Priority",
+        "/properties/QueueId",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/JobId",
+        "/properties/Name",
+        "/properties/LifecycleStatus",
+        "/properties/LifecycleStatusMessage",
+        "/properties/TaskRunStatus",
+        "/properties/CreatedAt",
+        "/properties/CreatedBy"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/FarmId",
+            "/properties/QueueId",
+            "/properties/JobId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "deadline:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "deadline:GetJob",
+                "deadline:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "FarmId": {
+                        "type": "string",
+                        "pattern": "^farm-[0-9a-f]{32}$"
+                    },
+                    "QueueId": {
+                        "type": "string",
+                        "pattern": "^queue-[0-9a-f]{32}$"
+                    }
+                },
+                "required": [
+                    "FarmId",
+                    "QueueId"
+                ]
+            },
+            "permissions": [
+                "deadline:ListJobs"
+            ]
+        }
+    }
+}

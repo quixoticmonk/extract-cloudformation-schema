@@ -1,0 +1,189 @@
+{
+    "typeName": "AWS::Comprehend::DominantLanguageDetectionJob",
+    "description": "Resource Type definition for AWS::Comprehend::DominantLanguageDetectionJob, a read-only resource representing an Amazon Comprehend dominant language detection job.",
+    "properties": {
+        "JobArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the dominant language detection job.",
+            "maxLength": 256,
+            "pattern": "^arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:[a-zA-Z0-9-]{1,64}/[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        },
+        "JobId": {
+            "type": "string",
+            "description": "The identifier assigned to the dominant language detection job.",
+            "minLength": 1,
+            "maxLength": 32
+        },
+        "JobName": {
+            "type": "string",
+            "description": "The name that you assigned to the dominant language detection job.",
+            "minLength": 1,
+            "maxLength": 256
+        },
+        "JobStatus": {
+            "type": "string",
+            "description": "The current status of the dominant language detection job.",
+            "enum": [
+                "SUBMITTED",
+                "IN_PROGRESS",
+                "COMPLETED",
+                "FAILED",
+                "STOP_REQUESTED",
+                "STOPPED"
+            ]
+        },
+        "InputDataConfig": {
+            "$ref": "#/definitions/InputDataConfig"
+        },
+        "OutputDataConfig": {
+            "$ref": "#/definitions/OutputDataConfig"
+        },
+        "DataAccessRoleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the IAM role that grants Amazon Comprehend read access to your input data.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[^:]+)?:iam::[0-9]{12}:role/.+$"
+        },
+        "VolumeKmsKeyId": {
+            "type": "string",
+            "description": "ID for the AWS KMS key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the job.",
+            "maxLength": 2048
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the dominant language detection job.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50
+        }
+    },
+    "definitions": {
+        "InputDataConfig": {
+            "type": "object",
+            "description": "The input data configuration for the job.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The Amazon S3 URI for the input data.",
+                    "maxLength": 1024,
+                    "pattern": "^s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?$"
+                },
+                "InputFormat": {
+                    "type": "string",
+                    "description": "Specifies how the text in an input file should be processed.",
+                    "enum": [
+                        "ONE_DOC_PER_FILE",
+                        "ONE_DOC_PER_LINE"
+                    ]
+                }
+            },
+            "required": [
+                "S3Uri"
+            ],
+            "additionalProperties": false
+        },
+        "OutputDataConfig": {
+            "type": "object",
+            "description": "The output data configuration for the job.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The Amazon S3 URI for the output data.",
+                    "maxLength": 1024,
+                    "pattern": "^s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?$"
+                },
+                "KmsKeyId": {
+                    "type": "string",
+                    "description": "ID for the AWS KMS key that Amazon Comprehend uses to encrypt the output results.",
+                    "maxLength": 2048
+                }
+            },
+            "required": [
+                "S3Uri"
+            ],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair that adds metadata to a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The initial part of a key-value pair.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The second part of a key-value pair.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/DataAccessRoleArn",
+        "/properties/InputDataConfig",
+        "/properties/JobName",
+        "/properties/Tags",
+        "/properties/VolumeKmsKeyId"
+    ],
+    "readOnlyProperties": [
+        "/properties/JobArn",
+        "/properties/JobId",
+        "/properties/JobStatus",
+        "/properties/OutputDataConfig"
+    ],
+    "primaryIdentifier": [
+        "/properties/JobArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/JobId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "comprehend:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "comprehend:DescribeDominantLanguageDetectionJob",
+                "comprehend:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "comprehend:ListDominantLanguageDetectionJobs"
+            ],
+            "handlerSchema": {
+                "properties": {
+                    "JobName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    }
+                },
+                "required": [
+                    "JobName"
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,168 @@
+{
+    "typeName": "AWS::IoTDeviceAdvisor::SuiteRun",
+    "description": "Represents a suite run in AWS IoT Core Device Advisor.",
+    "properties": {
+        "SuiteRunArn": {
+            "type": "string",
+            "description": "The ARN of the suite run.",
+            "minLength": 20,
+            "maxLength": 2048
+        },
+        "SuiteDefinitionId": {
+            "type": "string",
+            "description": "Suite definition ID of the test suite.",
+            "minLength": 12,
+            "maxLength": 36
+        },
+        "SuiteDefinitionVersion": {
+            "type": "string",
+            "description": "Suite definition version of the test suite.",
+            "minLength": 2,
+            "maxLength": 255
+        },
+        "SuiteRunId": {
+            "type": "string",
+            "description": "Suite run ID of the test suite run.",
+            "minLength": 12,
+            "maxLength": 36
+        },
+        "SuiteRunConfiguration": {
+            "$ref": "#/definitions/SuiteRunConfiguration"
+        },
+        "Status": {
+            "type": "string",
+            "description": "Status of the suite run.",
+            "enum": [
+                "PASS",
+                "FAIL",
+                "CANCELED",
+                "PENDING",
+                "RUNNING",
+                "STOPPING",
+                "STOPPED",
+                "PASS_WITH_WARNINGS",
+                "ERROR"
+            ]
+        },
+        "StartTime": {
+            "type": "string",
+            "description": "Date (in ISO 8601 format) when the test suite run started.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the suite run.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "SuiteRunConfiguration": {
+            "type": "object",
+            "description": "Suite run configuration.",
+            "properties": {
+                "PrimaryDevice": {
+                    "$ref": "#/definitions/DeviceUnderTest"
+                },
+                "ParallelRun": {
+                    "type": "boolean",
+                    "description": "TRUE if multiple test suites run in parallel."
+                }
+            },
+            "required": [
+                "PrimaryDevice"
+            ],
+            "additionalProperties": false
+        },
+        "DeviceUnderTest": {
+            "type": "object",
+            "description": "Information of a test device.",
+            "properties": {
+                "ThingArn": {
+                    "type": "string",
+                    "description": "Lists device's thing ARN.",
+                    "minLength": 20,
+                    "maxLength": 2048
+                },
+                "CertificateArn": {
+                    "type": "string",
+                    "description": "Lists device's certificate ARN.",
+                    "minLength": 20,
+                    "maxLength": 2048
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "SuiteDefinitionId",
+        "SuiteRunConfiguration"
+    ],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/SuiteDefinitionId",
+        "/properties/SuiteDefinitionVersion",
+        "/properties/SuiteRunConfiguration",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/SuiteRunArn",
+        "/properties/SuiteRunId",
+        "/properties/Status",
+        "/properties/StartTime"
+    ],
+    "primaryIdentifier": [
+        "/properties/SuiteRunArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/SuiteDefinitionId",
+            "/properties/SuiteRunId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "iotdeviceadvisor:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "iotdeviceadvisor:GetSuiteRun",
+                "iotdeviceadvisor:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "iotdeviceadvisor:ListSuiteRuns"
+            ]
+        }
+    }
+}

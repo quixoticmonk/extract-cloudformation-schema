@@ -1,0 +1,132 @@
+{
+    "typeName": "AWS::Comprehend::SentimentDetectionJob",
+    "description": "Resource type definition for an Amazon Comprehend Sentiment Detection Job.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the sentiment detection job.",
+            "maxLength": 256,
+            "pattern": "^arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:[a-zA-Z0-9-]{1,64}/[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        },
+        "JobId": {
+            "type": "string",
+            "description": "The identifier assigned to the sentiment detection job.",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-%@]*)$"
+        },
+        "JobName": {
+            "type": "string",
+            "description": "The name that you assigned to the sentiment detection job.",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-%@]*)$"
+        },
+        "JobStatus": {
+            "type": "string",
+            "description": "The current status of the sentiment detection job.",
+            "enum": ["SUBMITTED", "IN_PROGRESS", "COMPLETED", "FAILED", "STOP_REQUESTED", "STOPPED"]
+        },
+        "LanguageCode": {
+            "type": "string",
+            "description": "The language of the input documents.",
+            "enum": ["en", "es", "fr", "de", "it", "pt", "ar", "hi", "ja", "ko", "zh", "zh-TW"]
+        },
+        "DataAccessRoleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the IAM role that grants Amazon Comprehend read access to your input data.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[^:]+)?:iam::[0-9]{12}:role/.+$"
+        },
+        "InputDataConfig": {
+            "$ref": "#/definitions/InputDataConfig"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the sentiment detection job.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "InputDataConfig": {
+            "type": "object",
+            "description": "The input data configuration for the sentiment detection job.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The Amazon S3 URI for the input data.",
+                    "maxLength": 1024,
+                    "pattern": "^s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?$"
+                },
+                "InputFormat": {
+                    "type": "string",
+                    "description": "Specifies how the text in an input file should be processed.",
+                    "enum": ["ONE_DOC_PER_FILE", "ONE_DOC_PER_LINE"]
+                }
+            },
+            "required": ["S3Uri"],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair that adds metadata to a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key for the tag.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "required": ["InputDataConfig", "DataAccessRoleArn", "LanguageCode"],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/DataAccessRoleArn",
+        "/properties/InputDataConfig",
+        "/properties/JobName",
+        "/properties/LanguageCode",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/JobId",
+        "/properties/JobStatus"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/JobId"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["comprehend:ListTagsForResource"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "comprehend:DescribeSentimentDetectionJob",
+                "comprehend:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "comprehend:ListSentimentDetectionJobs"
+            ]
+        }
+    }
+}

@@ -1,0 +1,148 @@
+{
+    "typeName": "AWS::Comprehend::FlywheelDataset",
+    "description": "A dataset associated with a Comprehend Flywheel, used to upload training or test data for a model.",
+    "properties": {
+        "DatasetArn": {
+            "type": "string",
+            "description": "The ARN of the dataset.",
+            "maxLength": 256,
+            "pattern": "^arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:flywheel/[a-zA-Z0-9](-*[a-zA-Z0-9])*/dataset/[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        },
+        "FlywheelArn": {
+            "type": "string",
+            "description": "The Amazon Resource Number (ARN) of the flywheel.",
+            "maxLength": 256,
+            "pattern": "^arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:flywheel/[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        },
+        "DatasetName": {
+            "type": "string",
+            "description": "Name of the dataset.",
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        },
+        "DatasetType": {
+            "type": "string",
+            "description": "The dataset type (training data or test data).",
+            "enum": [
+                "TRAIN",
+                "TEST"
+            ]
+        },
+        "Description": {
+            "type": "string",
+            "description": "Description of the dataset.",
+            "maxLength": 2048
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags for the dataset.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50
+        },
+        "DatasetS3Uri": {
+            "type": "string",
+            "description": "The S3 URI where the dataset is stored.",
+            "maxLength": 1024,
+            "pattern": "^s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?$"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The dataset status.",
+            "enum": [
+                "CREATING",
+                "COMPLETED",
+                "FAILED"
+            ]
+        },
+        "NumberOfDocuments": {
+            "type": "integer",
+            "description": "The number of documents in the dataset."
+        },
+        "CreationTime": {
+            "type": "string",
+            "description": "Creation time of the dataset.",
+            "format": "date-time"
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ]
+        }
+    },
+    "required": [
+        "FlywheelArn",
+        "DatasetName"
+    ],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/DatasetName",
+        "/properties/DatasetType",
+        "/properties/Description",
+        "/properties/FlywheelArn",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/DatasetArn",
+        "/properties/DatasetS3Uri",
+        "/properties/Status",
+        "/properties/NumberOfDocuments",
+        "/properties/CreationTime"
+    ],
+    "primaryIdentifier": [
+        "/properties/DatasetArn"
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "comprehend:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "comprehend:DescribeDataset",
+                "comprehend:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "FlywheelArn": {
+                        "type": "string",
+                        "maxLength": 256,
+                        "pattern": "^arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:flywheel/[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+                    }
+                },
+                "required": [
+                    "FlywheelArn"
+                ]
+            },
+            "permissions": [
+                "comprehend:ListDatasets"
+            ]
+        }
+    }
+}

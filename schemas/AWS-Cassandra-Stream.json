@@ -1,0 +1,88 @@
+{
+    "typeName": "AWS::Cassandra::Stream",
+    "description": "Resource schema for a Cassandra CDC stream in Amazon Keyspaces. This is a read-only resource that represents a change data capture stream associated with an Amazon Keyspaces table.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) that uniquely identifies the stream.",
+            "minLength": 37,
+            "maxLength": 1024
+        },
+        "KeyspaceName": {
+            "type": "string",
+            "description": "The name of the keyspace containing the table associated with this stream.",
+            "minLength": 1,
+            "maxLength": 48,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_]{0,47}$"
+        },
+        "TableName": {
+            "type": "string",
+            "description": "The name of the table associated with this stream.",
+            "minLength": 1,
+            "maxLength": 48,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_]{0,47}$"
+        },
+        "StreamLabel": {
+            "type": "string",
+            "description": "A timestamp that serves as a unique identifier for this stream."
+        },
+        "StreamStatus": {
+            "type": "string",
+            "description": "The current status of the stream.",
+            "enum": [
+                "ENABLING",
+                "ENABLED",
+                "DISABLING",
+                "DISABLED"
+            ]
+        },
+        "StreamViewType": {
+            "type": "string",
+            "description": "The format of the data records in this stream.",
+            "enum": [
+                "NEW_IMAGE",
+                "OLD_IMAGE",
+                "NEW_AND_OLD_IMAGES",
+                "KEYS_ONLY"
+            ]
+        },
+        "CreationRequestDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the request to create this stream was issued, in ISO 8601 format."
+        }
+    },
+    "createOnlyProperties": [
+        "/properties/KeyspaceName",
+        "/properties/StreamViewType",
+        "/properties/TableName"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/StreamLabel",
+        "/properties/StreamStatus",
+        "/properties/CreationRequestDateTime"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [["/properties/KeyspaceName", "/properties/TableName", "/properties/StreamLabel"]],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "cassandra:GetStream",
+                "cassandra:Select"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "cassandra:ListStreams",
+                "cassandra:Select"
+            ]
+        }
+    },
+    "additionalProperties": false
+}

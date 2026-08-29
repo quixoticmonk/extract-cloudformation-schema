@@ -87,7 +87,7 @@
          "tagUpdatable": true,
          "cloudFormationSystemTags": false,
          "tagProperty": "/properties/Tags",
-         "permissions": ["connect:TagResource", "connect:UntagResource"]
+         "permissions": ["connect:TagResource", "connect:UntagResource", "connect:DescribeTrafficDistributionGroup"]
      },
     "additionalProperties": false,
     "required": [
@@ -121,6 +121,7 @@
         },
         "update": {
             "permissions": [
+                "connect:DescribeTrafficDistributionGroup",
                 "connect:TagResource",
                 "connect:UntagResource"
             ]

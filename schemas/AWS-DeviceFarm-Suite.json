@@ -1,0 +1,171 @@
+{
+    "typeName": "AWS::DeviceFarm::Suite",
+    "description": "Represents a collection of one or more tests in AWS Device Farm.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The suite's ARN.",
+            "minLength": 32,
+            "maxLength": 1011,
+            "pattern": "^arn:aws:devicefarm:.+$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The suite's name.",
+            "maxLength": 256
+        },
+        "Status": {
+            "type": "string",
+            "description": "The suite's status.",
+            "enum": [
+                "PENDING",
+                "PENDING_CONCURRENCY",
+                "PENDING_DEVICE",
+                "PROCESSING",
+                "SCHEDULING",
+                "PREPARING",
+                "RUNNING",
+                "COMPLETED",
+                "STOPPING"
+            ]
+        },
+        "Result": {
+            "type": "string",
+            "description": "The suite's result.",
+            "enum": [
+                "PENDING",
+                "PASSED",
+                "WARNED",
+                "FAILED",
+                "SKIPPED",
+                "ERRORED",
+                "STOPPED"
+            ]
+        },
+        "Created": {
+            "type": "string",
+            "description": "When the suite was created.",
+            "format": "date-time"
+        },
+        "Counters": {
+            "$ref": "#/definitions/Counters"
+        },
+        "Message": {
+            "type": "string",
+            "description": "A message about the suite's result.",
+            "maxLength": 16384
+        },
+        "DeviceMinutes": {
+            "$ref": "#/definitions/DeviceMinutes"
+        },
+        "JobArn": {
+            "type": "string",
+            "description": "The ARN of the job that contains this suite.",
+            "minLength": 32,
+            "maxLength": 1011,
+            "pattern": "^arn:aws:devicefarm:.+$"
+        }
+    },
+    "definitions": {
+        "Counters": {
+            "type": "object",
+            "description": "Represents entity counters.",
+            "properties": {
+                "Total": {
+                    "type": "integer",
+                    "description": "The total number of entities."
+                },
+                "Passed": {
+                    "type": "integer",
+                    "description": "The number of passed entities."
+                },
+                "Failed": {
+                    "type": "integer",
+                    "description": "The number of failed entities."
+                },
+                "Warned": {
+                    "type": "integer",
+                    "description": "The number of warned entities."
+                },
+                "Errored": {
+                    "type": "integer",
+                    "description": "The number of errored entities."
+                },
+                "Stopped": {
+                    "type": "integer",
+                    "description": "The number of stopped entities."
+                },
+                "Skipped": {
+                    "type": "integer",
+                    "description": "The number of skipped entities."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DeviceMinutes": {
+            "type": "object",
+            "description": "Represents the total minutes used by the resource to run tests.",
+            "properties": {
+                "Total": {
+                    "type": "number",
+                    "description": "The total minutes used by the resource to run tests."
+                },
+                "Metered": {
+                    "type": "number",
+                    "description": "The sum of metered minutes used by the resource to run tests."
+                },
+                "Unmetered": {
+                    "type": "number",
+                    "description": "The sum of unmetered minutes used by the resource to run tests."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/JobArn"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/Name",
+        "/properties/Status",
+        "/properties/Result",
+        "/properties/Created",
+        "/properties/Counters",
+        "/properties/Message",
+        "/properties/DeviceMinutes"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "devicefarm:GetSuite"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "JobArn": {
+                        "type": "string",
+                        "description": "The ARN of the job that contains the suites.",
+                        "minLength": 32,
+                        "maxLength": 1011,
+                        "pattern": "^arn:aws:devicefarm:.+$"
+                    }
+                },
+                "required": [
+                    "JobArn"
+                ]
+            },
+            "permissions": [
+                "devicefarm:ListSuites"
+            ]
+        }
+    }
+}

@@ -1,0 +1,200 @@
+{
+    "typeName": "AWS::Bedrock::ModelImportJob",
+    "description": "Resource Type definition for AWS::Bedrock::ModelImportJob - Represents a model import job in Amazon Bedrock.",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A tag to associate with the model import job.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9\\s._:/=+@-]*$"
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z0-9\\s._:/=+@-]*$"
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        },
+        "S3DataSource": {
+            "type": "object",
+            "description": "The S3 data source for the model import job.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The URI of the S3 bucket that contains the model data.",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^s3://[a-z0-9][-.a-z0-9]{1,61}[a-z0-9](?:/[-!_*'().a-z0-9A-Z]+(?:/[-!_*'().a-z0-9A-Z]+)*)?/?$"
+                }
+            },
+            "required": ["S3Uri"],
+            "additionalProperties": false
+        },
+        "ModelDataSource": {
+            "type": "object",
+            "description": "The data source for the model import job.",
+            "properties": {
+                "S3DataSource": {
+                    "$ref": "#/definitions/S3DataSource",
+                    "description": "The S3 data source for the model import job."
+                }
+            },
+            "required": ["S3DataSource"],
+            "additionalProperties": false
+        },
+        "VpcConfig": {
+            "type": "object",
+            "description": "VPC configuration for the model import job.",
+            "properties": {
+                "SecurityGroupIds": {
+                    "type": "array",
+                    "description": "The security group IDs for the VPC.",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "pattern": "^[-0-9a-zA-Z]+$"
+                    },
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "insertionOrder": false
+                },
+                "SubnetIds": {
+                    "type": "array",
+                    "description": "The subnet IDs for the VPC.",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "pattern": "^[-0-9a-zA-Z]+$"
+                    },
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "insertionOrder": false
+                }
+            },
+            "required": ["SecurityGroupIds", "SubnetIds"],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "JobArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the model import job.",
+            "maxLength": 1011,
+            "pattern": "^arn:aws(-[^:]+)?:bedrock:[a-z0-9-]{1,20}:[0-9]{12}:model-import-job/[a-z0-9]{12}$"
+        },
+        "JobName": {
+            "type": "string",
+            "description": "The name of the model import job.",
+            "minLength": 1,
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9\\+\\-\\.])*$"
+        },
+        "ImportedModelName": {
+            "type": "string",
+            "description": "The name of the imported model.",
+            "minLength": 1,
+            "maxLength": 63,
+            "pattern": "^([0-9a-zA-Z][_-]?)+$"
+        },
+        "RoleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the IAM role for the model import job.",
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[^:]+)?:iam::([0-9]{12})?:role/.+$"
+        },
+        "ModelDataSource": {
+            "$ref": "#/definitions/ModelDataSource",
+            "description": "The data source for the model import job."
+        },
+        "ImportedModelKmsKeyArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the KMS key used to encrypt the imported model.",
+            "minLength": 1,
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[^:]+)?:kms:[a-zA-Z0-9-]*:[0-9]{12}:key/[a-zA-Z0-9-]{36}$"
+        },
+        "VpcConfig": {
+            "$ref": "#/definitions/VpcConfig",
+            "description": "VPC configuration for the model import job."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the model import job.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "minItems": 0,
+            "maxItems": 200,
+            "insertionOrder": false
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the model import job.",
+            "enum": ["InProgress", "Completed", "Failed"]
+        },
+        "CreationTime": {
+            "type": "string",
+            "description": "The time the model import job was created.",
+            "format": "date-time"
+        },
+        "LastModifiedTime": {
+            "type": "string",
+            "description": "The time the model import job was last modified.",
+            "format": "date-time"
+        },
+        "EndTime": {
+            "type": "string",
+            "description": "The time the model import job ended.",
+            "format": "date-time"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["RoleArn", "ModelDataSource"],
+    "createOnlyProperties": [
+        "/properties/ModelDataSource",
+        "/properties/RoleArn",
+        "/properties/Tags",
+        "/properties/VpcConfig",
+        "/properties/ImportedModelKmsKeyArn"
+    ],
+    "readOnlyProperties": [
+        "/properties/JobArn",
+        "/properties/JobName",
+        "/properties/ImportedModelName",
+        "/properties/Status",
+        "/properties/CreationTime",
+        "/properties/LastModifiedTime",
+        "/properties/EndTime"
+    ],
+    "primaryIdentifier": ["/properties/JobArn"],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["bedrock:ListTagsForResource"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "bedrock:GetModelImportJob",
+                "bedrock:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "bedrock:ListModelImportJobs"
+            ]
+        }
+    }
+}

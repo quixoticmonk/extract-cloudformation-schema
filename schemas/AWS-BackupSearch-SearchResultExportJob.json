@@ -1,0 +1,122 @@
+{
+    "typeName": "AWS::BackupSearch::SearchResultExportJob",
+    "description": "Definition of AWS::BackupSearch::SearchResultExportJob Resource Type",
+    "definitions": {
+        "ExportSpecification": {
+            "type": "object",
+            "description": "The export specification object.",
+            "properties": {
+                "S3ExportSpecification": {
+                    "$ref": "#/definitions/S3ExportSpecification"
+                }
+            },
+            "required": ["S3ExportSpecification"],
+            "additionalProperties": false
+        },
+        "S3ExportSpecification": {
+            "type": "object",
+            "description": "The S3 export specification.",
+            "properties": {
+                "DestinationBucket": {
+                    "type": "string",
+                    "description": "The destination S3 bucket for the export job."
+                },
+                "DestinationPrefix": {
+                    "type": "string",
+                    "description": "The destination prefix for the export job."
+                }
+            },
+            "required": ["DestinationBucket"],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "ExportJobIdentifier": {
+            "type": "string",
+            "description": "The unique identifier of the export job."
+        },
+        "ExportJobArn": {
+            "type": "string",
+            "description": "The ARN of the export job."
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the export job.",
+            "enum": ["RUNNING", "FAILED", "COMPLETED"]
+        },
+        "CreationTime": {
+            "type": "string",
+            "description": "The creation time of the export job.",
+            "format": "date-time"
+        },
+        "SearchJobArn": {
+            "type": "string",
+            "description": "The ARN of the search job that produced the results being exported."
+        },
+        "ExportSpecification": {
+            "$ref": "#/definitions/ExportSpecification",
+            "description": "The export specification for the export job."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the export job.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Key": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                    },
+                    "Value": {
+                        "type": "string",
+                        "minLength": 0,
+                        "maxLength": 256
+                    }
+                },
+                "required": ["Key", "Value"],
+                "additionalProperties": false
+            },
+            "maxItems": 50,
+            "insertionOrder": false
+        }
+    },
+    "required": [],
+    "readOnlyProperties": [
+        "/properties/ExportJobArn",
+        "/properties/ExportJobIdentifier",
+        "/properties/Status",
+        "/properties/CreationTime",
+        "/properties/SearchJobArn"
+    ],
+    "createOnlyProperties": [
+        "/properties/ExportSpecification",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/ExportJobArn"],
+    "additionalIdentifiers": [["/properties/ExportJobIdentifier"]],
+    "additionalProperties": false,
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "backup-search:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "backup-search:GetSearchResultExportJob",
+                "backup-search:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "backup-search:ListSearchResultExportJobs"
+            ]
+        }
+    }
+}

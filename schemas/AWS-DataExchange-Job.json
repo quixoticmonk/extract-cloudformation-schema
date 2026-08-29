@@ -1,0 +1,78 @@
+{
+    "typeName": "AWS::DataExchange::Job",
+    "description": "Represents an AWS Data Exchange job, which is an asynchronous import or export operation used to create or copy assets.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the job."
+        },
+        "Id": {
+            "type": "string",
+            "description": "The unique identifier for the job.",
+            "pattern": "^[a-zA-Z0-9]{30,40}$"
+        },
+        "Type": {
+            "type": "string",
+            "description": "The type of job.",
+            "enum": [
+                "IMPORT_ASSETS_FROM_S3",
+                "IMPORT_ASSET_FROM_SIGNED_URL",
+                "EXPORT_ASSETS_TO_S3",
+                "EXPORT_ASSET_TO_SIGNED_URL",
+                "EXPORT_REVISIONS_TO_S3",
+                "IMPORT_ASSETS_FROM_REDSHIFT_DATA_SHARES",
+                "IMPORT_ASSET_FROM_API_GATEWAY_API",
+                "CREATE_S3_DATA_ACCESS_FROM_S3_BUCKET",
+                "IMPORT_ASSETS_FROM_LAKE_FORMATION_TAG_POLICY"
+            ]
+        },
+        "State": {
+            "type": "string",
+            "description": "The state of the job.",
+            "enum": [
+                "WAITING",
+                "IN_PROGRESS",
+                "ERROR",
+                "COMPLETED",
+                "CANCELLED",
+                "TIMED_OUT"
+            ]
+        },
+        "CreatedAt": {
+            "type": "string",
+            "description": "The date and time that the job was created, in ISO 8601 format.",
+            "format": "date-time"
+        },
+        "UpdatedAt": {
+            "type": "string",
+            "description": "The date and time that the job was last updated, in ISO 8601 format.",
+            "format": "date-time"
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/Id",
+        "/properties/Type",
+        "/properties/State",
+        "/properties/CreatedAt",
+        "/properties/UpdatedAt"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/Id"]],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "dataexchange:GetJob"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "dataexchange:ListJobs"
+            ]
+        }
+    }
+}

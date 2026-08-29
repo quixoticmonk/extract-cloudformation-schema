@@ -1,0 +1,72 @@
+{
+    "typeName": "AWS::Glue::TableVersion",
+    "description": "Represents a specific version of a table in the AWS Glue Data Catalog.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The ARN of the table version."
+        },
+        "DatabaseName": {
+            "type": "string",
+            "description": "The name of the database in the catalog in which the table resides.",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\t]*"
+        },
+        "TableName": {
+            "type": "string",
+            "description": "The name of the table.",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\t]*"
+        },
+        "VersionId": {
+            "type": "string",
+            "description": "The ID value that identifies this table version.",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\t]*"
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/DatabaseName",
+        "/properties/TableName"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/VersionId"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/DatabaseName", "/properties/TableName", "/properties/VersionId"]],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "glue:GetTableVersion"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "DatabaseName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                    },
+                    "TableName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                    }
+                },
+                "required": ["DatabaseName", "TableName"]
+            },
+            "permissions": [
+                "glue:GetTableVersions"
+            ]
+        }
+    }
+}

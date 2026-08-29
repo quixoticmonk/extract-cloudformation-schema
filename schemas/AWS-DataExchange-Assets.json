@@ -1,0 +1,125 @@
+{
+    "typeName": "AWS::DataExchange::Assets",
+    "description": "Definition of AWS::DataExchange::Assets Resource Type",
+    "properties": {
+        "Arn": {
+            "description": "The ARN for the asset.",
+            "type": "string"
+        },
+        "AssetId": {
+            "description": "The unique identifier for the asset.",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9]{30,40}$"
+        },
+        "AssetType": {
+            "description": "The type of asset that is added to a data set.",
+            "type": "string",
+            "enum": [
+                "S3_SNAPSHOT",
+                "REDSHIFT_DATA_SHARE",
+                "API_GATEWAY_API",
+                "S3_DATA_ACCESS",
+                "LAKE_FORMATION_DATA_PERMISSION"
+            ]
+        },
+        "CreatedAt": {
+            "description": "The date and time that the asset was created, in ISO 8601 format.",
+            "type": "string",
+            "format": "date-time"
+        },
+        "DataSetId": {
+            "description": "The unique identifier for the data set associated with this asset.",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9]{30,40}$"
+        },
+        "Name": {
+            "description": "The name of the asset.",
+            "type": "string"
+        },
+        "RevisionId": {
+            "description": "The unique identifier for the revision associated with this asset.",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9]{30,40}$"
+        },
+        "UpdatedAt": {
+            "description": "The date and time that the asset was last updated, in ISO 8601 format.",
+            "type": "string",
+            "format": "date-time"
+        },
+        "Tags": {
+            "description": "The tags for the asset.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Key": {
+                        "type": "string"
+                    },
+                    "Value": {
+                        "type": "string"
+                    }
+                },
+                "required": ["Key", "Value"],
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/DataSetId",
+        "/properties/Name",
+        "/properties/RevisionId"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/AssetId",
+        "/properties/AssetType",
+        "/properties/CreatedAt",
+        "/properties/UpdatedAt",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        ["/properties/DataSetId", "/properties/RevisionId", "/properties/AssetId"]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "dataexchange:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "dataexchange:GetAsset",
+                "dataexchange:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "DataSetId": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9]{30,40}$"
+                    },
+                    "RevisionId": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9]{30,40}$"
+                    }
+                },
+                "required": ["DataSetId", "RevisionId"]
+            },
+            "permissions": [
+                "dataexchange:ListRevisionAssets"
+            ]
+        }
+    }
+}

@@ -1,0 +1,158 @@
+{
+    "typeName": "AWS::EC2::ExportInstanceTask",
+    "description": "Resource schema for an EC2 Export Instance Task. This is a read-only resource representing an instance export job.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The ARN of the export task."
+        },
+        "ExportTaskId": {
+            "type": "string",
+            "description": "The ID of the export task."
+        },
+        "Description": {
+            "type": "string",
+            "description": "A description for the conversion task or the resource being exported.",
+            "maxLength": 255
+        },
+        "InstanceId": {
+            "type": "string",
+            "description": "The ID of the instance to export."
+        },
+        "TargetEnvironment": {
+            "type": "string",
+            "description": "The target virtualization environment.",
+            "enum": [
+                "citrix",
+                "vmware",
+                "microsoft"
+            ]
+        },
+        "ExportToS3Task": {
+            "$ref": "#/definitions/ExportToS3Task"
+        },
+        "State": {
+            "type": "string",
+            "description": "The state of the export task.",
+            "enum": [
+                "active",
+                "cancelling",
+                "cancelled",
+                "completed"
+            ]
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags for the export task.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "ExportToS3Task": {
+            "type": "object",
+            "description": "Describes the format and location for the export task.",
+            "properties": {
+                "ContainerFormat": {
+                    "type": "string",
+                    "description": "The container format used to combine disk images with metadata (such as OVF).",
+                    "enum": [
+                        "ova"
+                    ]
+                },
+                "DiskImageFormat": {
+                    "type": "string",
+                    "description": "The format for the exported image.",
+                    "enum": [
+                        "VMDK",
+                        "RAW",
+                        "VHD"
+                    ]
+                },
+                "S3Bucket": {
+                    "type": "string",
+                    "description": "The Amazon S3 bucket for the destination image."
+                },
+                "S3Key": {
+                    "type": "string",
+                    "description": "The S3 key for the exported image."
+                }
+            },
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key name of the tag.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "InstanceId",
+        "TargetEnvironment"
+    ],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/Description",
+        "/properties/ExportToS3Task",
+        "/properties/InstanceId",
+        "/properties/Tags",
+        "/properties/TargetEnvironment"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/ExportTaskId",
+        "/properties/State",
+        "/properties/ExportToS3Task/S3Key"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/ExportTaskId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "ec2:DescribeTags"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ec2:DescribeExportTasks",
+                "ec2:DescribeTags"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "ec2:DescribeExportTasks"
+            ]
+        }
+    }
+}

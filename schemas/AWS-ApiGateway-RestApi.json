@@ -187,6 +187,10 @@
             "description": "",
             "type": "string"
         },
+        "Version": {
+            "description": "",
+            "type": "string"
+        },
         "SecurityPolicy": {
             "description": "",
             "type": "string"

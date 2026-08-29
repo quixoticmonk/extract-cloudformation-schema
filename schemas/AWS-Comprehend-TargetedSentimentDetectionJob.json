@@ -1,0 +1,217 @@
+{
+    "typeName": "AWS::Comprehend::TargetedSentimentDetectionJob",
+    "description": "An Amazon Comprehend targeted sentiment detection job that identifies sentiment associated with specific entities in documents stored in Amazon S3.",
+    "properties": {
+        "JobArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the targeted sentiment detection job.",
+            "maxLength": 256,
+            "pattern": "^arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:[a-zA-Z0-9-]{1,64}/[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        },
+        "JobId": {
+            "type": "string",
+            "description": "The identifier assigned to the targeted sentiment detection job.",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-%@]*)$"
+        },
+        "JobName": {
+            "type": "string",
+            "description": "The identifier of the job.",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-%@]*)$"
+        },
+        "JobStatus": {
+            "type": "string",
+            "description": "The current status of the targeted sentiment detection job.",
+            "enum": [
+                "SUBMITTED",
+                "IN_PROGRESS",
+                "COMPLETED",
+                "FAILED",
+                "STOP_REQUESTED",
+                "STOPPED"
+            ]
+        },
+        "LanguageCode": {
+            "type": "string",
+            "description": "The language of the input documents. Currently, English is the only supported language.",
+            "enum": [
+                "en",
+                "es",
+                "fr",
+                "de",
+                "it",
+                "pt",
+                "ar",
+                "hi",
+                "ja",
+                "ko",
+                "zh",
+                "zh-TW"
+            ]
+        },
+        "DataAccessRoleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the IAM role that grants Amazon Comprehend read access to your input data.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[^:]+)?:iam::[0-9]{12}:role/.+$"
+        },
+        "InputDataConfig": {
+            "type": "object",
+            "description": "The input properties for a targeted sentiment detection job.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The Amazon S3 URI for the input data.",
+                    "maxLength": 1024,
+                    "pattern": "^s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?$"
+                },
+                "InputFormat": {
+                    "type": "string",
+                    "description": "Specifies how the text in an input file should be processed.",
+                    "enum": [
+                        "ONE_DOC_PER_FILE",
+                        "ONE_DOC_PER_LINE"
+                    ]
+                }
+            },
+            "required": [
+                "S3Uri"
+            ],
+            "additionalProperties": false
+        },
+        "OutputDataConfig": {
+            "type": "object",
+            "description": "Provides configuration parameters for the output of targeted sentiment detection jobs.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The Amazon S3 URI where the output is written.",
+                    "maxLength": 1024,
+                    "pattern": "^s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?$"
+                },
+                "KmsKeyId": {
+                    "type": "string",
+                    "description": "ID for the AWS KMS key that Amazon Comprehend uses to encrypt the output results.",
+                    "maxLength": 2048,
+                    "pattern": "^\\p{ASCII}+$"
+                }
+            },
+            "required": [
+                "S3Uri"
+            ],
+            "additionalProperties": false
+        },
+        "VolumeKmsKeyId": {
+            "type": "string",
+            "description": "ID for the AWS KMS key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job.",
+            "maxLength": 2048,
+            "pattern": "^\\p{ASCII}+$"
+        },
+        "SubmitTime": {
+            "type": "string",
+            "description": "The time that the targeted sentiment detection job was submitted for processing.",
+            "format": "date-time"
+        },
+        "EndTime": {
+            "type": "string",
+            "description": "The time that the targeted sentiment detection job completed.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the targeted sentiment detection job.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Key": {
+                        "type": "string",
+                        "description": "The key of the tag.",
+                        "minLength": 1,
+                        "maxLength": 128
+                    },
+                    "Value": {
+                        "type": "string",
+                        "description": "The value of the tag.",
+                        "minLength": 0,
+                        "maxLength": 256
+                    }
+                },
+                "required": [
+                    "Key",
+                    "Value"
+                ],
+                "additionalProperties": false
+            },
+            "maxItems": 50
+        }
+    },
+    "required": [
+        "DataAccessRoleArn",
+        "InputDataConfig",
+        "LanguageCode"
+    ],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/DataAccessRoleArn",
+        "/properties/InputDataConfig",
+        "/properties/JobName",
+        "/properties/LanguageCode",
+        "/properties/Tags",
+        "/properties/VolumeKmsKeyId"
+    ],
+    "readOnlyProperties": [
+        "/properties/JobArn",
+        "/properties/JobId",
+        "/properties/JobStatus",
+        "/properties/SubmitTime",
+        "/properties/EndTime",
+        "/properties/OutputDataConfig"
+    ],
+    "primaryIdentifier": [
+        "/properties/JobArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/JobId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "comprehend:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "comprehend:DescribeTargetedSentimentDetectionJob",
+                "comprehend:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "comprehend:ListTargetedSentimentDetectionJobs"
+            ],
+            "handlerSchema": {
+                "properties": {
+                    "JobName": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    }
+                },
+                "required": [
+                    "JobName"
+                ]
+            }
+        }
+    }
+}

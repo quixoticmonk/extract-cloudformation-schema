@@ -1,0 +1,107 @@
+{
+    "typeName": "AWS::InternetMonitor::InternetEvent",
+    "description": "An internet event in Amazon CloudWatch Internet Monitor that causes performance degradation or availability problems for impacted AWS client locations.",
+    "properties": {
+        "EventId": {
+            "type": "string",
+            "description": "The internally-generated identifier of an internet event.",
+            "minLength": 1,
+            "maxLength": 255,
+            "pattern": "^[a-zA-Z0-9-]+$"
+        },
+        "EventArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the internet event.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:.*"
+        },
+        "StartedAt": {
+            "type": "string",
+            "description": "The time when the internet event started.",
+            "format": "date-time"
+        },
+        "EndedAt": {
+            "type": "string",
+            "description": "The time when the internet event ended. If the event hasn't ended yet, this value is empty.",
+            "format": "date-time"
+        },
+        "ClientLocation": {
+            "type": "object",
+            "description": "The impacted location, such as a city, where clients access AWS application resources.",
+            "properties": {
+                "ASName": {
+                    "type": "string",
+                    "description": "The name of the internet service provider (ISP) or network (ASN)."
+                },
+                "ASNumber": {
+                    "type": "integer",
+                    "description": "The Autonomous System Number (ASN) of the network at an impacted location."
+                },
+                "Country": {
+                    "type": "string",
+                    "description": "The name of the country where the internet event is located."
+                },
+                "Subdivision": {
+                    "type": "string",
+                    "description": "The subdivision location where the health event is located."
+                },
+                "Metro": {
+                    "type": "string",
+                    "description": "The metro area where the health event is located."
+                },
+                "City": {
+                    "type": "string",
+                    "description": "The name of the city where the internet event is located."
+                },
+                "Latitude": {
+                    "type": "number",
+                    "description": "The latitude where the internet event is located."
+                },
+                "Longitude": {
+                    "type": "number",
+                    "description": "The longitude where the internet event is located."
+                }
+            },
+            "required": ["ASName", "ASNumber", "Country", "City", "Latitude", "Longitude"],
+            "additionalProperties": false
+        },
+        "EventType": {
+            "type": "string",
+            "description": "The type of network impairment.",
+            "enum": ["AVAILABILITY", "PERFORMANCE"]
+        },
+        "EventStatus": {
+            "type": "string",
+            "description": "The status of the internet event.",
+            "enum": ["ACTIVE", "RESOLVED"]
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/EventId",
+        "/properties/EventArn",
+        "/properties/StartedAt",
+        "/properties/EndedAt",
+        "/properties/ClientLocation",
+        "/properties/EventType",
+        "/properties/EventStatus"
+    ],
+    "primaryIdentifier": ["/properties/EventArn"],
+    "additionalIdentifiers": [["/properties/EventId"]],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "internetmonitor:GetInternetEvent"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "internetmonitor:ListInternetEvents"
+            ]
+        }
+    }
+}

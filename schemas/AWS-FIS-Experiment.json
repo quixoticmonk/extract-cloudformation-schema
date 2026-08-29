@@ -1,0 +1,144 @@
+{
+    "typeName": "AWS::FIS::Experiment",
+    "description": "Represents a fault injection experiment run in AWS Fault Injection Service.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the experiment.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^[\\S]+$"
+        },
+        "Id": {
+            "type": "string",
+            "description": "The ID of the experiment.",
+            "maxLength": 64,
+            "pattern": "^[\\S]+$"
+        },
+        "ExperimentTemplateId": {
+            "type": "string",
+            "description": "The ID of the experiment template.",
+            "maxLength": 64,
+            "pattern": "^[\\S]+$"
+        },
+        "ExperimentOptions": {
+            "$ref": "#/definitions/ExperimentOptions"
+        },
+        "RoleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of an IAM role that grants the FIS service permission to perform service actions on your behalf.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^[\\S]+$"
+        },
+        "CreationTime": {
+            "type": "string",
+            "description": "The time that the experiment was created.",
+            "format": "date-time"
+        },
+        "StartTime": {
+            "type": "string",
+            "description": "The time that the experiment started.",
+            "format": "date-time"
+        },
+        "EndTime": {
+            "type": "string",
+            "description": "The time that the experiment ended.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags for the experiment.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50,
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "ExperimentOptions": {
+            "type": "object",
+            "description": "The experiment options.",
+            "properties": {
+                "ActionsMode": {
+                    "type": "string",
+                    "description": "The actions mode.",
+                    "enum": [
+                        "skip-all",
+                        "run-all"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The tag key.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The tag value.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/ExperimentOptions",
+        "/properties/ExperimentTemplateId"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/Id",
+        "/properties/RoleArn",
+        "/properties/CreationTime",
+        "/properties/StartTime",
+        "/properties/EndTime",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/Id"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "fis:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "fis:GetExperiment",
+                "fis:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "fis:ListExperiments"
+            ]
+        }
+    }
+}

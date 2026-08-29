@@ -13,7 +13,7 @@
             "iam:GetRole",
             "iam:PassRole"
         ]},
-        "delete": {"permissions": ["apigateway:PATCH"]}
+        "delete": {"permissions": ["apigateway:GET"]}
     },
     "typeName": "AWS::ApiGateway::Account",
     "readOnlyProperties": ["/properties/Id"],

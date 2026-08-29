@@ -1,0 +1,407 @@
+{
+    "typeName": "AWS::IVS::Composition",
+    "description": "An IVS Composition resource represents a server-side composition process that composites participants of a stage into a single video and forwards it to destinations.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The ARN of the Composition resource.",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:composition/[a-zA-Z0-9-]+$"
+        },
+        "StageArn": {
+            "type": "string",
+            "description": "ARN of the stage used as input.",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:stage/[a-zA-Z0-9-]+$"
+        },
+        "State": {
+            "type": "string",
+            "description": "State of the Composition.",
+            "enum": [
+                "STARTING",
+                "ACTIVE",
+                "STOPPING",
+                "FAILED",
+                "STOPPED"
+            ]
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags attached to the resource.",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        },
+        "Destinations": {
+            "type": "array",
+            "description": "Array of destination configuration.",
+            "minItems": 1,
+            "maxItems": 2,
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/DestinationConfiguration"
+            }
+        },
+        "Layout": {
+            "$ref": "#/definitions/LayoutConfiguration"
+        },
+        "StartTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC time of the Composition start. ISO 8601 timestamp."
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ]
+        },
+        "DestinationConfiguration": {
+            "type": "object",
+            "description": "Configuration for a composition destination.",
+            "additionalProperties": false,
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "Name that can be specified to help identify the destination.",
+                    "minLength": 0,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9-_]*$"
+                },
+                "Channel": {
+                    "$ref": "#/definitions/ChannelDestinationConfiguration"
+                },
+                "S3": {
+                    "$ref": "#/definitions/S3DestinationConfiguration"
+                }
+            }
+        },
+        "ChannelDestinationConfiguration": {
+            "type": "object",
+            "description": "Configuration for a channel destination.",
+            "additionalProperties": false,
+            "properties": {
+                "ChannelArn": {
+                    "type": "string",
+                    "description": "ARN of the channel to use for broadcasting.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:channel/[a-zA-Z0-9-]+$"
+                },
+                "EncoderConfigurationArn": {
+                    "type": "string",
+                    "description": "ARN of the EncoderConfiguration resource.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:encoder-configuration/[a-zA-Z0-9-]+$"
+                }
+            },
+            "required": [
+                "ChannelArn"
+            ]
+        },
+        "S3DestinationConfiguration": {
+            "type": "object",
+            "description": "Configuration for an S3 destination.",
+            "additionalProperties": false,
+            "properties": {
+                "StorageConfigurationArn": {
+                    "type": "string",
+                    "description": "ARN of the StorageConfiguration where recorded videos will be stored.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:storage-configuration/[a-zA-Z0-9-]+$"
+                },
+                "EncoderConfigurationArns": {
+                    "type": "array",
+                    "description": "ARNs of the EncoderConfiguration resource.",
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128,
+                        "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:encoder-configuration/[a-zA-Z0-9-]+$"
+                    }
+                },
+                "RecordingConfiguration": {
+                    "$ref": "#/definitions/RecordingConfiguration"
+                },
+                "ThumbnailConfigurations": {
+                    "type": "array",
+                    "description": "Configuration for thumbnail generation.",
+                    "minItems": 0,
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/CompositionThumbnailConfiguration"
+                    }
+                }
+            },
+            "required": [
+                "StorageConfigurationArn",
+                "EncoderConfigurationArns"
+            ]
+        },
+        "RecordingConfiguration": {
+            "type": "object",
+            "description": "Recording configuration.",
+            "additionalProperties": false,
+            "properties": {
+                "Format": {
+                    "type": "string",
+                    "description": "The recording format for storing a recording in Amazon S3.",
+                    "enum": [
+                        "HLS"
+                    ]
+                },
+                "HlsConfiguration": {
+                    "$ref": "#/definitions/CompositionRecordingHlsConfiguration"
+                }
+            }
+        },
+        "CompositionRecordingHlsConfiguration": {
+            "type": "object",
+            "description": "HLS recording configuration.",
+            "additionalProperties": false,
+            "properties": {
+                "TargetSegmentDurationSeconds": {
+                    "type": "integer",
+                    "description": "Target duration for recorded segments. Default: 2.",
+                    "minimum": 2,
+                    "maximum": 10
+                }
+            }
+        },
+        "CompositionThumbnailConfiguration": {
+            "type": "object",
+            "description": "Thumbnail configuration for a Composition.",
+            "additionalProperties": false,
+            "properties": {
+                "TargetIntervalSeconds": {
+                    "type": "integer",
+                    "description": "Targeted thumbnail-generation interval in seconds. Default: 60.",
+                    "minimum": 1,
+                    "maximum": 86400
+                },
+                "Storage": {
+                    "type": "array",
+                    "description": "Format in which thumbnails are recorded.",
+                    "minItems": 0,
+                    "maxItems": 2,
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "SEQUENTIAL",
+                            "LATEST"
+                        ]
+                    }
+                }
+            }
+        },
+        "LayoutConfiguration": {
+            "type": "object",
+            "description": "Configuration information of supported layouts for server-side composition.",
+            "additionalProperties": false,
+            "properties": {
+                "Grid": {
+                    "$ref": "#/definitions/GridConfiguration"
+                },
+                "Pip": {
+                    "$ref": "#/definitions/PipConfiguration"
+                }
+            }
+        },
+        "GridConfiguration": {
+            "type": "object",
+            "description": "Configuration information specific to Grid layout.",
+            "additionalProperties": false,
+            "properties": {
+                "FeaturedParticipantAttribute": {
+                    "type": "string",
+                    "description": "Attribute name identifying the featured slot.",
+                    "minLength": 0,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9-_]*$"
+                },
+                "OmitStoppedVideo": {
+                    "type": "boolean",
+                    "description": "Determines whether to omit participants with stopped video."
+                },
+                "VideoAspectRatio": {
+                    "type": "string",
+                    "description": "Sets the non-featured participant display mode.",
+                    "enum": [
+                        "AUTO",
+                        "VIDEO",
+                        "SQUARE",
+                        "PORTRAIT"
+                    ]
+                },
+                "VideoFillMode": {
+                    "type": "string",
+                    "description": "Defines how video content fits within the participant tile.",
+                    "enum": [
+                        "FILL",
+                        "COVER",
+                        "CONTAIN"
+                    ]
+                },
+                "GridGap": {
+                    "type": "integer",
+                    "description": "Specifies the spacing between participant tiles in pixels.",
+                    "minimum": 0
+                },
+                "ParticipantOrderAttribute": {
+                    "type": "string",
+                    "description": "Attribute name identifying the participant ordering key.",
+                    "minLength": 0,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9-_]*$"
+                }
+            }
+        },
+        "PipConfiguration": {
+            "type": "object",
+            "description": "Configuration information specific to PiP layout.",
+            "additionalProperties": false,
+            "properties": {
+                "FeaturedParticipantAttribute": {
+                    "type": "string",
+                    "description": "Attribute name identifying the featured slot.",
+                    "minLength": 0,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9-_]*$"
+                },
+                "OmitStoppedVideo": {
+                    "type": "boolean",
+                    "description": "Determines whether to omit participants with stopped video."
+                },
+                "VideoFillMode": {
+                    "type": "string",
+                    "description": "Defines how video content fits within the participant tile.",
+                    "enum": [
+                        "FILL",
+                        "COVER",
+                        "CONTAIN"
+                    ]
+                },
+                "GridGap": {
+                    "type": "integer",
+                    "description": "Specifies the spacing between participant tiles in pixels.",
+                    "minimum": 0
+                },
+                "PipParticipantAttribute": {
+                    "type": "string",
+                    "description": "Specifies the participant for the PiP window.",
+                    "minLength": 0,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9-_]*$"
+                },
+                "PipBehavior": {
+                    "type": "string",
+                    "description": "Defines PiP behavior when all participants have left.",
+                    "enum": [
+                        "STATIC",
+                        "DYNAMIC"
+                    ]
+                },
+                "PipOffset": {
+                    "type": "integer",
+                    "description": "Sets the PiP window's offset position in pixels.",
+                    "minimum": 0
+                },
+                "PipPosition": {
+                    "type": "string",
+                    "description": "Determines the corner position of the PiP window.",
+                    "enum": [
+                        "TOP_LEFT",
+                        "TOP_RIGHT",
+                        "BOTTOM_LEFT",
+                        "BOTTOM_RIGHT"
+                    ]
+                },
+                "PipWidth": {
+                    "type": "integer",
+                    "description": "Specifies the width of the PiP window in pixels.",
+                    "minimum": 1
+                },
+                "PipHeight": {
+                    "type": "integer",
+                    "description": "Specifies the height of the PiP window in pixels.",
+                    "minimum": 1
+                },
+                "ParticipantOrderAttribute": {
+                    "type": "string",
+                    "description": "Attribute name identifying the participant ordering key.",
+                    "minLength": 0,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9-_]*$"
+                }
+            }
+        }
+    },
+    "required": [
+        "StageArn",
+        "Destinations"
+    ],
+    "createOnlyProperties": [
+        "/properties/Destinations",
+        "/properties/Layout",
+        "/properties/StageArn",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/State",
+        "/properties/StartTime"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalProperties": false,
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "ivs:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ivs:GetComposition",
+                "ivs:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "ivs:ListCompositions"
+            ]
+        }
+    }
+}

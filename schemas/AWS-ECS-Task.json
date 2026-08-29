@@ -1,0 +1,145 @@
+{
+    "typeName": "AWS::ECS::Task",
+    "description": "Resource schema for an Amazon ECS Task. This is a read-only resource representing a running or stopped task launched on an ECS cluster (e.g. via RunTask or StartTask).",
+    "properties": {
+        "TaskArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the task."
+        },
+        "TaskId": {
+            "type": "string",
+            "description": "The unique identifier of the task (the final segment of the task ARN)."
+        },
+        "Cluster": {
+            "type": "string",
+            "description": "The short name or ARN of the cluster that hosts the task."
+        },
+        "TaskDefinition": {
+            "type": "string",
+            "description": "The ARN of the task definition that the task is based on."
+        },
+        "LaunchType": {
+            "type": "string",
+            "description": "The infrastructure on which the task runs.",
+            "enum": [
+                "EC2",
+                "FARGATE",
+                "EXTERNAL",
+                "MANAGED_INSTANCES"
+            ]
+        },
+        "StartedBy": {
+            "type": "string",
+            "description": "The tag specified when the task was started."
+        },
+        "LastStatus": {
+            "type": "string",
+            "description": "The last known status of the task."
+        },
+        "DesiredStatus": {
+            "type": "string",
+            "description": "The desired status of the task."
+        },
+        "Group": {
+            "type": "string",
+            "description": "The name of the task group associated with the task."
+        },
+        "Cpu": {
+            "type": "string",
+            "description": "The number of CPU units used by the task as expressed in the task definition."
+        },
+        "Memory": {
+            "type": "string",
+            "description": "The amount of memory (in MiB) used by the task as expressed in the task definition."
+        },
+        "CreatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The ISO 8601 timestamp for the time when the task was created (entered the PENDING state)."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The metadata applied to the task.",
+            "uniqueItems": false,
+            "insertionOrder": false,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Key": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                    },
+                    "Value": {
+                        "type": "string",
+                        "maxLength": 256
+                    }
+                },
+                "required": [
+                    "Key",
+                    "Value"
+                ],
+                "additionalProperties": false
+            },
+            "maxItems": 50
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/TaskArn",
+        "/properties/TaskId",
+        "/properties/Cluster",
+        "/properties/TaskDefinition",
+        "/properties/LaunchType",
+        "/properties/StartedBy",
+        "/properties/LastStatus",
+        "/properties/DesiredStatus",
+        "/properties/Group",
+        "/properties/Cpu",
+        "/properties/Memory",
+        "/properties/CreatedAt",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/TaskArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/Cluster",
+            "/properties/TaskId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "ecs:DescribeTasks"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ecs:DescribeTasks"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "Cluster": {
+                        "type": "string",
+                        "description": "The short name or ARN of the cluster to list tasks from."
+                    }
+                },
+                "required": [
+                    "Cluster"
+                ]
+            },
+            "permissions": [
+                "ecs:ListTasks"
+            ]
+        }
+    }
+}

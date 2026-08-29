@@ -452,7 +452,7 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 1024,
-            "pattern": "^\\d{12}\\.dkr\\.ecr\\.([a-z0-9-]+)\\.amazonaws\\.com/((?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*)([:@]\\S+)$",
+            "pattern": "^(([0-9]{12})\\.dkr\\.ecr\\.([a-z0-9-]+)\\.amazonaws\\.com(\\.cn)?|public\\.ecr\\.aws)/((?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*)(?::([^:@]{1,300}))?(?:@(.+))?$",
             "description": "The ECR URI of the container"
         },
         "RoleArn": {
@@ -505,13 +505,13 @@
                 "IdleRuntimeSessionTimeout": {
                     "type": "integer",
                     "minimum": 60,
-                    "maximum": 28800,
+                    "maximum": 1209600,
                     "description": "Timeout in seconds for idle runtime sessions"
                 },
                 "MaxLifetime": {
                     "type": "integer",
                     "minimum": 60,
-                    "maximum": 28800,
+                    "maximum": 1209600,
                     "description": "Maximum lifetime in seconds for runtime sessions"
                 }
             },
@@ -603,6 +603,46 @@
             "required": ["AccessPointArn", "MountPath"],
             "additionalProperties": false
         },
+        "CapacityProviderArn": {
+            "type": "string",
+            "description": "ARN of the capacity provider",
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[^:]+)?:bedrock-agentcore:[a-z0-9-]+:[0-9]{12}:capacity-provider/[a-zA-Z][a-zA-Z0-9_]{0,47}-[a-zA-Z0-9]{10}$"
+        },
+        "CapacityProviderConfiguration": {
+            "type": "object",
+            "description": "Configuration for a capacity provider",
+            "properties": {
+                "CapacityProviderArn": {
+                    "$ref": "#/definitions/CapacityProviderArn"
+                }
+            },
+            "required": [
+                "CapacityProviderArn"
+            ],
+            "additionalProperties": false
+        },
+        "CapacityProviderVolumeName": {
+            "type": "string",
+            "description": "Name of the capacity provider volume",
+            "minLength": 1,
+            "maxLength": 48,
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,47}$"
+        },
+        "CapacityProviderVolumeConfiguration": {
+            "type": "object",
+            "description": "Configuration for a CapacityProvider-managed volume to mount into the agent runtime",
+            "properties": {
+                "VolumeName": {
+                    "$ref": "#/definitions/CapacityProviderVolumeName"
+                },
+                "MountPath": {
+                    "$ref": "#/definitions/MountPath"
+                }
+            },
+            "required": ["VolumeName", "MountPath"],
+            "additionalProperties": false
+        },
         "FilesystemConfiguration": {
             "type": "object",
             "description": "Filesystem configuration for the runtime",
@@ -615,6 +655,9 @@
                 },
                 "S3FilesAccessPoint": {
                     "$ref": "#/definitions/S3FilesAccessPointConfiguration"
+                },
+                "CapacityProviderVolume": {
+                    "$ref": "#/definitions/CapacityProviderVolumeConfiguration"
                 }
             },
             "additionalProperties": false
@@ -810,6 +853,10 @@
             "$ref": "#/definitions/FilesystemConfigurations",
             "description": "Filesystem configurations for the agent runtime"
         },
+        "CapacityProviderConfiguration": {
+            "$ref": "#/definitions/CapacityProviderConfiguration",
+            "description": "Capacity provider configuration for the agent runtime"
+        },
         "AgentRuntimeVersion": {
             "$ref": "#/definitions/AgentRuntimeVersion",
             "description": "Version of the Agent"
@@ -839,7 +886,7 @@
         }
     },
     "primaryIdentifier": ["/properties/AgentRuntimeId"],
-    "required": ["AgentRuntimeName", "AgentRuntimeArtifact", "RoleArn", "NetworkConfiguration"],
+    "required": ["AgentRuntimeName", "AgentRuntimeArtifact", "RoleArn"],
     "createOnlyProperties": [
         "/properties/AgentRuntimeName"
     ],
@@ -864,6 +911,7 @@
                 "bedrock-agentcore:CreateWorkloadIdentity",
                 "bedrock-agentcore:TagResource",
                 "bedrock-agentcore:ListTagsForResource",
+                "bedrock-agentcore:PassCapacityProvider",
                 "iam:CreateServiceLinkedRole",
                 "iam:PassRole",
                 "s3:GetObject",
@@ -896,6 +944,7 @@
                 "bedrock-agentcore:TagResource",
                 "bedrock-agentcore:UntagResource",
                 "bedrock-agentcore:ListTagsForResource",
+                "bedrock-agentcore:PassCapacityProvider",
                 "iam:CreateServiceLinkedRole",
                 "iam:PassRole",
                 "s3:GetObject",

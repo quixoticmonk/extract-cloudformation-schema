@@ -1,0 +1,138 @@
+{
+    "typeName": "AWS::DRS::RecoveryInstance",
+    "description": "Resource Type definition for AWS::DRS::RecoveryInstance. A Recovery Instance is a replica of a Source Server running on EC2, created by launching a recovery or drill. This is a read-only resource that provides visibility into Recovery Instances via Cloud Control API.",
+    "sourceUrl": "https://docs.aws.amazon.com/drs/latest/APIReference/API_RecoveryInstance.html",
+    "definitions": {
+        "Tag": {
+            "description": "A key-value pair to associate with a resource.",
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "description": "The ARN of the Recovery Instance.",
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:.{16,2044}$"
+        },
+        "RecoveryInstanceID": {
+            "description": "The ID of the Recovery Instance.",
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 19,
+            "pattern": "^i-[0-9a-fA-F]{8,}$"
+        },
+        "EC2InstanceID": {
+            "description": "The EC2 instance ID of the Recovery Instance.",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 255,
+            "pattern": "^i-[0-9a-fA-F]{8,}$"
+        },
+        "EC2InstanceState": {
+            "description": "The state of the EC2 instance for this Recovery Instance.",
+            "type": "string",
+            "enum": [
+                "PENDING",
+                "RUNNING",
+                "STOPPING",
+                "STOPPED",
+                "SHUTTING-DOWN",
+                "TERMINATED",
+                "NOT_FOUND"
+            ]
+        },
+        "JobID": {
+            "description": "The ID of the Job that created the Recovery Instance.",
+            "type": "string",
+            "minLength": 24,
+            "maxLength": 24,
+            "pattern": "^drsjob-[0-9a-zA-Z]{17}$"
+        },
+        "SourceServerID": {
+            "description": "The Source Server ID that this Recovery Instance is associated with.",
+            "type": "string",
+            "minLength": 19,
+            "maxLength": 19,
+            "pattern": "^s-[0-9a-zA-Z]{17}$"
+        },
+        "IsDrill": {
+            "description": "Whether this Recovery Instance was created for a drill or for an actual Recovery event.",
+            "type": "boolean"
+        },
+        "OriginEnvironment": {
+            "description": "Environment (On Premises / AWS) of the instance that the recovery instance originated from.",
+            "type": "string",
+            "enum": ["ON_PREMISES", "AWS"]
+        },
+        "OriginAvailabilityZone": {
+            "description": "AWS availability zone associated with the recovery instance.",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 255,
+            "pattern": "^(us(-gov)?|ap|ca|cn|eu|eusc|sa|af|me|il)-([a-z]{2}-)?(central|north|(north(?:east|west))|south|south(?:east|west)|east|west)-[0-9][a-z]$"
+        },
+        "Tags": {
+            "description": "An array of tags that are associated with the Recovery Instance.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/RecoveryInstanceID",
+        "/properties/EC2InstanceID",
+        "/properties/EC2InstanceState",
+        "/properties/JobID",
+        "/properties/SourceServerID",
+        "/properties/IsDrill",
+        "/properties/OriginEnvironment",
+        "/properties/OriginAvailabilityZone",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/RecoveryInstanceID"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["drs:ListTagsForResource"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "drs:DescribeRecoveryInstances",
+                "drs:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "drs:DescribeRecoveryInstances"
+            ]
+        }
+    }
+}

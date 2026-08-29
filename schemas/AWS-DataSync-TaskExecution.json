@@ -1,0 +1,326 @@
+{
+    "typeName": "AWS::DataSync::TaskExecution",
+    "description": "Resource schema for AWS::DataSync::TaskExecution - represents an execution of a DataSync transfer task.",
+    "properties": {
+        "TaskExecutionArn": {
+            "type": "string",
+            "description": "The ARN of the task execution.",
+            "maxLength": 128,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-eusc|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:task/task-[0-9a-f]{17}/execution/exec-[0-9a-f]{17}$"
+        },
+        "TaskArn": {
+            "type": "string",
+            "description": "The ARN of the task that was executed.",
+            "maxLength": 128,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-eusc|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:task/task-[0-9a-f]{17}$"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the task execution.",
+            "enum": [
+                "QUEUED",
+                "CANCELLING",
+                "LAUNCHING",
+                "PREPARING",
+                "TRANSFERRING",
+                "VERIFYING",
+                "SUCCESS",
+                "ERROR"
+            ]
+        },
+        "TaskMode": {
+            "type": "string",
+            "description": "The task mode used for the execution.",
+            "enum": [
+                "BASIC",
+                "ENHANCED"
+            ]
+        },
+        "BytesCompressed": {
+            "type": "integer",
+            "description": "The number of physical bytes transferred over the network after compression."
+        },
+        "BytesTransferred": {
+            "type": "integer",
+            "description": "The number of bytes sent to the network before compression."
+        },
+        "BytesWritten": {
+            "type": "integer",
+            "description": "The number of logical bytes written to the destination."
+        },
+        "EstimatedBytesToTransfer": {
+            "type": "integer",
+            "description": "The estimated number of bytes to transfer."
+        },
+        "EstimatedFilesToTransfer": {
+            "type": "integer",
+            "description": "The estimated number of files to transfer."
+        },
+        "EstimatedFilesToDelete": {
+            "type": "integer",
+            "description": "The estimated number of files to delete at the destination."
+        },
+        "FilesTransferred": {
+            "type": "integer",
+            "description": "The number of files transferred."
+        },
+        "FilesDeleted": {
+            "type": "integer",
+            "description": "The number of files deleted at the destination."
+        },
+        "FilesSkipped": {
+            "type": "integer",
+            "description": "The number of files skipped."
+        },
+        "FilesVerified": {
+            "type": "integer",
+            "description": "The number of files verified."
+        },
+        "FilesPrepared": {
+            "type": "integer",
+            "description": "The number of files prepared."
+        },
+        "StartTime": {
+            "type": "string",
+            "description": "The time the task execution started.",
+            "format": "date-time"
+        },
+        "OverrideOptions": {
+            "$ref": "#/definitions/Options"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "An array of key-value pairs to apply to this resource.",
+            "maxItems": 50,
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key name of the tag.",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z0-9\\s+=._:/-]+$"
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag.",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z0-9\\s+=._:@/-]*$"
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "Options": {
+            "type": "object",
+            "description": "Options that determine how DataSync handles files, objects, and metadata during transfer.",
+            "properties": {
+                "Atime": {
+                    "type": "string",
+                    "description": "Specifies whether to preserve file access time.",
+                    "enum": [
+                        "NONE",
+                        "BEST_EFFORT"
+                    ]
+                },
+                "BytesPerSecond": {
+                    "type": "integer",
+                    "description": "Limits the bandwidth used by a DataSync task.",
+                    "minimum": -1
+                },
+                "Gid": {
+                    "type": "string",
+                    "description": "Specifies the group ID (GID) handling.",
+                    "enum": [
+                        "NONE",
+                        "INT_VALUE",
+                        "NAME",
+                        "BOTH"
+                    ]
+                },
+                "LogLevel": {
+                    "type": "string",
+                    "description": "Specifies the level of log detail.",
+                    "enum": [
+                        "OFF",
+                        "BASIC",
+                        "TRANSFER"
+                    ]
+                },
+                "Mtime": {
+                    "type": "string",
+                    "description": "Specifies whether to preserve file modification time.",
+                    "enum": [
+                        "NONE",
+                        "PRESERVE"
+                    ]
+                },
+                "ObjectTags": {
+                    "type": "string",
+                    "description": "Specifies whether to preserve object tags.",
+                    "enum": [
+                        "PRESERVE",
+                        "NONE"
+                    ]
+                },
+                "OverwriteMode": {
+                    "type": "string",
+                    "description": "Specifies whether to overwrite data at the destination.",
+                    "enum": [
+                        "ALWAYS",
+                        "NEVER"
+                    ]
+                },
+                "PosixPermissions": {
+                    "type": "string",
+                    "description": "Specifies POSIX permissions handling.",
+                    "enum": [
+                        "NONE",
+                        "PRESERVE"
+                    ]
+                },
+                "PreserveDeletedFiles": {
+                    "type": "string",
+                    "description": "Specifies whether to preserve deleted files.",
+                    "enum": [
+                        "PRESERVE",
+                        "REMOVE"
+                    ]
+                },
+                "PreserveDevices": {
+                    "type": "string",
+                    "description": "Specifies whether to preserve block and character devices.",
+                    "enum": [
+                        "NONE",
+                        "PRESERVE"
+                    ]
+                },
+                "SecurityDescriptorCopyFlags": {
+                    "type": "string",
+                    "description": "Specifies which security descriptor components to copy.",
+                    "enum": [
+                        "NONE",
+                        "OWNER_DACL",
+                        "OWNER_DACL_SACL"
+                    ]
+                },
+                "TaskQueueing": {
+                    "type": "string",
+                    "description": "Specifies whether tasks can be queued.",
+                    "enum": [
+                        "ENABLED",
+                        "DISABLED"
+                    ]
+                },
+                "TransferMode": {
+                    "type": "string",
+                    "description": "Specifies what to transfer.",
+                    "enum": [
+                        "CHANGED",
+                        "ALL"
+                    ]
+                },
+                "Uid": {
+                    "type": "string",
+                    "description": "Specifies the user ID (UID) handling.",
+                    "enum": [
+                        "NONE",
+                        "INT_VALUE",
+                        "NAME",
+                        "BOTH"
+                    ]
+                },
+                "VerifyMode": {
+                    "type": "string",
+                    "description": "Specifies how and when to verify data integrity.",
+                    "enum": [
+                        "POINT_IN_TIME_CONSISTENT",
+                        "ONLY_FILES_TRANSFERRED",
+                        "NONE"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/Tags",
+        "/properties/TaskArn"
+    ],
+    "readOnlyProperties": [
+        "/properties/TaskExecutionArn",
+        "/properties/Status",
+        "/properties/TaskMode",
+        "/properties/BytesCompressed",
+        "/properties/BytesTransferred",
+        "/properties/BytesWritten",
+        "/properties/EstimatedBytesToTransfer",
+        "/properties/EstimatedFilesToTransfer",
+        "/properties/EstimatedFilesToDelete",
+        "/properties/FilesTransferred",
+        "/properties/FilesDeleted",
+        "/properties/FilesSkipped",
+        "/properties/FilesVerified",
+        "/properties/FilesPrepared",
+        "/properties/StartTime",
+        "/properties/OverrideOptions"
+    ],
+    "primaryIdentifier": [
+        "/properties/TaskExecutionArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/TaskExecutionArn"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "datasync:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "datasync:DescribeTaskExecution",
+                "datasync:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "TaskArn": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-eusc|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:task/task-[0-9a-f]{17}$"
+                    }
+                },
+                "required": [
+                    "TaskArn"
+                ]
+            },
+            "permissions": [
+                "datasync:ListTaskExecutions"
+            ]
+        }
+    }
+}
