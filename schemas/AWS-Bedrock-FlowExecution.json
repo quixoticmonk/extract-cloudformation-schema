@@ -1,0 +1,108 @@
+{
+    "typeName": "AWS::Bedrock::FlowExecution",
+    "description": "Represents an asynchronous execution of an Amazon Bedrock flow.",
+    "properties": {
+        "ExecutionArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) that uniquely identifies the flow execution.",
+            "maxLength": 2048,
+            "pattern": "^[a-zA-Z0-9-]{1,36}$|^(arn:aws(-[a-z]+)?:bedrock:[a-z0-9-]{1,20}:[0-9]{12}:flow/[0-9a-zA-Z]{10}/alias/[0-9a-zA-Z]{10}/execution/[a-zA-Z0-9-]{1,36})$"
+        },
+        "FlowIdentifier": {
+            "type": "string",
+            "description": "The unique identifier of the flow.",
+            "maxLength": 2048,
+            "pattern": "^(arn:aws(-[a-z]+)?:bedrock:[a-z0-9-]{1,20}:[0-9]{12}:flow/[0-9a-zA-Z]{10})|([0-9a-zA-Z]{10})$"
+        },
+        "FlowAliasIdentifier": {
+            "type": "string",
+            "description": "The unique identifier of the flow alias used for the execution.",
+            "maxLength": 2048,
+            "pattern": "^(arn:aws(-[a-z]+)?:bedrock:[a-z0-9-]{1,20}:[0-9]{12}:flow/[0-9a-zA-Z]{10}/alias/[0-9a-zA-Z]{10})|(\\bTSTALIASID\\b|[0-9a-zA-Z]+)$"
+        },
+        "FlowExecutionName": {
+            "type": "string",
+            "description": "The unique name for the flow execution.",
+            "maxLength": 36,
+            "pattern": "^[a-zA-Z0-9-]{1,36}$"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The current status of the flow execution.",
+            "enum": [
+                "Running",
+                "Succeeded",
+                "Failed",
+                "TimedOut",
+                "Aborted"
+            ]
+        },
+        "StartedAt": {
+            "type": "string",
+            "description": "The timestamp when the flow execution started.",
+            "format": "date-time"
+        },
+        "EndedAt": {
+            "type": "string",
+            "description": "The timestamp when the flow execution ended.",
+            "format": "date-time"
+        },
+        "FlowVersion": {
+            "type": "string",
+            "description": "The version of the flow used for the execution.",
+            "minLength": 1,
+            "maxLength": 5,
+            "pattern": "^(DRAFT|[0-9]{0,4}[1-9][0-9]{0,4})$"
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/FlowAliasIdentifier",
+        "/properties/FlowExecutionName",
+        "/properties/FlowIdentifier"
+    ],
+    "readOnlyProperties": [
+        "/properties/ExecutionArn",
+        "/properties/Status",
+        "/properties/StartedAt",
+        "/properties/EndedAt",
+        "/properties/FlowVersion"
+    ],
+    "primaryIdentifier": [
+        "/properties/ExecutionArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/FlowIdentifier",
+            "/properties/FlowAliasIdentifier",
+            "/properties/FlowExecutionName"
+        ]
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "bedrock:GetFlowExecution"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "FlowIdentifier": {
+                        "type": "string",
+                        "maxLength": 2048,
+                        "pattern": "^(arn:aws(-[a-z]+)?:bedrock:[a-z0-9-]{1,20}:[0-9]{12}:flow/[0-9a-zA-Z]{10})|([0-9a-zA-Z]{10})$"
+                    }
+                },
+                "required": [
+                    "FlowIdentifier"
+                ]
+            },
+            "permissions": [
+                "bedrock:ListFlowExecutions"
+            ]
+        }
+    }
+}
