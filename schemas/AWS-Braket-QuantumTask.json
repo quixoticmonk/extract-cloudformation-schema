@@ -1,0 +1,173 @@
+{
+    "typeName": "AWS::Braket::QuantumTask",
+    "description": "Resource Type definition for AWS::Braket::QuantumTask",
+    "properties": {
+        "QuantumTaskArn": {
+            "type": "string",
+            "description": "The ARN of the quantum task.",
+            "pattern": "^arn:aws[a-z\\-]*:braket:[a-z0-9\\-]*:[0-9]{12}:quantum-task/[a-z0-9-]+$",
+            "minLength": 0,
+            "maxLength": 256
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the quantum task.",
+            "enum": ["CREATED", "QUEUED", "RUNNING", "COMPLETED", "FAILED", "CANCELLING", "CANCELLED"]
+        },
+        "DeviceArn": {
+            "type": "string",
+            "description": "The ARN of the device the quantum task was run on.",
+            "pattern": "^arn:aws[a-z\\-]*:braket:[a-z0-9\\-]*:[0-9]*:device/[a-z0-9\\-]+/[a-z0-9\\-]+/[a-zA-Z0-9\\-_]+$",
+            "minLength": 1,
+            "maxLength": 256
+        },
+        "DeviceParameters": {
+            "type": "string",
+            "description": "The parameters for the device on which the quantum task ran. This is a JSON-encoded string."
+        },
+        "Shots": {
+            "type": "integer",
+            "description": "The number of shots used in the quantum task.",
+            "minimum": 0
+        },
+        "OutputS3Bucket": {
+            "type": "string",
+            "description": "The S3 bucket where quantum task results are stored.",
+            "minLength": 3,
+            "maxLength": 63
+        },
+        "OutputS3Directory": {
+            "type": "string",
+            "description": "The folder in the S3 bucket where quantum task results are stored."
+        },
+        "CreatedAt": {
+            "type": "string",
+            "description": "The time at which the quantum task was created.",
+            "format": "date-time"
+        },
+        "Associations": {
+            "type": "array",
+            "description": "The list of Amazon Braket resources associated with the quantum task.",
+            "items": {
+                "$ref": "#/definitions/Association"
+            },
+            "minItems": 0,
+            "maxItems": 1,
+            "insertionOrder": true
+        },
+        "ExperimentalCapabilities": {
+            "$ref": "#/definitions/ExperimentalCapabilities"
+        },
+        "ActionMetadata": {
+            "$ref": "#/definitions/ActionMetadata"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the quantum task.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "Association": {
+            "type": "object",
+            "description": "The Amazon Braket resource and the association type.",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Braket resource ARN.",
+                    "pattern": "^arn:aws[a-z\\-]*:braket:[a-z0-9\\-]*:[0-9]{12}:.*$"
+                },
+                "Type": {
+                    "type": "string",
+                    "description": "The association type for the specified Amazon Braket resource ARN.",
+                    "enum": ["RESERVATION_TIME_WINDOW_ARN"]
+                }
+            },
+            "required": ["Arn", "Type"],
+            "additionalProperties": false
+        },
+        "ExperimentalCapabilities": {
+            "type": "object",
+            "description": "Enabled experimental capabilities for quantum hardware.",
+            "properties": {
+                "Enabled": {
+                    "type": "string",
+                    "description": "Enabled experimental capabilities.",
+                    "enum": ["ALL", "NONE"]
+                }
+            },
+            "required": ["Enabled"],
+            "additionalProperties": false
+        },
+        "ActionMetadata": {
+            "type": "object",
+            "description": "Contains metadata about the quantum task action, including the action type and program statistics.",
+            "properties": {
+                "ActionType": {
+                    "type": "string",
+                    "description": "The type of action associated with the quantum task."
+                }
+            },
+            "required": ["ActionType"],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key name of the tag."
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag."
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "required": ["DeviceArn", "Shots", "OutputS3Bucket"],
+    "createOnlyProperties": [
+        "/properties/DeviceArn",
+        "/properties/DeviceParameters",
+        "/properties/Shots",
+        "/properties/OutputS3Bucket",
+        "/properties/Associations",
+        "/properties/ExperimentalCapabilities",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/QuantumTaskArn",
+        "/properties/Status",
+        "/properties/OutputS3Directory",
+        "/properties/CreatedAt",
+        "/properties/ActionMetadata"
+    ],
+    "primaryIdentifier": ["/properties/QuantumTaskArn"],
+    "additionalProperties": false,
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["braket:GetQuantumTask"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "braket:GetQuantumTask"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "braket:SearchQuantumTasks"
+            ]
+        }
+    }
+}

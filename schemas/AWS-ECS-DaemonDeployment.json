@@ -1,0 +1,271 @@
+{
+    "typeName": "AWS::ECS::DaemonDeployment",
+    "description": "Resource schema for an Amazon ECS daemon deployment. A daemon deployment orchestrates the progressive rollout of daemon task updates across the container instances managed by a daemon's capacity providers. Deployments are created as a side effect of creating or updating an Amazon ECS daemon, so this is a read-only resource that provides visibility into them.",
+    "definitions": {
+        "DaemonDeploymentCapacityProvider": {
+            "description": "Information about a capacity provider during a daemon deployment.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the capacity provider."
+                },
+                "RunningInstanceCount": {
+                    "type": "integer",
+                    "description": "The number of instances running daemon tasks on this capacity provider."
+                },
+                "DrainingInstanceCount": {
+                    "type": "integer",
+                    "description": "The number of instances being drained on this capacity provider during the deployment."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DaemonDeploymentRevisionDetail": {
+            "description": "Details about a daemon revision during a deployment, including running and draining instance counts per capacity provider.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the daemon revision."
+                },
+                "CapacityProviders": {
+                    "type": "array",
+                    "description": "The capacity providers associated with this daemon revision during the deployment.",
+                    "items": {
+                        "$ref": "#/definitions/DaemonDeploymentCapacityProvider"
+                    }
+                },
+                "TotalRunningInstanceCount": {
+                    "type": "integer",
+                    "description": "The total number of instances running daemon tasks for this revision."
+                },
+                "TotalDrainingInstanceCount": {
+                    "type": "integer",
+                    "description": "The total number of instances being drained for this revision during the deployment."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DaemonCircuitBreaker": {
+            "description": "Information about the circuit breaker used to determine when a daemon deployment has failed.",
+            "type": "object",
+            "properties": {
+                "FailureCount": {
+                    "type": "integer",
+                    "description": "The number of times the circuit breaker detected a daemon deployment failure."
+                },
+                "Status": {
+                    "type": "string",
+                    "description": "The circuit breaker status. Amazon ECS is not using the circuit breaker for daemon deployment failures when the status is DISABLED.",
+                    "enum": [
+                        "TRIGGERED",
+                        "MONITORING",
+                        "MONITORING_COMPLETE",
+                        "DISABLED"
+                    ]
+                },
+                "Threshold": {
+                    "type": "integer",
+                    "description": "The threshold which determines that the daemon deployment failed."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DaemonDeploymentAlarms": {
+            "description": "The CloudWatch alarms used to determine a daemon deployment failed.",
+            "type": "object",
+            "properties": {
+                "Status": {
+                    "type": "string",
+                    "description": "The status of the alarms check. Amazon ECS is not using alarms for daemon deployment failures when the status is DISABLED.",
+                    "enum": [
+                        "TRIGGERED",
+                        "MONITORING",
+                        "MONITORING_COMPLETE",
+                        "DISABLED"
+                    ]
+                },
+                "AlarmNames": {
+                    "type": "array",
+                    "description": "The name of the CloudWatch alarms that determine when a daemon deployment failed.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "TriggeredAlarmNames": {
+                    "type": "array",
+                    "description": "One or more CloudWatch alarm names that have been triggered during the daemon deployment.",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "DaemonAlarmConfiguration": {
+            "description": "The CloudWatch alarm configuration for a daemon. When enabled, CloudWatch alarms determine whether a daemon deployment has failed.",
+            "type": "object",
+            "properties": {
+                "AlarmNames": {
+                    "type": "array",
+                    "description": "The CloudWatch alarm names to monitor during a daemon deployment.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Enable": {
+                    "type": "boolean",
+                    "description": "Determines whether to use the CloudWatch alarm option in the daemon deployment process."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DaemonDeploymentConfiguration": {
+            "description": "Optional deployment parameters that control how a daemon rolls out updates across container instances.",
+            "type": "object",
+            "properties": {
+                "DrainPercent": {
+                    "type": "number",
+                    "description": "The percentage of container instances to drain simultaneously during a daemon deployment.",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "Alarms": {
+                    "$ref": "#/definitions/DaemonAlarmConfiguration"
+                },
+                "BakeTimeInMinutes": {
+                    "type": "integer",
+                    "description": "The amount of time (in minutes) to wait after a successful deployment step before proceeding."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "DaemonDeploymentArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the daemon deployment."
+        },
+        "ClusterName": {
+            "type": "string",
+            "description": "The name of the cluster that hosts the daemon (the cluster segment of the daemon deployment ARN)."
+        },
+        "DaemonName": {
+            "type": "string",
+            "description": "The name of the daemon (the daemon segment of the daemon deployment ARN)."
+        },
+        "DaemonDeploymentId": {
+            "type": "string",
+            "description": "The daemon deployment identifier (the trailing segment of the daemon deployment ARN)."
+        },
+        "ClusterArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the cluster that hosts the daemon."
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the daemon deployment.",
+            "enum": [
+                "PENDING",
+                "SUCCESSFUL",
+                "STOPPED",
+                "STOP_REQUESTED",
+                "IN_PROGRESS",
+                "ROLLBACK_IN_PROGRESS",
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_FAILED"
+            ]
+        },
+        "TargetDaemonRevision": {
+            "$ref": "#/definitions/DaemonDeploymentRevisionDetail"
+        },
+        "SourceDaemonRevisions": {
+            "type": "array",
+            "description": "The currently deployed daemon revisions that are being replaced.",
+            "items": {
+                "$ref": "#/definitions/DaemonDeploymentRevisionDetail"
+            }
+        },
+        "CircuitBreaker": {
+            "$ref": "#/definitions/DaemonCircuitBreaker"
+        },
+        "Alarms": {
+            "$ref": "#/definitions/DaemonDeploymentAlarms"
+        },
+        "DeploymentConfiguration": {
+            "$ref": "#/definitions/DaemonDeploymentConfiguration"
+        },
+        "CreatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the daemon deployment was created."
+        },
+        "StartedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the daemon deployment started."
+        },
+        "FinishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the daemon deployment finished."
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/DaemonDeploymentArn",
+        "/properties/ClusterName",
+        "/properties/DaemonName",
+        "/properties/DaemonDeploymentId",
+        "/properties/ClusterArn",
+        "/properties/Status",
+        "/properties/TargetDaemonRevision",
+        "/properties/SourceDaemonRevisions",
+        "/properties/CircuitBreaker",
+        "/properties/Alarms",
+        "/properties/DeploymentConfiguration",
+        "/properties/CreatedAt",
+        "/properties/StartedAt",
+        "/properties/FinishedAt"
+    ],
+    "primaryIdentifier": [
+        "/properties/DaemonDeploymentArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/ClusterName",
+            "/properties/DaemonName",
+            "/properties/DaemonDeploymentId"
+        ]
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ecs:DescribeDaemonDeployments"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "ClusterName": {
+                        "type": "string"
+                    },
+                    "DaemonName": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "ClusterName",
+                    "DaemonName"
+                ]
+            },
+            "permissions": [
+                "ecs:ListDaemonDeployments"
+            ]
+        }
+    }
+}

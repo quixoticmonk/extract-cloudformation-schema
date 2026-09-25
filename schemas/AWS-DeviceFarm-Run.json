@@ -1,0 +1,668 @@
+{
+    "typeName": "AWS::DeviceFarm::Run",
+    "description": "Represents a test run on a set of devices with a given app package, test parameters, and other settings in AWS Device Farm. A run is a job-type resource: it is scheduled, executes to a terminal state, and is not updatable.",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A tag assigned to the run.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The tag key.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The tag value.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "Counters": {
+            "type": "object",
+            "description": "Represents entity counters for the run.",
+            "properties": {
+                "Total": {
+                    "type": "integer",
+                    "description": "The total number of entities."
+                },
+                "Passed": {
+                    "type": "integer",
+                    "description": "The number of passed entities."
+                },
+                "Failed": {
+                    "type": "integer",
+                    "description": "The number of failed entities."
+                },
+                "Warned": {
+                    "type": "integer",
+                    "description": "The number of warned entities."
+                },
+                "Errored": {
+                    "type": "integer",
+                    "description": "The number of errored entities."
+                },
+                "Stopped": {
+                    "type": "integer",
+                    "description": "The number of stopped entities."
+                },
+                "Skipped": {
+                    "type": "integer",
+                    "description": "The number of skipped entities."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DeviceMinutes": {
+            "type": "object",
+            "description": "Represents the total minutes used by the resource to run tests.",
+            "properties": {
+                "Total": {
+                    "type": "number",
+                    "description": "The total minutes used by the resource to run tests."
+                },
+                "Metered": {
+                    "type": "number",
+                    "description": "The sum of metered minutes used by the resource to run tests."
+                },
+                "Unmetered": {
+                    "type": "number",
+                    "description": "The sum of unmetered minutes used by the resource to run tests."
+                }
+            },
+            "additionalProperties": false
+        },
+        "Radios": {
+            "type": "object",
+            "description": "Represents the set of radios and their states on a device.",
+            "properties": {
+                "Wifi": {
+                    "type": "boolean",
+                    "description": "True if Wi-Fi is enabled at the beginning of the test. Otherwise, false."
+                },
+                "Bluetooth": {
+                    "type": "boolean",
+                    "description": "True if Bluetooth is enabled at the beginning of the test. Otherwise, false."
+                },
+                "Nfc": {
+                    "type": "boolean",
+                    "description": "True if NFC is enabled at the beginning of the test. Otherwise, false."
+                },
+                "Gps": {
+                    "type": "boolean",
+                    "description": "True if GPS is enabled at the beginning of the test. Otherwise, false."
+                }
+            },
+            "additionalProperties": false
+        },
+        "Location": {
+            "type": "object",
+            "description": "Represents a latitude and longitude pair, expressed in geographic coordinate system degrees.",
+            "properties": {
+                "Latitude": {
+                    "type": "number",
+                    "description": "The latitude."
+                },
+                "Longitude": {
+                    "type": "number",
+                    "description": "The longitude."
+                }
+            },
+            "required": [
+                "Latitude",
+                "Longitude"
+            ],
+            "additionalProperties": false
+        },
+        "CustomerArtifactPaths": {
+            "type": "object",
+            "description": "A list of upload ARNs for app packages to be installed with your app.",
+            "properties": {
+                "IosPaths": {
+                    "type": "array",
+                    "description": "Comma-separated list of paths on the iOS device where the artifacts generated by the customer's tests are pulled from.",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "AndroidPaths": {
+                    "type": "array",
+                    "description": "Comma-separated list of paths on the Android device where the artifacts generated by the customer's tests are pulled from.",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "DeviceHostPaths": {
+                    "type": "array",
+                    "description": "Comma-separated list of paths in the test execution environment where the artifacts generated by the customer's tests are pulled from.",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "DeviceProxy": {
+            "type": "object",
+            "description": "Represents the device proxy configuration for the run.",
+            "properties": {
+                "Host": {
+                    "type": "string",
+                    "description": "Hostname or IPv4 address of the proxy.",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "pattern": "^([a-zA-Z0-9])([a-zA-Z0-9-.]+)([a-zA-Z0-9])$"
+                },
+                "Port": {
+                    "type": "integer",
+                    "description": "The port number on which the http/s proxy is listening.",
+                    "minimum": 1,
+                    "maximum": 65535
+                }
+            },
+            "required": [
+                "Host",
+                "Port"
+            ],
+            "additionalProperties": false
+        },
+        "EnvironmentVariable": {
+            "type": "object",
+            "description": "An environment variable associated with the run.",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the environment variable.",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z_][a-zA-Z_0-9]*$"
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the environment variable.",
+                    "minLength": 1,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Name",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "NetworkProfile": {
+            "type": "object",
+            "description": "The network profile being used for the test run.",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the network profile.",
+                    "minLength": 32,
+                    "maxLength": 1011,
+                    "pattern": "^arn:[^:]+:devicefarm:.+$"
+                },
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the network profile.",
+                    "maxLength": 256
+                },
+                "Description": {
+                    "type": "string",
+                    "description": "The description of the network profile.",
+                    "maxLength": 16384
+                },
+                "Type": {
+                    "type": "string",
+                    "description": "The type of network profile. Valid values are listed here.",
+                    "enum": [
+                        "CURATED",
+                        "PRIVATE"
+                    ]
+                },
+                "UplinkBandwidthBits": {
+                    "type": "number",
+                    "description": "The data throughput rate in bits per second, as an integer from 0 to 104857600."
+                },
+                "DownlinkBandwidthBits": {
+                    "type": "number",
+                    "description": "The data throughput rate in bits per second, as an integer from 0 to 104857600."
+                },
+                "UplinkDelayMs": {
+                    "type": "number",
+                    "description": "Delay time for all packets to destination in milliseconds as an integer from 0 to 2000."
+                },
+                "DownlinkDelayMs": {
+                    "type": "number",
+                    "description": "Delay time for all packets to destination in milliseconds as an integer from 0 to 2000."
+                },
+                "UplinkJitterMs": {
+                    "type": "number",
+                    "description": "Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000."
+                },
+                "DownlinkJitterMs": {
+                    "type": "number",
+                    "description": "Time variation in the delay of received packets in milliseconds as an integer from 0 to 2000."
+                },
+                "UplinkLossPercent": {
+                    "type": "integer",
+                    "description": "Proportion of transmitted packets that fail to arrive from 0 to 100 percent.",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "DownlinkLossPercent": {
+                    "type": "integer",
+                    "description": "Proportion of received packets that fail to arrive from 0 to 100 percent.",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            },
+            "additionalProperties": false
+        },
+        "DeviceFilter": {
+            "type": "object",
+            "description": "Represents a device filter used to select a set of devices to be included in a test run.",
+            "properties": {
+                "Attribute": {
+                    "type": "string",
+                    "description": "The aspect of a device such as platform or model used as the selection criteria in a device filter.",
+                    "enum": [
+                        "ARN",
+                        "PLATFORM",
+                        "OS_VERSION",
+                        "MODEL",
+                        "AVAILABILITY",
+                        "FORM_FACTOR",
+                        "MANUFACTURER",
+                        "REMOTE_ACCESS_ENABLED",
+                        "REMOTE_DEBUG_ENABLED",
+                        "INSTANCE_ARN",
+                        "INSTANCE_LABELS",
+                        "FLEET_TYPE"
+                    ]
+                },
+                "Operator": {
+                    "type": "string",
+                    "description": "Specifies how Device Farm compares the filter's attribute to the value.",
+                    "enum": [
+                        "EQUALS",
+                        "LESS_THAN",
+                        "LESS_THAN_OR_EQUALS",
+                        "GREATER_THAN",
+                        "GREATER_THAN_OR_EQUALS",
+                        "IN",
+                        "NOT_IN",
+                        "CONTAINS"
+                    ]
+                },
+                "Values": {
+                    "type": "array",
+                    "description": "An array of one or more filter values used in a device filter.",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "Attribute",
+                "Operator",
+                "Values"
+            ],
+            "additionalProperties": false
+        },
+        "DeviceSelectionResult": {
+            "type": "object",
+            "description": "Contains the run results requested by the device selection configuration, and how many devices were returned.",
+            "properties": {
+                "Filters": {
+                    "type": "array",
+                    "description": "The filters in a device selection result.",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/DeviceFilter"
+                    }
+                },
+                "MatchedDevicesCount": {
+                    "type": "integer",
+                    "description": "The number of devices that matched the device filter selection criteria."
+                },
+                "MaxDevices": {
+                    "type": "integer",
+                    "description": "The maximum number of devices to be selected by a device filter and included in a test run."
+                }
+            },
+            "additionalProperties": false
+        },
+        "VpcConfig": {
+            "type": "object",
+            "description": "The VPC security groups and subnets that are attached to the project of this run.",
+            "properties": {
+                "SecurityGroupIds": {
+                    "type": "array",
+                    "description": "A list of VPC security group IDs.",
+                    "insertionOrder": false,
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096,
+                        "pattern": "^sg-[0-9a-fA-F]{8,}$"
+                    }
+                },
+                "SubnetIds": {
+                    "type": "array",
+                    "description": "A subnet ID from the VPC.",
+                    "insertionOrder": false,
+                    "minItems": 1,
+                    "maxItems": 8,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096,
+                        "pattern": "^subnet-[0-9a-fA-F]{8,}$"
+                    }
+                },
+                "VpcId": {
+                    "type": "string",
+                    "description": "The ID of the Amazon VPC.",
+                    "minLength": 1,
+                    "maxLength": 4096,
+                    "pattern": "\\S"
+                }
+            },
+            "required": [
+                "SecurityGroupIds",
+                "SubnetIds",
+                "VpcId"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The run's ARN.",
+            "minLength": 32,
+            "maxLength": 1011,
+            "pattern": "^arn:[^:]+:devicefarm:.+$"
+        },
+        "ProjectArn": {
+            "type": "string",
+            "description": "The ARN of the project that contains this run.",
+            "minLength": 32,
+            "maxLength": 1011,
+            "pattern": "^arn:[^:]+:devicefarm:.+$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The run's name.",
+            "maxLength": 256
+        },
+        "Type": {
+            "type": "string",
+            "description": "The run's type.",
+            "enum": [
+                "BUILTIN_FUZZ",
+                "APPIUM_JAVA_JUNIT",
+                "APPIUM_JAVA_TESTNG",
+                "APPIUM_PYTHON",
+                "APPIUM_NODE",
+                "APPIUM_RUBY",
+                "APPIUM_WEB_JAVA_JUNIT",
+                "APPIUM_WEB_JAVA_TESTNG",
+                "APPIUM_WEB_PYTHON",
+                "APPIUM_WEB_NODE",
+                "APPIUM_WEB_RUBY",
+                "INSTRUMENTATION",
+                "XCTEST",
+                "XCTEST_UI"
+            ]
+        },
+        "Platform": {
+            "type": "string",
+            "description": "The run's platform."
+        },
+        "Created": {
+            "type": "string",
+            "description": "When the run was created.",
+            "format": "date-time"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The run's status.",
+            "enum": [
+                "PENDING",
+                "PENDING_CONCURRENCY",
+                "PENDING_DEVICE",
+                "PROCESSING",
+                "SCHEDULING",
+                "PREPARING",
+                "RUNNING",
+                "COMPLETED",
+                "STOPPING"
+            ]
+        },
+        "Result": {
+            "type": "string",
+            "description": "The run's result.",
+            "enum": [
+                "PENDING",
+                "PASSED",
+                "WARNED",
+                "FAILED",
+                "SKIPPED",
+                "ERRORED",
+                "STOPPED"
+            ]
+        },
+        "Started": {
+            "type": "string",
+            "description": "The run's start time.",
+            "format": "date-time"
+        },
+        "Stopped": {
+            "type": "string",
+            "description": "The run's stop time.",
+            "format": "date-time"
+        },
+        "Counters": {
+            "$ref": "#/definitions/Counters"
+        },
+        "TotalJobs": {
+            "type": "integer",
+            "description": "The total number of jobs for the run."
+        },
+        "CompletedJobs": {
+            "type": "integer",
+            "description": "The total number of completed jobs."
+        },
+        "BillingMethod": {
+            "type": "string",
+            "description": "Specifies the billing method for the test run.",
+            "enum": [
+                "METERED",
+                "UNMETERED"
+            ]
+        },
+        "DeviceMinutes": {
+            "$ref": "#/definitions/DeviceMinutes"
+        },
+        "NetworkProfile": {
+            "$ref": "#/definitions/NetworkProfile"
+        },
+        "DeviceProxy": {
+            "$ref": "#/definitions/DeviceProxy"
+        },
+        "Seed": {
+            "type": "integer",
+            "description": "For fuzz tests, this is a seed to use for randomizing the UI fuzz test. Using the same seed value between tests ensures identical event sequences."
+        },
+        "AppUpload": {
+            "type": "string",
+            "description": "An app to upload or that has been uploaded.",
+            "minLength": 32,
+            "maxLength": 1011,
+            "pattern": "^arn:[^:]+:devicefarm:.+$"
+        },
+        "EventCount": {
+            "type": "integer",
+            "description": "For fuzz tests, this is the number of events, between 1 and 10000, that the UI fuzz test should perform."
+        },
+        "JobTimeoutMinutes": {
+            "type": "integer",
+            "description": "The number of minutes the job executes before it times out."
+        },
+        "DevicePoolArn": {
+            "type": "string",
+            "description": "The ARN of the device pool for the run.",
+            "minLength": 32,
+            "maxLength": 1011,
+            "pattern": "^arn:[^:]+:devicefarm:.+$"
+        },
+        "Locale": {
+            "type": "string",
+            "description": "Information about the locale that is used for the run."
+        },
+        "Radios": {
+            "$ref": "#/definitions/Radios"
+        },
+        "Location": {
+            "$ref": "#/definitions/Location"
+        },
+        "CustomerArtifactPaths": {
+            "$ref": "#/definitions/CustomerArtifactPaths"
+        },
+        "SkipAppResign": {
+            "type": "boolean",
+            "description": "When set to true, for private devices, Device Farm does not sign your app again."
+        },
+        "TestSpecArn": {
+            "type": "string",
+            "description": "The ARN of the YAML-formatted test specification for the run.",
+            "minLength": 32,
+            "maxLength": 1011,
+            "pattern": "^arn:[^:]+:devicefarm:.+$"
+        },
+        "DeviceSelectionResult": {
+            "$ref": "#/definitions/DeviceSelectionResult"
+        },
+        "VpcConfig": {
+            "$ref": "#/definitions/VpcConfig"
+        },
+        "ExecutionRoleArn": {
+            "type": "string",
+            "description": "An IAM role that the test host assumes for the run.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:[^:]+:iam::[0-9]{12}:role/.+$"
+        },
+        "EnvironmentVariables": {
+            "type": "array",
+            "description": "Environment variables associated with the run.",
+            "insertionOrder": false,
+            "minItems": 1,
+            "maxItems": 32,
+            "items": {
+                "$ref": "#/definitions/EnvironmentVariable"
+            }
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags assigned to the run.",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 150
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/ProjectArn",
+        "/properties/Name",
+        "/properties/Type",
+        "/properties/BillingMethod",
+        "/properties/DeviceProxy",
+        "/properties/AppUpload",
+        "/properties/EventCount",
+        "/properties/JobTimeoutMinutes",
+        "/properties/DevicePoolArn",
+        "/properties/Locale",
+        "/properties/Radios",
+        "/properties/Location",
+        "/properties/CustomerArtifactPaths",
+        "/properties/SkipAppResign",
+        "/properties/TestSpecArn",
+        "/properties/ExecutionRoleArn",
+        "/properties/EnvironmentVariables",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/Platform",
+        "/properties/Created",
+        "/properties/Status",
+        "/properties/Result",
+        "/properties/Started",
+        "/properties/Stopped",
+        "/properties/Counters",
+        "/properties/TotalJobs",
+        "/properties/CompletedJobs",
+        "/properties/DeviceMinutes",
+        "/properties/NetworkProfile",
+        "/properties/Seed",
+        "/properties/DeviceSelectionResult",
+        "/properties/VpcConfig"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "devicefarm:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "devicefarm:GetRun",
+                "devicefarm:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "ProjectArn": {
+                        "type": "string",
+                        "description": "The ARN of the project for which to list runs.",
+                        "minLength": 32,
+                        "maxLength": 1011,
+                        "pattern": "^arn:[^:]+:devicefarm:.+$"
+                    }
+                },
+                "required": [
+                    "ProjectArn"
+                ]
+            },
+            "permissions": [
+                "devicefarm:ListRuns"
+            ]
+        }
+    }
+}

@@ -1,0 +1,1339 @@
+{
+    "typeName": "AWS::ECS::ServiceRevision",
+    "description": "Resource schema for an Amazon ECS service revision. A service revision is a version of the service that contains a record of the workload configuration Amazon ECS is attempting to deploy. Amazon ECS automatically creates a service revision whenever you create or deploy a service. This is a read-only resource that provides visibility into the service revisions of an Amazon ECS service.",
+    "definitions": {
+        "AwsVpcConfiguration": {
+            "description": "An object representing the networking details for a task or service.",
+            "type": "object",
+            "properties": {
+                "Subnets": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The IDs of the subnets associated with the task or service."
+                },
+                "SecurityGroups": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The IDs of the security groups associated with the task or service."
+                },
+                "AssignPublicIp": {
+                    "type": "string",
+                    "enum": [
+                        "ENABLED",
+                        "DISABLED"
+                    ],
+                    "description": "Whether the task's elastic network interface receives a public IP address."
+                }
+            },
+            "required": [
+                "Subnets"
+            ],
+            "additionalProperties": false
+        },
+        "NetworkConfiguration": {
+            "description": "The network configuration for a task or service.",
+            "type": "object",
+            "properties": {
+                "AwsvpcConfiguration": {
+                    "$ref": "#/definitions/AwsVpcConfiguration"
+                }
+            },
+            "additionalProperties": false
+        },
+        "CapacityProviderStrategyItem": {
+            "description": "The details of a capacity provider strategy.",
+            "type": "object",
+            "properties": {
+                "CapacityProvider": {
+                    "type": "string",
+                    "description": "The short name of the capacity provider."
+                },
+                "Weight": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1000,
+                    "description": "The weight value designates the relative percentage of the total number of tasks launched that should use the specified capacity provider."
+                },
+                "Base": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100000,
+                    "description": "The base value designates how many tasks, at a minimum, to run on the specified capacity provider."
+                }
+            },
+            "required": [
+                "CapacityProvider"
+            ],
+            "additionalProperties": false
+        },
+        "AdvancedConfiguration": {
+            "description": "The advanced settings for a load balancer used in blue/green deployments.",
+            "type": "object",
+            "properties": {
+                "AlternateTargetGroupArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the alternate target group for Amazon ECS blue/green deployments."
+                },
+                "ProductionListenerRule": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) that identifies the production listener rule for routing production traffic."
+                },
+                "TestListenerRule": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) that identifies the test listener rule for routing test traffic."
+                },
+                "RoleArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the IAM role that grants Amazon ECS permission to call the Elastic Load Balancing APIs for you."
+                }
+            },
+            "additionalProperties": false
+        },
+        "LoadBalancer": {
+            "description": "The load balancer configuration to use with a service or task set.",
+            "type": "object",
+            "properties": {
+                "TargetGroupArn": {
+                    "type": "string",
+                    "description": "The full Amazon Resource Name (ARN) of the Elastic Load Balancing target group or groups associated with a service or task set."
+                },
+                "LoadBalancerName": {
+                    "type": "string",
+                    "description": "The name of the load balancer to associate with the Amazon ECS service or task set."
+                },
+                "ContainerName": {
+                    "type": "string",
+                    "description": "The name of the container to associate with the load balancer."
+                },
+                "ContainerPort": {
+                    "type": "integer",
+                    "description": "The port on the container to associate with the load balancer."
+                },
+                "AdvancedConfiguration": {
+                    "$ref": "#/definitions/AdvancedConfiguration"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ServiceRegistry": {
+            "description": "The details for the service registry.",
+            "type": "object",
+            "properties": {
+                "RegistryArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the service registry. The currently supported service registry is Cloud Map."
+                },
+                "Port": {
+                    "type": "integer",
+                    "description": "The port value used if your service discovery service specified an SRV record."
+                },
+                "ContainerName": {
+                    "type": "string",
+                    "description": "The container name value to be used for your service discovery service."
+                },
+                "ContainerPort": {
+                    "type": "integer",
+                    "description": "The port value to be used for your service discovery service."
+                }
+            },
+            "additionalProperties": false
+        },
+        "ContainerImage": {
+            "description": "The details about the container image a service revision uses.",
+            "type": "object",
+            "properties": {
+                "ContainerName": {
+                    "type": "string",
+                    "description": "The name of the container."
+                },
+                "ImageDigest": {
+                    "type": "string",
+                    "description": "The container image digest."
+                },
+                "Image": {
+                    "type": "string",
+                    "description": "The container image."
+                }
+            },
+            "additionalProperties": false
+        },
+        "ServiceConnectConfiguration": {
+            "description": "The Service Connect configuration of an Amazon ECS service.",
+            "type": "object",
+            "properties": {
+                "Enabled": {
+                    "type": "boolean",
+                    "description": "Specifies whether to use Service Connect with this service."
+                },
+                "Namespace": {
+                    "type": "string",
+                    "description": "The namespace name or full Amazon Resource Name (ARN) of the Cloud Map namespace for use with Service Connect."
+                },
+                "Services": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ServiceConnectService"
+                    },
+                    "description": "The list of Service Connect service objects."
+                },
+                "LogConfiguration": {
+                    "$ref": "#/definitions/LogConfiguration"
+                },
+                "AccessLogConfiguration": {
+                    "$ref": "#/definitions/ServiceConnectAccessLogConfiguration"
+                }
+            },
+            "required": [
+                "Enabled"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceConnectService": {
+            "description": "The Service Connect service object configuration.",
+            "type": "object",
+            "properties": {
+                "PortName": {
+                    "type": "string",
+                    "description": "The portName must match the name of one of the portMappings from all the containers in the task definition of this Amazon ECS service."
+                },
+                "DiscoveryName": {
+                    "type": "string",
+                    "description": "The discoveryName is the name of the new Cloud Map service that Amazon ECS creates for this Amazon ECS service."
+                },
+                "ClientAliases": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ServiceConnectClientAlias"
+                    },
+                    "description": "The list of client aliases for this Service Connect service."
+                },
+                "IngressPortOverride": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 65535,
+                    "description": "The port number for the Service Connect proxy to listen on."
+                },
+                "Timeout": {
+                    "$ref": "#/definitions/TimeoutConfiguration"
+                },
+                "Tls": {
+                    "$ref": "#/definitions/ServiceConnectTlsConfiguration"
+                }
+            },
+            "required": [
+                "PortName"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceConnectClientAlias": {
+            "description": "Each alias (endpoint) is a fully-qualified name and port number that other tasks (clients) can use to connect to this service.",
+            "type": "object",
+            "properties": {
+                "Port": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 65535,
+                    "description": "The listening port number for the Service Connect proxy."
+                },
+                "DnsName": {
+                    "type": "string",
+                    "description": "The dnsName is the name that you use in the applications of client tasks to connect to this service."
+                },
+                "TestTrafficRules": {
+                    "$ref": "#/definitions/ServiceConnectTestTrafficRules"
+                }
+            },
+            "required": [
+                "Port"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceConnectTestTrafficRules": {
+            "description": "The header matching rules for test traffic routing in Amazon ECS blue/green deployments.",
+            "type": "object",
+            "properties": {
+                "Header": {
+                    "$ref": "#/definitions/ServiceConnectTestTrafficHeaderRules"
+                }
+            },
+            "required": [
+                "Header"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceConnectTestTrafficHeaderRules": {
+            "description": "The header rules for test traffic routing in Amazon ECS blue/green deployments.",
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the HTTP header to match."
+                },
+                "Value": {
+                    "$ref": "#/definitions/ServiceConnectTestTrafficHeaderMatchRules"
+                }
+            },
+            "required": [
+                "Name"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceConnectTestTrafficHeaderMatchRules": {
+            "description": "The header matching rules for test traffic routing in Amazon ECS blue/green deployments.",
+            "type": "object",
+            "properties": {
+                "Exact": {
+                    "type": "string",
+                    "description": "The exact value that the HTTP header must match for the test traffic routing rule to apply."
+                }
+            },
+            "required": [
+                "Exact"
+            ],
+            "additionalProperties": false
+        },
+        "TimeoutConfiguration": {
+            "description": "An object that represents the timeout configurations for Service Connect.",
+            "type": "object",
+            "properties": {
+                "IdleTimeoutSeconds": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2147483647,
+                    "description": "The amount of time in seconds a connection will stay active while idle."
+                },
+                "PerRequestTimeoutSeconds": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2147483647,
+                    "description": "The amount of time in seconds for the upstream to respond with a complete response per request."
+                }
+            },
+            "additionalProperties": false
+        },
+        "ServiceConnectTlsConfiguration": {
+            "description": "The TLS configuration for Service Connect.",
+            "type": "object",
+            "properties": {
+                "IssuerCertificateAuthority": {
+                    "$ref": "#/definitions/ServiceConnectTlsCertificateAuthority"
+                },
+                "KmsKey": {
+                    "type": "string",
+                    "description": "The KMS key used to encrypt the private key in Secrets Manager."
+                },
+                "RoleArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the IAM role that's associated with the Service Connect TLS."
+                }
+            },
+            "required": [
+                "IssuerCertificateAuthority"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceConnectTlsCertificateAuthority": {
+            "description": "The certificate root authority that secures your service.",
+            "type": "object",
+            "properties": {
+                "AwsPcaAuthorityArn": {
+                    "type": "string",
+                    "description": "The ARN of the Amazon Web Services Private Certificate Authority certificate."
+                }
+            },
+            "additionalProperties": false
+        },
+        "LogConfiguration": {
+            "description": "The log configuration for the container.",
+            "type": "object",
+            "properties": {
+                "LogDriver": {
+                    "type": "string",
+                    "enum": [
+                        "json-file",
+                        "syslog",
+                        "journald",
+                        "gelf",
+                        "fluentd",
+                        "awslogs",
+                        "splunk",
+                        "awsfirelens"
+                    ],
+                    "description": "The log driver to use for the container."
+                },
+                "Options": {
+                    "type": "object",
+                    "patternProperties": {
+                        ".{1,}": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "description": "The configuration options to send to the log driver."
+                },
+                "SecretOptions": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/Secret"
+                    },
+                    "description": "The secrets to pass to the log configuration."
+                }
+            },
+            "required": [
+                "LogDriver"
+            ],
+            "additionalProperties": false
+        },
+        "Secret": {
+            "description": "An object representing the secret to expose to your container.",
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the secret."
+                },
+                "ValueFrom": {
+                    "type": "string",
+                    "description": "The secret to expose to the container. The supported values are either the full ARN of the Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store."
+                }
+            },
+            "required": [
+                "Name",
+                "ValueFrom"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceConnectAccessLogConfiguration": {
+            "description": "Configuration for Service Connect access logging.",
+            "type": "object",
+            "properties": {
+                "Format": {
+                    "type": "string",
+                    "enum": [
+                        "JSON",
+                        "TEXT"
+                    ],
+                    "description": "The format for Service Connect access log output."
+                },
+                "IncludeQueryParameters": {
+                    "type": "string",
+                    "enum": [
+                        "DISABLED",
+                        "ENABLED"
+                    ],
+                    "description": "Specifies whether to include query parameters in Service Connect access logs."
+                }
+            },
+            "required": [
+                "Format"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceVolumeConfiguration": {
+            "description": "The configuration for a volume specified in the task definition as a volume that is configured at launch time.",
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the volume. This value must match the volume name from the Volume object in the task definition."
+                },
+                "ManagedEBSVolume": {
+                    "$ref": "#/definitions/ServiceManagedEBSVolumeConfiguration"
+                }
+            },
+            "required": [
+                "Name"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceManagedEBSVolumeConfiguration": {
+            "description": "The configuration for the Amazon EBS volume that Amazon ECS creates and manages on your behalf.",
+            "type": "object",
+            "properties": {
+                "Encrypted": {
+                    "type": "boolean",
+                    "description": "Indicates whether the volume should be encrypted."
+                },
+                "KmsKeyId": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) identifier of the Amazon Web Services Key Management Service key to use for Amazon EBS encryption."
+                },
+                "VolumeType": {
+                    "type": "string",
+                    "description": "The volume type."
+                },
+                "SizeInGiB": {
+                    "type": "integer",
+                    "description": "The size of the volume in GiB."
+                },
+                "SnapshotId": {
+                    "type": "string",
+                    "description": "The snapshot that Amazon ECS uses to create the volume."
+                },
+                "VolumeInitializationRate": {
+                    "type": "integer",
+                    "description": "The rate, in MiB/s, at which data is fetched from a snapshot of an existing Amazon EBS volume to create a new volume for attachment."
+                },
+                "Iops": {
+                    "type": "integer",
+                    "description": "The number of I/O operations per second (IOPS)."
+                },
+                "Throughput": {
+                    "type": "integer",
+                    "description": "The throughput to provision for a volume, in MiB/s, with a maximum of 1,000 MiB/s."
+                },
+                "TagSpecifications": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/EBSTagSpecification"
+                    },
+                    "description": "The tags to apply to the volume."
+                },
+                "RoleArn": {
+                    "type": "string",
+                    "description": "The ARN of the IAM role to associate with this volume."
+                },
+                "FilesystemType": {
+                    "type": "string",
+                    "enum": [
+                        "ext3",
+                        "ext4",
+                        "xfs",
+                        "ntfs"
+                    ],
+                    "description": "The filesystem type for the volume."
+                }
+            },
+            "required": [
+                "RoleArn"
+            ],
+            "additionalProperties": false
+        },
+        "EBSTagSpecification": {
+            "description": "The tag specifications of an Amazon EBS volume.",
+            "type": "object",
+            "properties": {
+                "ResourceType": {
+                    "type": "string",
+                    "enum": [
+                        "volume"
+                    ],
+                    "description": "The type of volume resource."
+                },
+                "Tags": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    },
+                    "description": "The tags applied to this Amazon EBS volume."
+                },
+                "PropagateTags": {
+                    "type": "string",
+                    "enum": [
+                        "NONE",
+                        "SERVICE",
+                        "TASK_DEFINITION"
+                    ],
+                    "description": "Determines whether to propagate the tags from the task definition to the Amazon EBS volume."
+                }
+            },
+            "required": [
+                "ResourceType"
+            ],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "description": "The metadata that you apply to a resource to help you categorize and organize them.",
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "description": "One part of a key-value pair that make up a tag."
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "description": "The optional part of a key-value pair that make up a tag."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DeploymentEphemeralStorage": {
+            "description": "The amount of ephemeral storage to allocate for the deployment.",
+            "type": "object",
+            "properties": {
+                "KmsKeyId": {
+                    "type": "string",
+                    "description": "Specify an Amazon Web Services Key Management Service key ID to encrypt the ephemeral storage for deployment."
+                }
+            },
+            "additionalProperties": false
+        },
+        "VpcLatticeConfiguration": {
+            "description": "The VPC Lattice configuration for your service that holds the information for the target group(s) Amazon ECS tasks will be registered to.",
+            "type": "object",
+            "properties": {
+                "RoleArn": {
+                    "type": "string",
+                    "description": "The ARN of the IAM role to associate with this VPC Lattice configuration."
+                },
+                "TargetGroupArn": {
+                    "type": "string",
+                    "description": "The full Amazon Resource Name (ARN) of the target group or groups associated with the VPC Lattice configuration."
+                },
+                "PortName": {
+                    "type": "string",
+                    "description": "The name of the port mapping to register in the VPC Lattice target group."
+                }
+            },
+            "required": [
+                "RoleArn",
+                "TargetGroupArn",
+                "PortName"
+            ],
+            "additionalProperties": false
+        },
+        "MonitoringConfiguration": {
+            "description": "The monitoring configuration for the service, which defines the resolution for the service-level CPUUtilization and MemoryUtilization Amazon CloudWatch metrics.",
+            "type": "object",
+            "properties": {
+                "MetricConfigurations": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "maxItems": 5,
+                    "items": {
+                        "$ref": "#/definitions/MetricConfiguration"
+                    },
+                    "description": "The list of metric configurations for the service."
+                }
+            },
+            "additionalProperties": false
+        },
+        "MetricConfiguration": {
+            "description": "The metric resolution configuration for a service.",
+            "type": "object",
+            "properties": {
+                "MetricNames": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255
+                    },
+                    "description": "The names of the metrics the resolution applies to."
+                },
+                "ResolutionSeconds": {
+                    "type": "integer",
+                    "minimum": 20,
+                    "maximum": 60,
+                    "description": "The resolution, in seconds, for the metrics."
+                }
+            },
+            "required": [
+                "MetricNames",
+                "ResolutionSeconds"
+            ],
+            "additionalProperties": false
+        },
+        "ServiceRevisionLoadBalancer": {
+            "description": "The resolved load balancer configuration for a service revision, including which target groups serve traffic and which listener rules direct traffic to them.",
+            "type": "object",
+            "properties": {
+                "TargetGroupArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the target group associated with the service revision."
+                },
+                "ProductionListenerRule": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the production listener rule or listener that directs traffic to the target group associated with the service revision."
+                }
+            },
+            "additionalProperties": false
+        },
+        "ResolvedConfiguration": {
+            "description": "The resolved configuration for a service revision, which contains the actual resources the service revision uses, such as which target groups serve traffic.",
+            "type": "object",
+            "properties": {
+                "LoadBalancers": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ServiceRevisionLoadBalancer"
+                    },
+                    "description": "The resolved load balancer configuration for the service revision."
+                }
+            },
+            "additionalProperties": false
+        },
+        "ManagedResourceStatus": {
+            "description": "The status of an Amazon Web Services resource managed by Amazon ECS for an Express service.",
+            "type": "string",
+            "enum": [
+                "PROVISIONING",
+                "ACTIVE",
+                "DEPROVISIONING",
+                "DELETED",
+                "FAILED"
+            ]
+        },
+        "ManagedLoadBalancer": {
+            "description": "The Application Load Balancer associated with the Express service.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the load balancer."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the load balancer is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when this load balancer was most recently updated."
+                },
+                "Scheme": {
+                    "type": "string",
+                    "description": "The scheme of the load balancer. By default, the scheme of the load balancer is internet-facing."
+                },
+                "SubnetIds": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The IDs of the subnets associated with the load balancer."
+                },
+                "SecurityGroupIds": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "The IDs of the security groups associated with the load balancer."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt",
+                "Scheme"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedSecurityGroup": {
+            "description": "A security group managed by the Express service.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the security group."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the security group is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when the security group was last updated."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedCertificate": {
+            "description": "The ACM certificate associated with the HTTPS domain created for the Express service.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the ACM certificate."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the ACM certificate is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when the ACM certificate was last updated."
+                },
+                "DomainName": {
+                    "type": "string",
+                    "description": "The fully qualified domain name (FQDN) that is secured with this ACM certificate."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt",
+                "DomainName"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedListener": {
+            "description": "A listener associated with the Express service's Application Load Balancer.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the load balancer listener."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the load balancer listener is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when this listener was most recently updated."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedListenerRule": {
+            "description": "A listener rule associated with the Express service's Application Load Balancer.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the load balancer listener rule."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the load balancer listener rule is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when this listener rule was most recently updated."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedTargetGroup": {
+            "description": "A target group associated with the Express service's Application Load Balancer.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the target group."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the target group is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when the target group was last updated."
+                },
+                "HealthCheckPath": {
+                    "type": "string",
+                    "description": "The destination for health checks on the targets."
+                },
+                "HealthCheckPort": {
+                    "type": "integer",
+                    "description": "The port the load balancer uses when performing health checks on targets."
+                },
+                "Port": {
+                    "type": "integer",
+                    "description": "The port on which the targets receive traffic."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt",
+                "HealthCheckPath",
+                "HealthCheckPort",
+                "Port"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedIngressPath": {
+            "description": "An entry point into the Express service.",
+            "type": "object",
+            "properties": {
+                "AccessType": {
+                    "type": "string",
+                    "enum": [
+                        "PUBLIC",
+                        "PRIVATE"
+                    ],
+                    "description": "The type of access to the endpoint for the Express service."
+                },
+                "Endpoint": {
+                    "type": "string",
+                    "description": "The endpoint for access to the Express service."
+                },
+                "LoadBalancer": {
+                    "$ref": "#/definitions/ManagedLoadBalancer"
+                },
+                "LoadBalancerSecurityGroups": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ManagedSecurityGroup"
+                    },
+                    "description": "The security groups associated with the Application Load Balancer."
+                },
+                "Certificate": {
+                    "$ref": "#/definitions/ManagedCertificate"
+                },
+                "Listener": {
+                    "$ref": "#/definitions/ManagedListener"
+                },
+                "Rule": {
+                    "$ref": "#/definitions/ManagedListenerRule"
+                },
+                "TargetGroups": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ManagedTargetGroup"
+                    },
+                    "description": "The target groups associated with the Application Load Balancer."
+                }
+            },
+            "required": [
+                "AccessType",
+                "Endpoint"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedScalableTarget": {
+            "description": "The scalable target created by Amazon ECS for an Express service.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the scalable target."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the scalable target is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when the target was most recently updated."
+                },
+                "MinCapacity": {
+                    "type": "integer",
+                    "description": "The minimum value to scale to in response to a scale-in activity."
+                },
+                "MaxCapacity": {
+                    "type": "integer",
+                    "description": "The maximum value to scale to in response to a scale-out activity."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt",
+                "MinCapacity",
+                "MaxCapacity"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedApplicationAutoScalingPolicy": {
+            "description": "The Application Auto Scaling policy created by Amazon ECS for an Express service.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the Application Auto Scaling policy associated with the Express service."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the Application Auto Scaling policy is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when the Application Auto Scaling policy was last updated."
+                },
+                "PolicyType": {
+                    "type": "string",
+                    "description": "The type of Application Auto Scaling policy associated with the Express service."
+                },
+                "TargetValue": {
+                    "type": "number",
+                    "description": "The target value for the auto scaling metric."
+                },
+                "Metric": {
+                    "type": "string",
+                    "description": "The metric used for auto scaling decisions."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt",
+                "PolicyType",
+                "TargetValue",
+                "Metric"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedAutoScaling": {
+            "description": "The auto scaling configuration created by Amazon ECS for an Express service.",
+            "type": "object",
+            "properties": {
+                "ScalableTarget": {
+                    "$ref": "#/definitions/ManagedScalableTarget"
+                },
+                "ApplicationAutoScalingPolicies": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ManagedApplicationAutoScalingPolicy"
+                    },
+                    "description": "The policies used for auto scaling."
+                }
+            },
+            "additionalProperties": false
+        },
+        "ManagedMetricAlarm": {
+            "description": "A CloudWatch metric alarm associated with the Express service's scaling policy.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the CloudWatch metric alarm."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the CloudWatch metric alarm is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when the CloudWatch metric alarm was last updated."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt"
+            ],
+            "additionalProperties": false
+        },
+        "ManagedLogGroup": {
+            "description": "The CloudWatch log group created by Amazon ECS for an Express service.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the CloudWatch log group associated with the Express service."
+                },
+                "Status": {
+                    "$ref": "#/definitions/ManagedResourceStatus"
+                },
+                "StatusReason": {
+                    "type": "string",
+                    "description": "Information about why the CloudWatch log group is in the current status."
+                },
+                "UpdatedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The time when the CloudWatch log group was last updated."
+                },
+                "LogGroupName": {
+                    "type": "string",
+                    "description": "The name of the CloudWatch log group associated with the Express service."
+                }
+            },
+            "required": [
+                "Status",
+                "UpdatedAt",
+                "LogGroupName"
+            ],
+            "additionalProperties": false
+        },
+        "EcsManagedResources": {
+            "description": "The Amazon Web Services resources managed by Amazon ECS for an Express service, including ingress paths, auto-scaling policies, metric alarms, security groups, and log groups.",
+            "type": "object",
+            "properties": {
+                "IngressPaths": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ManagedIngressPath"
+                    },
+                    "description": "The ingress paths and endpoints for the Express service."
+                },
+                "AutoScaling": {
+                    "$ref": "#/definitions/ManagedAutoScaling"
+                },
+                "MetricAlarms": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ManagedMetricAlarm"
+                    },
+                    "description": "The CloudWatch metric alarms associated with the Express service."
+                },
+                "ServiceSecurityGroups": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ManagedSecurityGroup"
+                    },
+                    "description": "The security groups managed by the Express service."
+                },
+                "LogGroups": {
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/ManagedLogGroup"
+                    },
+                    "description": "The log groups managed by the Express service."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "ServiceRevisionArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the service revision."
+        },
+        "Cluster": {
+            "type": "string",
+            "description": "The short name of the cluster that hosts the service (the cluster segment of the service revision ARN)."
+        },
+        "Service": {
+            "type": "string",
+            "description": "The short name of the service (the service segment of the service revision ARN)."
+        },
+        "ServiceRevisionId": {
+            "type": "string",
+            "description": "The service revision identifier (the trailing segment of the service revision ARN)."
+        },
+        "ServiceArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the service for the service revision."
+        },
+        "ClusterArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the cluster that hosts the service."
+        },
+        "TaskDefinition": {
+            "type": "string",
+            "description": "The task definition the service revision uses."
+        },
+        "CapacityProviderStrategy": {
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/CapacityProviderStrategyItem"
+            },
+            "description": "The capacity provider strategy the service revision uses."
+        },
+        "LaunchType": {
+            "type": "string",
+            "enum": [
+                "EC2",
+                "FARGATE",
+                "EXTERNAL",
+                "MANAGED_INSTANCES"
+            ],
+            "description": "The launch type the service revision uses."
+        },
+        "PlatformVersion": {
+            "type": "string",
+            "description": "For the Fargate launch type, the platform version the service revision uses."
+        },
+        "PlatformFamily": {
+            "type": "string",
+            "description": "The platform family the service revision uses."
+        },
+        "LoadBalancers": {
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/LoadBalancer"
+            },
+            "description": "The load balancers the service revision uses."
+        },
+        "ServiceRegistries": {
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/ServiceRegistry"
+            },
+            "description": "The service registries (for Service Discovery) the service revision uses."
+        },
+        "NetworkConfiguration": {
+            "$ref": "#/definitions/NetworkConfiguration"
+        },
+        "ContainerImages": {
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/ContainerImage"
+            },
+            "description": "The container images the service revision uses."
+        },
+        "GuardDutyEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether Runtime Monitoring is turned on."
+        },
+        "ServiceConnectConfiguration": {
+            "$ref": "#/definitions/ServiceConnectConfiguration"
+        },
+        "VolumeConfigurations": {
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/ServiceVolumeConfiguration"
+            },
+            "description": "The volumes that are configured at deployment that the service revision uses."
+        },
+        "FargateEphemeralStorage": {
+            "$ref": "#/definitions/DeploymentEphemeralStorage"
+        },
+        "VpcLatticeConfigurations": {
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/VpcLatticeConfiguration"
+            },
+            "description": "The VPC Lattice configuration for the service revision."
+        },
+        "Monitoring": {
+            "$ref": "#/definitions/MonitoringConfiguration"
+        },
+        "ResolvedConfiguration": {
+            "$ref": "#/definitions/ResolvedConfiguration"
+        },
+        "EcsManagedResources": {
+            "$ref": "#/definitions/EcsManagedResources"
+        },
+        "CreatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time that the service revision was created."
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/ServiceRevisionArn",
+        "/properties/Cluster",
+        "/properties/Service",
+        "/properties/ServiceRevisionId",
+        "/properties/ServiceArn",
+        "/properties/ClusterArn",
+        "/properties/TaskDefinition",
+        "/properties/CapacityProviderStrategy",
+        "/properties/LaunchType",
+        "/properties/PlatformVersion",
+        "/properties/PlatformFamily",
+        "/properties/LoadBalancers",
+        "/properties/ServiceRegistries",
+        "/properties/NetworkConfiguration",
+        "/properties/ContainerImages",
+        "/properties/GuardDutyEnabled",
+        "/properties/ServiceConnectConfiguration",
+        "/properties/VolumeConfigurations",
+        "/properties/FargateEphemeralStorage",
+        "/properties/VpcLatticeConfigurations",
+        "/properties/Monitoring",
+        "/properties/ResolvedConfiguration",
+        "/properties/EcsManagedResources",
+        "/properties/CreatedAt"
+    ],
+    "primaryIdentifier": [
+        "/properties/ServiceRevisionArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/Cluster",
+            "/properties/Service",
+            "/properties/ServiceRevisionId"
+        ]
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ecs:DescribeServiceRevisions"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "Cluster": {
+                        "type": "string"
+                    },
+                    "Service": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "Cluster",
+                    "Service"
+                ]
+            },
+            "permissions": [
+                "ecs:ListServiceDeployments"
+            ]
+        }
+    }
+}

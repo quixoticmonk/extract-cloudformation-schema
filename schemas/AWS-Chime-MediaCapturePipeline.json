@@ -1,0 +1,448 @@
+{
+    "typeName": "AWS::Chime::MediaCapturePipeline",
+    "description": "Resource Type definition for AWS::Chime::MediaCapturePipeline",
+    "properties": {
+        "MediaPipelineId": {
+            "type": "string",
+            "description": "The ID of the media pipeline.",
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": "^[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+        },
+        "MediaPipelineArn": {
+            "type": "string",
+            "description": "The ARN of the media capture pipeline.",
+            "minLength": 1,
+            "maxLength": 1011,
+            "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+        },
+        "SourceType": {
+            "type": "string",
+            "description": "Source type from which the media artifacts are captured.",
+            "enum": ["ChimeSdkMeeting"]
+        },
+        "SourceArn": {
+            "type": "string",
+            "description": "ARN of the source from which the media artifacts are captured.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+        },
+        "SinkType": {
+            "type": "string",
+            "description": "Destination type to which the media artifacts are saved.",
+            "enum": ["S3Bucket"]
+        },
+        "SinkArn": {
+            "type": "string",
+            "description": "The ARN of the sink type.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the media pipeline.",
+            "enum": ["Initializing", "InProgress", "Failed", "Stopping", "Stopped", "Paused", "NotStarted"]
+        },
+        "SinkIamRoleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the sink role to be used with AwsKmsKeyId in SseAwsKeyManagementParams.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+        },
+        "CreatedTimestamp": {
+            "type": "string",
+            "description": "The time at which the pipeline was created, in ISO 8601 format.",
+            "format": "date-time"
+        },
+        "UpdatedTimestamp": {
+            "type": "string",
+            "description": "The time at which the pipeline was updated, in ISO 8601 format.",
+            "format": "date-time"
+        },
+        "ChimeSdkMeetingConfiguration": {
+            "$ref": "#/definitions/ChimeSdkMeetingConfiguration"
+        },
+        "SseAwsKeyManagementParams": {
+            "$ref": "#/definitions/SseAwsKeyManagementParams"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tag key-value pairs.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 200,
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with the resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key name of the tag.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        },
+        "ChimeSdkMeetingConfiguration": {
+            "type": "object",
+            "description": "The configuration object of the Amazon Chime SDK meeting for a specified media pipeline.",
+            "properties": {
+                "SourceConfiguration": {
+                    "$ref": "#/definitions/SourceConfiguration"
+                },
+                "ArtifactsConfiguration": {
+                    "$ref": "#/definitions/ArtifactsConfiguration"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SourceConfiguration": {
+            "type": "object",
+            "description": "Source configuration for a specified media pipeline.",
+            "properties": {
+                "SelectedVideoStreams": {
+                    "$ref": "#/definitions/SelectedVideoStreams"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SelectedVideoStreams": {
+            "type": "object",
+            "description": "The video streams for a specified media pipeline.",
+            "properties": {
+                "AttendeeIds": {
+                    "type": "array",
+                    "description": "The attendee IDs of the streams selected for a media pipeline.",
+                    "items": {
+                        "type": "string",
+                        "minLength": 36,
+                        "maxLength": 36,
+                        "pattern": "^[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+                    },
+                    "minItems": 1
+                },
+                "ExternalUserIds": {
+                    "type": "array",
+                    "description": "The external user IDs of the streams selected for a media pipeline.",
+                    "items": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 64
+                    },
+                    "minItems": 1
+                }
+            },
+            "additionalProperties": false
+        },
+        "ArtifactsConfiguration": {
+            "type": "object",
+            "description": "The configuration for the artifacts.",
+            "properties": {
+                "Audio": {
+                    "$ref": "#/definitions/AudioArtifactsConfiguration"
+                },
+                "Video": {
+                    "$ref": "#/definitions/VideoArtifactsConfiguration"
+                },
+                "Content": {
+                    "$ref": "#/definitions/ContentArtifactsConfiguration"
+                },
+                "CompositedVideo": {
+                    "$ref": "#/definitions/CompositedVideoArtifactsConfiguration"
+                }
+            },
+            "required": ["Audio", "Video", "Content"],
+            "additionalProperties": false
+        },
+        "AudioArtifactsConfiguration": {
+            "type": "object",
+            "description": "The audio artifact configuration object.",
+            "properties": {
+                "MuxType": {
+                    "type": "string",
+                    "description": "The MUX type of the audio artifact configuration object.",
+                    "enum": ["AudioOnly", "AudioWithActiveSpeakerVideo", "AudioWithCompositedVideo"]
+                }
+            },
+            "required": ["MuxType"],
+            "additionalProperties": false
+        },
+        "VideoArtifactsConfiguration": {
+            "type": "object",
+            "description": "The video artifact configuration object.",
+            "properties": {
+                "State": {
+                    "type": "string",
+                    "description": "Indicates whether the video artifact is enabled or disabled.",
+                    "enum": ["Enabled", "Disabled"]
+                },
+                "MuxType": {
+                    "type": "string",
+                    "description": "The MUX type of the video artifact configuration object.",
+                    "enum": ["VideoOnly"]
+                }
+            },
+            "required": ["State"],
+            "additionalProperties": false
+        },
+        "ContentArtifactsConfiguration": {
+            "type": "object",
+            "description": "The content artifact configuration object.",
+            "properties": {
+                "State": {
+                    "type": "string",
+                    "description": "Indicates whether the content artifact is enabled or disabled.",
+                    "enum": ["Enabled", "Disabled"]
+                },
+                "MuxType": {
+                    "type": "string",
+                    "description": "The MUX type of the artifact configuration.",
+                    "enum": ["ContentOnly"]
+                }
+            },
+            "required": ["State"],
+            "additionalProperties": false
+        },
+        "CompositedVideoArtifactsConfiguration": {
+            "type": "object",
+            "description": "Specifies the configuration for compositing video artifacts.",
+            "properties": {
+                "Layout": {
+                    "type": "string",
+                    "description": "The layout setting.",
+                    "enum": ["GridView"]
+                },
+                "Resolution": {
+                    "type": "string",
+                    "description": "The video resolution setting.",
+                    "enum": ["HD", "FHD"]
+                },
+                "GridViewConfiguration": {
+                    "$ref": "#/definitions/GridViewConfiguration"
+                }
+            },
+            "required": ["GridViewConfiguration"],
+            "additionalProperties": false
+        },
+        "GridViewConfiguration": {
+            "type": "object",
+            "description": "Specifies the type of grid layout.",
+            "properties": {
+                "ContentShareLayout": {
+                    "type": "string",
+                    "description": "Defines the layout of the video tiles when content sharing is enabled.",
+                    "enum": ["PresenterOnly", "Horizontal", "Vertical", "ActiveSpeakerOnly"]
+                },
+                "PresenterOnlyConfiguration": {
+                    "$ref": "#/definitions/PresenterOnlyConfiguration"
+                },
+                "ActiveSpeakerOnlyConfiguration": {
+                    "$ref": "#/definitions/ActiveSpeakerOnlyConfiguration"
+                },
+                "HorizontalLayoutConfiguration": {
+                    "$ref": "#/definitions/HorizontalLayoutConfiguration"
+                },
+                "VerticalLayoutConfiguration": {
+                    "$ref": "#/definitions/VerticalLayoutConfiguration"
+                },
+                "VideoAttribute": {
+                    "$ref": "#/definitions/VideoAttribute"
+                },
+                "CanvasOrientation": {
+                    "type": "string",
+                    "description": "The orientation setting, horizontal or vertical.",
+                    "enum": ["Landscape", "Portrait"]
+                }
+            },
+            "required": ["ContentShareLayout"],
+            "additionalProperties": false
+        },
+        "PresenterOnlyConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration for a presenter-only video tile.",
+            "properties": {
+                "PresenterPosition": {
+                    "type": "string",
+                    "description": "Defines the position of the presenter video tile.",
+                    "enum": ["TopLeft", "TopRight", "BottomLeft", "BottomRight"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "ActiveSpeakerOnlyConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration for an ActiveSpeakerOnly video tile.",
+            "properties": {
+                "ActiveSpeakerPosition": {
+                    "type": "string",
+                    "description": "The position of the ActiveSpeakerOnly video tile.",
+                    "enum": ["TopLeft", "TopRight", "BottomLeft", "BottomRight"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "HorizontalLayoutConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration settings for the horizontal layout.",
+            "properties": {
+                "TileOrder": {
+                    "type": "string",
+                    "description": "Sets the automatic ordering of the video tiles.",
+                    "enum": ["JoinSequence", "SpeakerSequence"]
+                },
+                "TilePosition": {
+                    "type": "string",
+                    "description": "Sets the position of horizontal tiles.",
+                    "enum": ["Top", "Bottom"]
+                },
+                "TileCount": {
+                    "type": "integer",
+                    "description": "The maximum number of video tiles to display.",
+                    "minimum": 1,
+                    "maximum": 10
+                },
+                "TileAspectRatio": {
+                    "type": "string",
+                    "description": "Specifies the aspect ratio of all video tiles.",
+                    "pattern": "^\\d{1,2}\\/\\d{1,2}$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "VerticalLayoutConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration settings for a vertical layout.",
+            "properties": {
+                "TileOrder": {
+                    "type": "string",
+                    "description": "Sets the automatic ordering of the video tiles.",
+                    "enum": ["JoinSequence", "SpeakerSequence"]
+                },
+                "TilePosition": {
+                    "type": "string",
+                    "description": "Sets the position of vertical tiles.",
+                    "enum": ["Left", "Right"]
+                },
+                "TileCount": {
+                    "type": "integer",
+                    "description": "The maximum number of tiles to display.",
+                    "minimum": 1,
+                    "maximum": 10
+                },
+                "TileAspectRatio": {
+                    "type": "string",
+                    "description": "Sets the aspect ratio of the video tiles.",
+                    "pattern": "^\\d{1,2}\\/\\d{1,2}$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "VideoAttribute": {
+            "type": "object",
+            "description": "Defines the settings for a video tile.",
+            "properties": {
+                "CornerRadius": {
+                    "type": "integer",
+                    "description": "Sets the corner radius of all video tiles.",
+                    "minimum": 1,
+                    "maximum": 20
+                },
+                "BorderColor": {
+                    "type": "string",
+                    "description": "Defines the border color of all video tiles.",
+                    "enum": ["Black", "Blue", "Red", "Green", "White", "Yellow"]
+                },
+                "HighlightColor": {
+                    "type": "string",
+                    "description": "Defines the highlight color for the active video tile.",
+                    "enum": ["Black", "Blue", "Red", "Green", "White", "Yellow"]
+                },
+                "BorderThickness": {
+                    "type": "integer",
+                    "description": "Defines the border thickness for all video tiles.",
+                    "minimum": 1,
+                    "maximum": 20
+                }
+            },
+            "additionalProperties": false
+        },
+        "SseAwsKeyManagementParams": {
+            "type": "object",
+            "description": "Contains server side encryption parameters to be used by media capture pipeline.",
+            "properties": {
+                "AwsKmsKeyId": {
+                    "type": "string",
+                    "description": "The KMS key you want to use to encrypt your media pipeline output.",
+                    "maxLength": 4096
+                },
+                "AwsKmsEncryptionContext": {
+                    "type": "string",
+                    "description": "Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context.",
+                    "maxLength": 4096
+                }
+            },
+            "required": ["AwsKmsKeyId"],
+            "additionalProperties": false
+        }
+    },
+    "required": ["SourceType", "SinkType", "SinkArn"],
+    "readOnlyProperties": [
+        "/properties/MediaPipelineId",
+        "/properties/MediaPipelineArn",
+        "/properties/SourceArn",
+        "/properties/Status",
+        "/properties/CreatedTimestamp",
+        "/properties/UpdatedTimestamp"
+    ],
+    "createOnlyProperties": [
+        "/properties/SourceType",
+        "/properties/SinkType",
+        "/properties/SinkArn",
+        "/properties/SinkIamRoleArn",
+        "/properties/ChimeSdkMeetingConfiguration",
+        "/properties/SseAwsKeyManagementParams",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/MediaPipelineArn"],
+    "additionalIdentifiers": [["/properties/MediaPipelineId"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "chime:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "chime:GetMediaCapturePipeline",
+                "chime:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "chime:ListMediaCapturePipelines"
+            ]
+        }
+    },
+    "additionalProperties": false
+}

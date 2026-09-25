@@ -1,0 +1,135 @@
+{
+    "typeName": "AWS::ECS::ServiceDeployment",
+    "description": "Resource schema for an Amazon ECS service deployment. A service deployment happens when you release a software update for a service by updating the service to use a new service revision. This is a read-only resource that provides visibility into the service deployments of an Amazon ECS service.",
+    "definitions": {
+        "ServiceRevisionSummary": {
+            "description": "The information about the number of requested, pending, and running tasks for a service revision.",
+            "type": "object",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The ARN of the service revision."
+                },
+                "RequestedTaskCount": {
+                    "type": "integer",
+                    "description": "The number of requested tasks for the service revision."
+                },
+                "RunningTaskCount": {
+                    "type": "integer",
+                    "description": "The number of running tasks for the service revision."
+                },
+                "PendingTaskCount": {
+                    "type": "integer",
+                    "description": "The number of pending tasks for the service revision."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "ServiceDeploymentArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the service deployment."
+        },
+        "Cluster": {
+            "type": "string",
+            "description": "The short name of the cluster that hosts the service (the cluster segment of the service deployment ARN)."
+        },
+        "Service": {
+            "type": "string",
+            "description": "The short name of the service (the service segment of the service deployment ARN)."
+        },
+        "ServiceDeploymentId": {
+            "type": "string",
+            "description": "The service deployment identifier (the trailing segment of the service deployment ARN)."
+        },
+        "ServiceArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the service for this service deployment."
+        },
+        "ClusterArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the cluster that hosts the service."
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the service deployment. Valid values include PENDING, SUCCESSFUL, STOPPED, STOP_REQUESTED, IN_PROGRESS, ROLLBACK_REQUESTED, ROLLBACK_IN_PROGRESS, ROLLBACK_SUCCESSFUL, and ROLLBACK_FAILED.",
+            "enum": [
+                "PENDING",
+                "SUCCESSFUL",
+                "STOPPED",
+                "STOP_REQUESTED",
+                "IN_PROGRESS",
+                "ROLLBACK_REQUESTED",
+                "ROLLBACK_IN_PROGRESS",
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_FAILED"
+            ]
+        },
+        "CreatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the service deployment was created."
+        },
+        "UpdatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the service deployment was last updated."
+        },
+        "TargetServiceRevision": {
+            "$ref": "#/definitions/ServiceRevisionSummary"
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/ServiceDeploymentArn",
+        "/properties/Cluster",
+        "/properties/Service",
+        "/properties/ServiceDeploymentId",
+        "/properties/ServiceArn",
+        "/properties/ClusterArn",
+        "/properties/Status",
+        "/properties/CreatedAt",
+        "/properties/UpdatedAt",
+        "/properties/TargetServiceRevision"
+    ],
+    "primaryIdentifier": [
+        "/properties/ServiceDeploymentArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/Cluster",
+            "/properties/Service",
+            "/properties/ServiceDeploymentId"
+        ]
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ecs:DescribeServiceDeployments"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "Cluster": {
+                        "type": "string"
+                    },
+                    "Service": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "Cluster",
+                    "Service"
+                ]
+            },
+            "permissions": [
+                "ecs:ListServiceDeployments"
+            ]
+        }
+    }
+}

@@ -1,0 +1,308 @@
+{
+    "typeName": "AWS::Chime::MediaInsightsPipeline",
+    "description": "A media insights pipeline in the Amazon Chime SDK that streams and processes call analytics data.",
+    "properties": {
+        "MediaPipelineArn": {
+            "type": "string",
+            "description": "The ARN of the media insights pipeline.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+        },
+        "MediaPipelineId": {
+            "type": "string",
+            "description": "The ID of the media insights pipeline.",
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": "^[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+        },
+        "MediaInsightsPipelineConfigurationArn": {
+            "type": "string",
+            "description": "The ARN of the pipeline's configuration.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the media insights pipeline.",
+            "enum": ["Failed", "InProgress", "Initializing", "NotStarted", "Paused", "Stopped", "Stopping"]
+        },
+        "KinesisVideoStreamSourceRuntimeConfiguration": {
+            "$ref": "#/definitions/KinesisVideoStreamSourceRuntimeConfiguration"
+        },
+        "KinesisVideoStreamRecordingSourceRuntimeConfiguration": {
+            "$ref": "#/definitions/KinesisVideoStreamRecordingSourceRuntimeConfiguration"
+        },
+        "S3RecordingSinkRuntimeConfiguration": {
+            "$ref": "#/definitions/S3RecordingSinkRuntimeConfiguration"
+        },
+        "MediaInsightsRuntimeMetadata": {
+            "type": "object",
+            "description": "The runtime metadata for the media insights pipeline, as a key-value map of strings.",
+            "patternProperties": {
+                "\\S": {
+                    "type": "string",
+                    "maxLength": 4096
+                }
+            },
+            "additionalProperties": false
+        },
+        "CreatedTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time at which the media insights pipeline was created."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags assigned to the media insights pipeline.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 200,
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "KinesisVideoStreamSourceRuntimeConfiguration": {
+            "type": "object",
+            "description": "The runtime configuration settings for the Kinesis video stream source.",
+            "properties": {
+                "Streams": {
+                    "type": "array",
+                    "description": "The streams in the source runtime configuration of a Kinesis video stream.",
+                    "items": {
+                        "$ref": "#/definitions/StreamConfiguration"
+                    },
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "insertionOrder": false
+                },
+                "MediaEncoding": {
+                    "type": "string",
+                    "description": "The encoding of the input audio.",
+                    "enum": ["pcm"]
+                },
+                "MediaSampleRate": {
+                    "type": "integer",
+                    "description": "The sample rate of the input audio, in hertz.",
+                    "minimum": 8000,
+                    "maximum": 48000
+                }
+            },
+            "required": ["Streams", "MediaEncoding", "MediaSampleRate"],
+            "additionalProperties": false
+        },
+        "StreamConfiguration": {
+            "type": "object",
+            "description": "The configuration settings for a stream.",
+            "properties": {
+                "StreamArn": {
+                    "type": "string",
+                    "description": "The ARN of the Kinesis video stream.",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^arn:[a-z\\d-]+:kinesisvideo:[a-z0-9-]+:[0-9]+:[a-z]+/[a-zA-Z0-9_.-]+/[0-9]+$"
+                },
+                "FragmentNumber": {
+                    "type": "string",
+                    "description": "The unique identifier of the fragment to begin processing.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[0-9]+$"
+                },
+                "StreamChannelDefinition": {
+                    "$ref": "#/definitions/StreamChannelDefinition"
+                }
+            },
+            "required": ["StreamArn", "StreamChannelDefinition"],
+            "additionalProperties": false
+        },
+        "StreamChannelDefinition": {
+            "type": "object",
+            "description": "Defines a streaming channel.",
+            "properties": {
+                "NumberOfChannels": {
+                    "type": "integer",
+                    "description": "The number of channels in a streaming channel.",
+                    "minimum": 1,
+                    "maximum": 2
+                },
+                "ChannelDefinitions": {
+                    "type": "array",
+                    "description": "The definitions of the channels in a streaming channel.",
+                    "items": {
+                        "$ref": "#/definitions/ChannelDefinition"
+                    },
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "insertionOrder": false
+                }
+            },
+            "required": ["NumberOfChannels"],
+            "additionalProperties": false
+        },
+        "ChannelDefinition": {
+            "type": "object",
+            "description": "Defines an audio channel in a Kinesis video stream.",
+            "properties": {
+                "ChannelId": {
+                    "type": "integer",
+                    "description": "The channel ID.",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "ParticipantRole": {
+                    "type": "string",
+                    "description": "Specifies whether the audio in a channel belongs to the AGENT or CUSTOMER.",
+                    "enum": ["AGENT", "CUSTOMER"]
+                }
+            },
+            "required": ["ChannelId"],
+            "additionalProperties": false
+        },
+        "KinesisVideoStreamRecordingSourceRuntimeConfiguration": {
+            "type": "object",
+            "description": "The runtime settings for recording a Kinesis video stream.",
+            "properties": {
+                "Streams": {
+                    "type": "array",
+                    "description": "The stream or streams to be recorded.",
+                    "items": {
+                        "$ref": "#/definitions/RecordingStreamConfiguration"
+                    },
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "insertionOrder": false
+                },
+                "FragmentSelector": {
+                    "$ref": "#/definitions/FragmentSelector"
+                }
+            },
+            "required": ["Streams", "FragmentSelector"],
+            "additionalProperties": false
+        },
+        "RecordingStreamConfiguration": {
+            "type": "object",
+            "description": "A structure that holds the settings for recording media.",
+            "properties": {
+                "StreamArn": {
+                    "type": "string",
+                    "description": "The ARN of the recording stream.",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^arn:[a-z\\d-]+:kinesisvideo:[a-z0-9-]+:[0-9]+:[a-z]+/[a-zA-Z0-9_.-]+/[0-9]+$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "FragmentSelector": {
+            "type": "object",
+            "description": "Describes the timestamp range and timestamp origin of a range of fragments in the Kinesis video stream.",
+            "properties": {
+                "FragmentSelectorType": {
+                    "type": "string",
+                    "description": "The origin of the timestamps to use.",
+                    "enum": ["ProducerTimestamp", "ServerTimestamp"]
+                },
+                "TimestampRange": {
+                    "$ref": "#/definitions/TimestampRange"
+                }
+            },
+            "required": ["FragmentSelectorType", "TimestampRange"],
+            "additionalProperties": false
+        },
+        "TimestampRange": {
+            "type": "object",
+            "description": "The range of timestamps to return.",
+            "properties": {
+                "StartTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The starting timestamp for the specified range."
+                },
+                "EndTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The ending timestamp for the specified range."
+                }
+            },
+            "required": ["StartTimestamp", "EndTimestamp"],
+            "additionalProperties": false
+        },
+        "S3RecordingSinkRuntimeConfiguration": {
+            "type": "object",
+            "description": "The runtime configuration for the S3 recording sink.",
+            "properties": {
+                "Destination": {
+                    "type": "string",
+                    "description": "The URI of the S3 bucket used as the sink.",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+                },
+                "RecordingFileFormat": {
+                    "type": "string",
+                    "description": "The file format for the media files sent to the S3 bucket.",
+                    "enum": ["Opus", "Wav"]
+                }
+            },
+            "required": ["Destination", "RecordingFileFormat"],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key/value pair that grants users access to meeting resources.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key half of a tag.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value half of a tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "required": ["MediaInsightsPipelineConfigurationArn"],
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/MediaPipelineArn",
+        "/properties/MediaPipelineId",
+        "/properties/Status",
+        "/properties/CreatedTimestamp"
+    ],
+    "createOnlyProperties": [
+        "/properties/MediaInsightsPipelineConfigurationArn",
+        "/properties/KinesisVideoStreamSourceRuntimeConfiguration",
+        "/properties/KinesisVideoStreamRecordingSourceRuntimeConfiguration",
+        "/properties/S3RecordingSinkRuntimeConfiguration",
+        "/properties/MediaInsightsRuntimeMetadata",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/MediaPipelineArn"],
+    "additionalIdentifiers": [["/properties/MediaPipelineId"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["chime:ListTagsForResource"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": ["chime:GetMediaPipeline", "chime:ListTagsForResource"]
+        },
+        "list": {
+            "permissions": ["chime:ListMediaPipelines"]
+        }
+    }
+}

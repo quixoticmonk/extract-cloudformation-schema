@@ -309,7 +309,15 @@
             ],
             "additionalProperties": false,
             "type": "object",
-            "properties": {"ResourcePolicy": {"$ref": "#/definitions/ResourcePolicy"}}
+            "properties": {
+                "ResourcePolicy": {"$ref": "#/definitions/ResourcePolicy"},
+                "Tags": {
+                    "uniqueItems": true,
+                    "insertionOrder": false,
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/Tag"}
+                }
+            }
         },
         "GlobalTableWitness": {
             "additionalProperties": false,

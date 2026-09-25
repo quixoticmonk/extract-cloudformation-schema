@@ -1,0 +1,411 @@
+{
+    "typeName": "AWS::Chime::MediaLiveConnectorPipeline",
+    "description": "Creates a media live connector pipeline in an Amazon Chime SDK meeting.",
+    "properties": {
+        "MediaPipelineArn": {
+            "type": "string",
+            "description": "The ARN of the media live connector pipeline.",
+            "minLength": 1,
+            "maxLength": 1011,
+            "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+        },
+        "MediaPipelineId": {
+            "type": "string",
+            "description": "The ID of the media live connector pipeline.",
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": "^[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+        },
+        "Sources": {
+            "type": "array",
+            "description": "The media live connector pipeline's data sources.",
+            "items": {
+                "$ref": "#/definitions/LiveConnectorSourceConfiguration"
+            },
+            "minItems": 1,
+            "maxItems": 1,
+            "insertionOrder": false
+        },
+        "Sinks": {
+            "type": "array",
+            "description": "The media live connector pipeline's data sinks.",
+            "items": {
+                "$ref": "#/definitions/LiveConnectorSinkConfiguration"
+            },
+            "minItems": 1,
+            "maxItems": 1,
+            "insertionOrder": false
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the media live connector pipeline.",
+            "enum": ["Initializing", "InProgress", "Failed", "Stopping", "Stopped", "Paused", "NotStarted"]
+        },
+        "CreatedTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time at which the connector pipeline was created."
+        },
+        "UpdatedTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time at which the connector pipeline was last updated."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags associated with the media live connector pipeline.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 200,
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "LiveConnectorSourceConfiguration": {
+            "type": "object",
+            "description": "The data source configuration object of a streaming media pipeline.",
+            "properties": {
+                "SourceType": {
+                    "type": "string",
+                    "description": "The source configuration's media source type.",
+                    "enum": ["ChimeSdkMeeting"]
+                },
+                "ChimeSdkMeetingLiveConnectorConfiguration": {
+                    "$ref": "#/definitions/ChimeSdkMeetingLiveConnectorConfiguration"
+                }
+            },
+            "required": ["SourceType", "ChimeSdkMeetingLiveConnectorConfiguration"],
+            "additionalProperties": false
+        },
+        "ChimeSdkMeetingLiveConnectorConfiguration": {
+            "type": "object",
+            "description": "The media pipeline's configuration object.",
+            "properties": {
+                "Arn": {
+                    "type": "string",
+                    "description": "The configuration object's Chime SDK meeting ARN.",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^arn[\\/\\:\\-\\_\\.a-zA-Z0-9]+$"
+                },
+                "MuxType": {
+                    "type": "string",
+                    "description": "The configuration object's multiplex type.",
+                    "enum": ["AudioWithCompositedVideo", "AudioWithActiveSpeakerVideo"]
+                },
+                "CompositedVideo": {
+                    "$ref": "#/definitions/CompositedVideoArtifactsConfiguration"
+                },
+                "SourceConfiguration": {
+                    "$ref": "#/definitions/SourceConfiguration"
+                }
+            },
+            "required": ["MuxType"],
+            "additionalProperties": false
+        },
+        "CompositedVideoArtifactsConfiguration": {
+            "type": "object",
+            "description": "Specifies the configuration for compositing video artifacts.",
+            "properties": {
+                "Layout": {
+                    "type": "string",
+                    "description": "The layout setting.",
+                    "enum": ["GridView"]
+                },
+                "Resolution": {
+                    "type": "string",
+                    "description": "The video resolution setting.",
+                    "enum": ["HD", "FHD"]
+                },
+                "GridViewConfiguration": {
+                    "$ref": "#/definitions/GridViewConfiguration"
+                }
+            },
+            "required": ["GridViewConfiguration"],
+            "additionalProperties": false
+        },
+        "GridViewConfiguration": {
+            "type": "object",
+            "description": "Specifies the type of grid layout.",
+            "properties": {
+                "ContentShareLayout": {
+                    "type": "string",
+                    "description": "Defines the layout of the video tiles when content sharing is enabled.",
+                    "enum": ["PresenterOnly", "Horizontal", "Vertical", "ActiveSpeakerOnly"]
+                },
+                "PresenterOnlyConfiguration": {
+                    "$ref": "#/definitions/PresenterOnlyConfiguration"
+                },
+                "ActiveSpeakerOnlyConfiguration": {
+                    "$ref": "#/definitions/ActiveSpeakerOnlyConfiguration"
+                },
+                "HorizontalLayoutConfiguration": {
+                    "$ref": "#/definitions/HorizontalLayoutConfiguration"
+                },
+                "VerticalLayoutConfiguration": {
+                    "$ref": "#/definitions/VerticalLayoutConfiguration"
+                },
+                "VideoAttribute": {
+                    "$ref": "#/definitions/VideoAttribute"
+                },
+                "CanvasOrientation": {
+                    "type": "string",
+                    "description": "The orientation setting, horizontal or vertical.",
+                    "enum": ["Landscape", "Portrait"]
+                }
+            },
+            "required": ["ContentShareLayout"],
+            "additionalProperties": false
+        },
+        "PresenterOnlyConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration for a presenter-only video tile.",
+            "properties": {
+                "PresenterPosition": {
+                    "type": "string",
+                    "description": "Defines the position of the presenter video tile.",
+                    "enum": ["TopLeft", "TopRight", "BottomLeft", "BottomRight"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "ActiveSpeakerOnlyConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration for an ActiveSpeakerOnly video tile.",
+            "properties": {
+                "ActiveSpeakerPosition": {
+                    "type": "string",
+                    "description": "The position of the ActiveSpeakerOnly video tile.",
+                    "enum": ["TopLeft", "TopRight", "BottomLeft", "BottomRight"]
+                }
+            },
+            "additionalProperties": false
+        },
+        "HorizontalLayoutConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration settings for the horizontal layout.",
+            "properties": {
+                "TileOrder": {
+                    "type": "string",
+                    "description": "Sets the automatic ordering of the video tiles.",
+                    "enum": ["JoinSequence", "SpeakerSequence"]
+                },
+                "TilePosition": {
+                    "type": "string",
+                    "description": "Sets the position of horizontal tiles.",
+                    "enum": ["Top", "Bottom"]
+                },
+                "TileCount": {
+                    "type": "integer",
+                    "description": "The maximum number of video tiles to display.",
+                    "minimum": 1,
+                    "maximum": 10
+                },
+                "TileAspectRatio": {
+                    "type": "string",
+                    "description": "Specifies the aspect ratio of all video tiles.",
+                    "pattern": "^\\d{1,2}\\/\\d{1,2}$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "VerticalLayoutConfiguration": {
+            "type": "object",
+            "description": "Defines the configuration settings for a vertical layout.",
+            "properties": {
+                "TileOrder": {
+                    "type": "string",
+                    "description": "Sets the automatic ordering of the video tiles.",
+                    "enum": ["JoinSequence", "SpeakerSequence"]
+                },
+                "TilePosition": {
+                    "type": "string",
+                    "description": "Sets the position of vertical tiles.",
+                    "enum": ["Left", "Right"]
+                },
+                "TileCount": {
+                    "type": "integer",
+                    "description": "The maximum number of tiles to display.",
+                    "minimum": 1,
+                    "maximum": 10
+                },
+                "TileAspectRatio": {
+                    "type": "string",
+                    "description": "Sets the aspect ratio of the video tiles.",
+                    "pattern": "^\\d{1,2}\\/\\d{1,2}$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "VideoAttribute": {
+            "type": "object",
+            "description": "Defines the settings for a video tile.",
+            "properties": {
+                "CornerRadius": {
+                    "type": "integer",
+                    "description": "Sets the corner radius of all video tiles.",
+                    "minimum": 1,
+                    "maximum": 20
+                },
+                "BorderColor": {
+                    "type": "string",
+                    "description": "Defines the border color of all video tiles.",
+                    "enum": ["Black", "Blue", "Red", "Green", "White", "Yellow"]
+                },
+                "HighlightColor": {
+                    "type": "string",
+                    "description": "Defines the highlight color for the active video tile.",
+                    "enum": ["Black", "Blue", "Red", "Green", "White", "Yellow"]
+                },
+                "BorderThickness": {
+                    "type": "integer",
+                    "description": "Defines the border thickness for all video tiles.",
+                    "minimum": 1,
+                    "maximum": 20
+                }
+            },
+            "additionalProperties": false
+        },
+        "SourceConfiguration": {
+            "type": "object",
+            "description": "Source configuration for a specified media pipeline.",
+            "properties": {
+                "SelectedVideoStreams": {
+                    "$ref": "#/definitions/SelectedVideoStreams"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SelectedVideoStreams": {
+            "type": "object",
+            "description": "The video streams for a specified media pipeline.",
+            "properties": {
+                "AttendeeIds": {
+                    "type": "array",
+                    "description": "The attendee IDs of the streams selected for a media pipeline.",
+                    "items": {
+                        "type": "string",
+                        "minLength": 36,
+                        "maxLength": 36,
+                        "pattern": "^[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}$"
+                    },
+                    "minItems": 1,
+                    "insertionOrder": false
+                },
+                "ExternalUserIds": {
+                    "type": "array",
+                    "description": "The external user IDs of the streams selected for a media pipeline.",
+                    "items": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 64
+                    },
+                    "minItems": 1,
+                    "insertionOrder": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "LiveConnectorSinkConfiguration": {
+            "type": "object",
+            "description": "The media pipeline's sink configuration settings.",
+            "properties": {
+                "SinkType": {
+                    "type": "string",
+                    "description": "The sink configuration's sink type.",
+                    "enum": ["RTMP"]
+                },
+                "RTMPConfiguration": {
+                    "$ref": "#/definitions/LiveConnectorRTMPConfiguration"
+                }
+            },
+            "required": ["SinkType", "RTMPConfiguration"],
+            "additionalProperties": false
+        },
+        "LiveConnectorRTMPConfiguration": {
+            "type": "object",
+            "description": "The media pipeline's RTMP configuration object.",
+            "properties": {
+                "Url": {
+                    "type": "string",
+                    "description": "The URL of the RTMP configuration.",
+                    "minLength": 1,
+                    "maxLength": 1024
+                },
+                "AudioChannels": {
+                    "type": "string",
+                    "description": "The audio channels set for the RTMP configuration.",
+                    "enum": ["Stereo", "Mono"]
+                },
+                "AudioSampleRate": {
+                    "type": "string",
+                    "description": "The audio sample rate set for the RTMP configuration.",
+                    "pattern": "^44100|48000$"
+                }
+            },
+            "required": ["Url"],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key/value pair that grants users access to meeting resources.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key half of a tag.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value half of a tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "required": ["Sources", "Sinks"],
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/MediaPipelineArn",
+        "/properties/MediaPipelineId",
+        "/properties/Status",
+        "/properties/CreatedTimestamp",
+        "/properties/UpdatedTimestamp",
+        "/properties/Sources/*/ChimeSdkMeetingLiveConnectorConfiguration/Arn"
+    ],
+    "createOnlyProperties": [
+        "/properties/Sources",
+        "/properties/Sinks",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/MediaPipelineArn"],
+    "additionalIdentifiers": [["/properties/MediaPipelineId"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "chime:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "chime:GetMediaPipeline",
+                "chime:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "chime:ListMediaPipelines"
+            ]
+        }
+    }
+}

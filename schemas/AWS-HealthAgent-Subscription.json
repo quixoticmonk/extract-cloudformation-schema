@@ -1,0 +1,94 @@
+{
+    "typeName": "AWS::HealthAgent::Subscription",
+    "description": "Resource Type definition for AWS::HealthAgent::Subscription. A Subscription is a child resource of a Connect Health Domain.",
+    "properties": {
+        "DomainId": {
+            "description": "The unique identifier of the parent Domain.",
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 25,
+            "pattern": "^(hai-|dom-)[a-z0-9]+$"
+        },
+        "SubscriptionId": {
+            "description": "The unique identifier of the Subscription.",
+            "type": "string",
+            "minLength": 25,
+            "maxLength": 25,
+            "pattern": "^sub-[a-zA-Z0-9]{21}$"
+        },
+        "Arn": {
+            "description": "The Amazon Resource Name (ARN) of the Subscription.",
+            "type": "string"
+        },
+        "Status": {
+            "description": "The current status of the Subscription.",
+            "type": "string",
+            "enum": [
+                "ACTIVE",
+                "INACTIVE",
+                "DELETED"
+            ]
+        },
+        "CreatedAt": {
+            "description": "The time at which the Subscription was created.",
+            "type": "string",
+            "format": "date-time"
+        },
+        "LastUpdatedAt": {
+            "description": "The time at which the Subscription was last updated.",
+            "type": "string",
+            "format": "date-time"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "DomainId"
+    ],
+    "readOnlyProperties": [
+        "/properties/SubscriptionId",
+        "/properties/Arn",
+        "/properties/Status",
+        "/properties/CreatedAt",
+        "/properties/LastUpdatedAt"
+    ],
+    "createOnlyProperties": [
+        "/properties/DomainId"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/DomainId",
+            "/properties/SubscriptionId"
+        ]
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "health-agent:GetSubscription"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "health-agent:ListSubscriptions"
+            ],
+            "handlerSchema": {
+                "properties": {
+                    "DomainId": {
+                        "type": "string",
+                        "minLength": 20,
+                        "maxLength": 25,
+                        "pattern": "^(hai-|dom-)[a-z0-9]+$"
+                    }
+                },
+                "required": [
+                    "DomainId"
+                ]
+            }
+        }
+    }
+}

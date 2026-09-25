@@ -281,7 +281,8 @@
                 "Gateway",
                 "GatewayLoadBalancer",
                 "ServiceNetwork",
-                "Resource"
+                "Resource",
+                "Tunnel"
             ]
         },
         "Id": {

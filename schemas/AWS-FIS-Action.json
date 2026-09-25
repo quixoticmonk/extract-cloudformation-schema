@@ -1,0 +1,82 @@
+{
+    "typeName": "AWS::FIS::Action",
+    "description": "Describes an AWS FIS action. Actions are predefined fault injection activities provided by AWS Fault Injection Service.",
+    "properties": {
+        "Id": {
+            "type": "string",
+            "description": "The ID of the action.",
+            "maxLength": 128,
+            "pattern": "^[\\S]+$"
+        },
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the action.",
+            "minLength": 20,
+            "maxLength": 2048
+        },
+        "Description": {
+            "type": "string",
+            "description": "The description for the action.",
+            "maxLength": 512
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags for the action.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50,
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key in a tag.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value in a tag.",
+                    "minLength": 1,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "readOnlyProperties": [
+        "/properties/Id",
+        "/properties/Arn",
+        "/properties/Description",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/Id"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["fis:ListTagsForResource"]
+    },
+    "additionalProperties": false,
+    "handlers": {
+        "read": {
+            "permissions": [
+                "fis:GetAction"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "fis:ListActions"
+            ]
+        }
+    }
+}

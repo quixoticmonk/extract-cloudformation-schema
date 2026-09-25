@@ -1,0 +1,134 @@
+{
+    "typeName": "AWS::GroundStation::Satellite",
+    "description": "Resource Type definition for AWS::GroundStation::Satellite. A Satellite is onboarded to AWS Ground Station through a manual, out-of-band process and cannot be created programmatically. This is a read-only resource that provides visibility into satellites onboarded to your account via Cloud Control API.",
+    "sourceUrl": "https://docs.aws.amazon.com/ground-station/latest/APIReference/API_GetSatellite.html",
+    "definitions": {
+        "Tag": {
+            "description": "A key-value pair assigned to the satellite.",
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The tag key."
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The tag value."
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "EphemerisMetaData": {
+            "description": "Metadata describing a particular ephemeris.",
+            "type": "object",
+            "properties": {
+                "Source": {
+                    "type": "string",
+                    "description": "The EphemerisSource that generated a given ephemeris.",
+                    "enum": [
+                        "CUSTOMER_PROVIDED",
+                        "SPACE_TRACK"
+                    ]
+                },
+                "Epoch": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The epoch of a default ephemeris from Space Track in UTC."
+                }
+            },
+            "required": [
+                "Source"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "description": "The Region-qualified Amazon Resource Name (ARN) of the satellite. AWS Ground Station returns a global satellite ARN, but its tagging APIs require a Region-qualified ARN. This resource therefore uses the Region-qualified ARN (the current Region inserted into the satellite ARN) as the primary identifier.",
+            "type": "string",
+            "minLength": 83,
+            "maxLength": 132,
+            "pattern": "^arn:aws:groundstation:[-a-z0-9]{1,50}:[0-9]{12}:satellite/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+        },
+        "SatelliteId": {
+            "description": "The UUID of the satellite.",
+            "type": "string",
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+        },
+        "NoradSatelliteID": {
+            "description": "The NORAD satellite ID number.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 339999
+        },
+        "GroundStations": {
+            "description": "A list of ground stations to which the satellite is on-boarded.",
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "type": "string",
+                "minLength": 4,
+                "maxLength": 97,
+                "pattern": "^[ a-zA-Z0-9-._:=]{4,97}$"
+            }
+        },
+        "CurrentEphemeris": {
+            "$ref": "#/definitions/EphemerisMetaData"
+        },
+        "Tags": {
+            "description": "The tags assigned to the satellite.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/SatelliteId",
+        "/properties/NoradSatelliteID",
+        "/properties/GroundStations",
+        "/properties/CurrentEphemeris",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/SatelliteId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "groundstation:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "groundstation:GetSatellite",
+                "groundstation:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "groundstation:ListSatellites"
+            ]
+        }
+    }
+}

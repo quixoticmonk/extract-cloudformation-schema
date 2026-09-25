@@ -1,0 +1,103 @@
+{
+    "typeName": "AWS::DMS::ReplicationTaskAssessmentRun",
+    "description": "Resource Type definition for AWS::DMS::ReplicationTaskAssessmentRun. Provides read-only visibility into an AWS DMS premigration assessment run, an ephemeral job started for a replication task via the StartReplicationTaskAssessmentRun operation.",
+    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-dms.git",
+    "definitions": {
+        "AssessmentProgress": {
+            "description": "The progress values reported by the AssessmentProgress response element.",
+            "type": "object",
+            "properties": {
+                "IndividualAssessmentCount": {
+                    "type": "integer",
+                    "description": "The number of individual assessments that are specified to run."
+                },
+                "IndividualAssessmentCompletedCount": {
+                    "type": "integer",
+                    "description": "The number of individual assessments that have completed, successfully or not."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "ReplicationTaskAssessmentRunArn": {
+            "description": "Amazon Resource Name (ARN) of this assessment run.",
+            "type": "string",
+            "pattern": "^arn:.+:dms:.+:[0-9]+:assessment-run:.+$"
+        },
+        "ReplicationTaskArn": {
+            "description": "Amazon Resource Name (ARN) of the migration task associated with this premigration assessment run.",
+            "type": "string",
+            "pattern": "^arn:.+:dms:.+:[0-9]+:task:.+$"
+        },
+        "ServiceAccessRoleArn": {
+            "description": "ARN of the service role used to start the assessment run. The role must allow the iam:PassRole action.",
+            "type": "string",
+            "pattern": "^arn:.+:iam::[0-9]+:role/.+$"
+        },
+        "ResultLocationBucket": {
+            "description": "Amazon S3 bucket where AWS DMS stores the results of this assessment run.",
+            "type": "string"
+        },
+        "ResultLocationFolder": {
+            "description": "Folder in an Amazon S3 bucket where AWS DMS stores the results of this assessment run.",
+            "type": "string"
+        },
+        "ResultEncryptionMode": {
+            "description": "Encryption mode used to encrypt the assessment run results.",
+            "type": "string"
+        },
+        "AssessmentRunName": {
+            "description": "Unique name to identify the assessment run.",
+            "type": "string"
+        },
+        "Status": {
+            "description": "Assessment run status. This status can have one of the following values: cancelling, deleting, failed, error-provisioning, error-executing, invalid state, passed, provisioning, running, starting, or warning.",
+            "type": "string"
+        },
+        "ReplicationTaskAssessmentRunCreationDate": {
+            "description": "Date on which the assessment run was created using the StartReplicationTaskAssessmentRun operation.",
+            "type": "string",
+            "format": "date-time"
+        },
+        "AssessmentProgress": {
+            "$ref": "#/definitions/AssessmentProgress"
+        },
+        "IsLatestTaskAssessmentRun": {
+            "description": "Indicates that the following premigration assessment run is the latest for the migration task.",
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/ReplicationTaskAssessmentRunArn",
+        "/properties/ReplicationTaskArn",
+        "/properties/ServiceAccessRoleArn",
+        "/properties/ResultLocationBucket",
+        "/properties/ResultLocationFolder",
+        "/properties/ResultEncryptionMode",
+        "/properties/AssessmentRunName",
+        "/properties/Status",
+        "/properties/ReplicationTaskAssessmentRunCreationDate",
+        "/properties/AssessmentProgress",
+        "/properties/IsLatestTaskAssessmentRun"
+    ],
+    "primaryIdentifier": [
+        "/properties/ReplicationTaskAssessmentRunArn"
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "dms:DescribeReplicationTaskAssessmentRuns"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "dms:DescribeReplicationTaskAssessmentRuns"
+            ]
+        }
+    }
+}

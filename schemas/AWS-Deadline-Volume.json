@@ -1,0 +1,187 @@
+{
+    "typeName": "AWS::Deadline::Volume",
+    "description": "Definition of AWS::Deadline::Volume Resource Type",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the volume.",
+            "pattern": "^arn:aws[a-z-]*:deadline:[a-z0-9-]+:[0-9]{12}:farm/farm-[0-9a-f]{32}/fleet/fleet-[0-9a-f]{32}/volume/volume-[0-9a-f]{32}$"
+        },
+        "FarmId": {
+            "type": "string",
+            "description": "The farm ID of the farm that contains the fleet.",
+            "pattern": "^farm-[0-9a-f]{32}$"
+        },
+        "FleetId": {
+            "type": "string",
+            "description": "The fleet ID of the fleet that contains the volume.",
+            "pattern": "^fleet-[0-9a-f]{32}$"
+        },
+        "VolumeId": {
+            "type": "string",
+            "description": "The volume ID.",
+            "pattern": "^volume-[0-9a-f]{32}$"
+        },
+        "State": {
+            "type": "string",
+            "description": "The state of the volume.",
+            "enum": [
+                "PENDING_CREATION",
+                "PENDING_ATTACHMENT",
+                "IN_USE",
+                "AVAILABLE",
+                "PENDING_DELETION"
+            ]
+        },
+        "SizeGiB": {
+            "type": "integer",
+            "description": "The volume size in GiB.",
+            "minimum": 1,
+            "maximum": 65536
+        },
+        "AvailabilityZoneId": {
+            "type": "string",
+            "description": "The Availability Zone ID of the volume."
+        },
+        "AttachedWorkerId": {
+            "type": "string",
+            "description": "The worker ID of the worker the volume is attached to.",
+            "pattern": "^worker-[0-9a-f]{32}$"
+        },
+        "VolumeType": {
+            "type": "string",
+            "description": "The EBS volume type.",
+            "enum": [
+                "gp3"
+            ]
+        },
+        "Iops": {
+            "type": "integer",
+            "description": "The IOPS of the volume.",
+            "minimum": 100,
+            "maximum": 80000
+        },
+        "ThroughputMiB": {
+            "type": "integer",
+            "description": "The throughput of the volume in MiB.",
+            "minimum": 125,
+            "maximum": 2000
+        },
+        "CreatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time the resource was created."
+        },
+        "LastAssignedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time the volume was last assigned to a worker."
+        },
+        "LastReleasedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time the volume was last released from a worker."
+        },
+        "ExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time the volume expires and will be deleted."
+        },
+        "Tags": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Key": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                    },
+                    "Value": {
+                        "type": "string",
+                        "minLength": 0,
+                        "maxLength": 256
+                    }
+                },
+                "required": [
+                    "Key",
+                    "Value"
+                ],
+                "additionalProperties": false
+            },
+            "maxItems": 50,
+            "description": "An array of key-value pairs to apply to this resource.",
+            "insertionOrder": false
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/VolumeId",
+        "/properties/State",
+        "/properties/SizeGiB",
+        "/properties/AvailabilityZoneId",
+        "/properties/AttachedWorkerId",
+        "/properties/VolumeType",
+        "/properties/Iops",
+        "/properties/ThroughputMiB",
+        "/properties/CreatedAt",
+        "/properties/LastAssignedAt",
+        "/properties/LastReleasedAt",
+        "/properties/ExpiresAt"
+    ],
+    "createOnlyProperties": [
+        "/properties/FarmId",
+        "/properties/FleetId",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/FarmId",
+            "/properties/FleetId",
+            "/properties/VolumeId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "deadline:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "deadline:GetVolume",
+                "deadline:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "FarmId": {
+                        "type": "string",
+                        "pattern": "^farm-[0-9a-f]{32}$"
+                    },
+                    "FleetId": {
+                        "type": "string",
+                        "pattern": "^fleet-[0-9a-f]{32}$"
+                    }
+                },
+                "required": [
+                    "FarmId",
+                    "FleetId"
+                ]
+            },
+            "permissions": [
+                "deadline:ListVolumes"
+            ]
+        }
+    }
+}

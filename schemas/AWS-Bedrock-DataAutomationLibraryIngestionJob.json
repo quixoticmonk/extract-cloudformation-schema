@@ -1,0 +1,135 @@
+{
+    "typeName": "AWS::Bedrock::DataAutomationLibraryIngestionJob",
+    "description": "Definition of AWS::Bedrock::DataAutomationLibraryIngestionJob Resource Type",
+    "properties": {
+        "JobArn": {
+            "type": "string",
+            "description": "ARN of the DataAutomationLibraryIngestionJob",
+            "maxLength": 128,
+            "pattern": "^arn:aws(|-cn|-iso|-iso-[a-z]|-us-gov):bedrock:[a-zA-Z0-9-]*:[0-9]{12}:data-automation-library-ingestion-job/[a-zA-Z0-9-]{12,36}$"
+        },
+        "LibraryArn": {
+            "type": "string",
+            "description": "ARN of the DataAutomationLibrary",
+            "maxLength": 128,
+            "pattern": "^arn:aws(|-cn|-iso|-iso-[a-z]|-us-gov):bedrock:[a-zA-Z0-9-]*:[0-9]{12}:data-automation-library/[a-zA-Z0-9-]{12,36}$"
+        },
+        "EntityType": {
+            "type": "string",
+            "description": "The entity type associated with the ingestion job",
+            "enum": ["VOCABULARY"]
+        },
+        "OperationType": {
+            "type": "string",
+            "description": "The operation performed by the ingestion job",
+            "enum": ["UPSERT", "DELETE"]
+        },
+        "OutputConfiguration": {
+            "$ref": "#/definitions/OutputConfiguration"
+        },
+        "JobStatus": {
+            "type": "string",
+            "description": "The status of the ingestion job",
+            "enum": ["IN_PROGRESS", "COMPLETED", "COMPLETED_WITH_ERRORS", "FAILED"]
+        },
+        "CreationTime": {
+            "type": "string",
+            "description": "Timestamp when the ingestion job was created",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "List of tags",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 200,
+            "minItems": 0
+        }
+    },
+    "definitions": {
+        "OutputConfiguration": {
+            "type": "object",
+            "description": "Output configuration for the ingestion job",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "S3 Uri for output",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "pattern": "^s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?$"
+                }
+            },
+            "required": ["S3Uri"],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "Key-value pair tag",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "Tag key",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "Tag value",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "required": ["LibraryArn", "EntityType", "OperationType", "OutputConfiguration"],
+    "readOnlyProperties": [
+        "/properties/JobArn",
+        "/properties/JobStatus",
+        "/properties/CreationTime"
+    ],
+    "createOnlyProperties": [
+        "/properties/LibraryArn",
+        "/properties/EntityType",
+        "/properties/OperationType",
+        "/properties/OutputConfiguration",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/LibraryArn", "/properties/JobArn"],
+    "additionalProperties": false,
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "bedrock:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "bedrock:GetDataAutomationLibraryIngestionJob",
+                "bedrock:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "LibraryArn": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "pattern": "^arn:aws(|-cn|-iso|-iso-[a-z]|-us-gov):bedrock:[a-zA-Z0-9-]*:[0-9]{12}:data-automation-library/[a-zA-Z0-9-]{12,36}$"
+                    }
+                },
+                "required": ["LibraryArn"]
+            },
+            "permissions": [
+                "bedrock:ListDataAutomationLibraryIngestionJobs"
+            ]
+        }
+    }
+}

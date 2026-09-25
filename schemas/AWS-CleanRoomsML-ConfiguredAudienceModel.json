@@ -1,0 +1,203 @@
+{
+    "typeName": "AWS::CleanRoomsML::ConfiguredAudienceModel",
+    "description": "Resource Type definition for AWS::CleanRoomsML::ConfiguredAudienceModel",
+    "properties": {
+        "ConfiguredAudienceModelArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the configured audience model.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws[-a-z]*:cleanrooms-ml:[-a-z0-9]+:[0-9]{12}:configured-audience-model/[-a-zA-Z0-9_/.]+$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The name of the configured audience model.",
+            "minLength": 1,
+            "maxLength": 63,
+            "pattern": "^(?!\\s*$)[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t]*$"
+        },
+        "AudienceModelArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the audience model used for this configured audience model.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws[-a-z]*:cleanrooms-ml:[-a-z0-9]+:[0-9]{12}:audience-model/[-a-zA-Z0-9_/.]+$"
+        },
+        "OutputConfig": {
+            "$ref": "#/definitions/ConfiguredAudienceModelOutputConfig"
+        },
+        "Description": {
+            "type": "string",
+            "description": "The description of the configured audience model.",
+            "maxLength": 255,
+            "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]*$"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the configured audience model.",
+            "enum": ["ACTIVE"]
+        },
+        "SharedAudienceMetrics": {
+            "type": "array",
+            "description": "Whether audience metrics are shared.",
+            "items": {
+                "type": "string",
+                "enum": ["ALL", "NONE"]
+            },
+            "minItems": 1,
+            "maxItems": 1
+        },
+        "MinMatchingSeedSize": {
+            "type": "integer",
+            "description": "The minimum number of users from the seed audience that must match with users in the training data of the audience model.",
+            "minimum": 25,
+            "maximum": 500000
+        },
+        "AudienceSizeConfig": {
+            "$ref": "#/definitions/AudienceSizeConfig"
+        },
+        "CreateTime": {
+            "type": "string",
+            "description": "The time at which the configured audience model was created.",
+            "format": "date-time"
+        },
+        "UpdateTime": {
+            "type": "string",
+            "description": "The most recent time at which the configured audience model was updated.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the configured audience model.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 200,
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "ConfiguredAudienceModelOutputConfig": {
+            "type": "object",
+            "description": "Configuration information necessary for the configure audience model output.",
+            "properties": {
+                "Destination": {
+                    "$ref": "#/definitions/AudienceDestination"
+                },
+                "RoleArn": {
+                    "type": "string",
+                    "description": "The ARN of the IAM role that can write the Amazon S3 bucket.",
+                    "minLength": 20,
+                    "maxLength": 2048,
+                    "pattern": "^arn:aws[-a-z]*:iam::[0-9]{12}:role/.+$"
+                }
+            },
+            "required": ["Destination", "RoleArn"],
+            "additionalProperties": false
+        },
+        "AudienceDestination": {
+            "type": "object",
+            "description": "Defines the Amazon S3 bucket where the configured audience is stored.",
+            "properties": {
+                "S3Destination": {
+                    "$ref": "#/definitions/S3ConfigMap"
+                }
+            },
+            "required": ["S3Destination"],
+            "additionalProperties": false
+        },
+        "S3ConfigMap": {
+            "type": "object",
+            "description": "Provides information about an Amazon S3 bucket and path.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The Amazon S3 location URI.",
+                    "minLength": 1,
+                    "maxLength": 1285,
+                    "pattern": "^s3://.+$"
+                }
+            },
+            "required": ["S3Uri"],
+            "additionalProperties": false
+        },
+        "AudienceSizeConfig": {
+            "type": "object",
+            "description": "Configure the list of output sizes of audiences that can be created using this configured audience model.",
+            "properties": {
+                "AudienceSizeType": {
+                    "type": "string",
+                    "description": "Whether the audience output sizes are defined as an absolute number or a percentage.",
+                    "enum": ["ABSOLUTE", "PERCENTAGE"]
+                },
+                "AudienceSizeBins": {
+                    "type": "array",
+                    "description": "An array of the different audience output sizes.",
+                    "items": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 20000000
+                    },
+                    "minItems": 1,
+                    "maxItems": 25
+                }
+            },
+            "required": ["AudienceSizeType", "AudienceSizeBins"],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/ConfiguredAudienceModelArn",
+        "/properties/Name",
+        "/properties/AudienceModelArn",
+        "/properties/OutputConfig",
+        "/properties/Description",
+        "/properties/Status",
+        "/properties/SharedAudienceMetrics",
+        "/properties/MinMatchingSeedSize",
+        "/properties/AudienceSizeConfig",
+        "/properties/CreateTime",
+        "/properties/UpdateTime",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/ConfiguredAudienceModelArn"],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["cleanrooms-ml:ListTagsForResource"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "cleanrooms-ml:GetConfiguredAudienceModel",
+                "cleanrooms-ml:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "cleanrooms-ml:ListConfiguredAudienceModels"
+            ]
+        }
+    }
+}

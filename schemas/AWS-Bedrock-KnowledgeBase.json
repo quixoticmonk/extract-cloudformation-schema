@@ -701,6 +701,10 @@
                 },
                 "Video": {
                     "$ref": "#/definitions/VideoConfigurations"
+                },
+                "ModelConfiguration": {
+                    "type": "object",
+                    "description": "Model-specific configuration for the embedding model."
                 }
             },
             "additionalProperties": false
@@ -825,6 +829,9 @@
                 },
                 "EmbeddingModelConfiguration": {
                     "$ref": "#/definitions/EmbeddingModelConfiguration"
+                },
+                "SupplementalDataStorageConfiguration": {
+                    "$ref": "#/definitions/SupplementalDataStorageConfiguration"
                 },
                 "ServerSideEncryptionConfiguration": {
                     "$ref": "#/definitions/ManagedKnowledgeBaseServerSideEncryptionConfiguration"
@@ -1373,6 +1380,7 @@
                 "iam:PassRole",
                 "kms:CreateGrant",
                 "kms:RetireGrant",
+                "kms:DescribeKey",
                 "kms:GenerateDataKey",
                 "kms:GenerateDataKeyWithoutPlaintext",
                 "kms:Encrypt",
@@ -1396,6 +1404,7 @@
                 "iam:PassRole",
                 "kms:CreateGrant",
                 "kms:RetireGrant",
+                "kms:DescribeKey",
                 "kms:GenerateDataKey",
                 "kms:GenerateDataKeyWithoutPlaintext",
                 "kms:Encrypt",

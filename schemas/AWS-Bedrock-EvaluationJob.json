@@ -1,0 +1,572 @@
+{
+    "typeName": "AWS::Bedrock::EvaluationJob",
+    "description": "Resource Type definition for AWS::Bedrock::EvaluationJob - Creates a model evaluation job in Amazon Bedrock.",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A tag to associate with the evaluation job.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^[a-zA-Z0-9\\s._:/=+@-]*$"
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^[a-zA-Z0-9\\s._:/=+@-]*$"
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "EvaluationConfig": {
+            "type": "object",
+            "description": "The configuration details of either an automated or human-based evaluation job.",
+            "properties": {
+                "Automated": {
+                    "$ref": "#/definitions/AutomatedEvaluationConfig"
+                },
+                "Human": {
+                    "$ref": "#/definitions/HumanEvaluationConfig"
+                }
+            },
+            "additionalProperties": false
+        },
+        "AutomatedEvaluationConfig": {
+            "type": "object",
+            "description": "Configuration details for an automated evaluation job.",
+            "properties": {
+                "DatasetMetricConfigs": {
+                    "type": "array",
+                    "description": "The prompt datasets, metrics, and task types for the evaluation job.",
+                    "items": {
+                        "$ref": "#/definitions/EvaluationDatasetMetricConfig"
+                    },
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "insertionOrder": false
+                },
+                "EvaluatorModelConfig": {
+                    "$ref": "#/definitions/EvaluatorModelConfig"
+                }
+            },
+            "required": [
+                "DatasetMetricConfigs"
+            ],
+            "additionalProperties": false
+        },
+        "HumanEvaluationConfig": {
+            "type": "object",
+            "description": "Configuration details for a human-based evaluation job.",
+            "properties": {
+                "DatasetMetricConfigs": {
+                    "type": "array",
+                    "description": "The prompt datasets, metrics, and task types for the evaluation job.",
+                    "items": {
+                        "$ref": "#/definitions/EvaluationDatasetMetricConfig"
+                    },
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "insertionOrder": false
+                },
+                "CustomMetrics": {
+                    "type": "array",
+                    "description": "Custom metrics for human evaluation.",
+                    "items": {
+                        "$ref": "#/definitions/HumanEvaluationCustomMetric"
+                    },
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "insertionOrder": false
+                },
+                "HumanWorkflowConfig": {
+                    "$ref": "#/definitions/HumanWorkflowConfig"
+                }
+            },
+            "required": [
+                "DatasetMetricConfigs"
+            ],
+            "additionalProperties": false
+        },
+        "EvaluationDatasetMetricConfig": {
+            "type": "object",
+            "description": "Defines the prompt datasets, built-in metric names and custom metric names, and the task type.",
+            "properties": {
+                "TaskType": {
+                    "type": "string",
+                    "description": "The task type for the evaluation job.",
+                    "minLength": 1,
+                    "maxLength": 63
+                },
+                "Dataset": {
+                    "$ref": "#/definitions/EvaluationDataset"
+                },
+                "MetricNames": {
+                    "type": "array",
+                    "description": "The names of the metrics for the evaluation job.",
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 63
+                    },
+                    "minItems": 1,
+                    "maxItems": 25,
+                    "insertionOrder": false
+                }
+            },
+            "required": [
+                "TaskType",
+                "Dataset",
+                "MetricNames"
+            ],
+            "additionalProperties": false
+        },
+        "EvaluationDataset": {
+            "type": "object",
+            "description": "Specifies the prompt dataset.",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the prompt dataset.",
+                    "minLength": 1,
+                    "maxLength": 63
+                },
+                "DatasetLocation": {
+                    "$ref": "#/definitions/EvaluationDatasetLocation"
+                }
+            },
+            "required": [
+                "Name"
+            ],
+            "additionalProperties": false
+        },
+        "EvaluationDatasetLocation": {
+            "type": "object",
+            "description": "The location in Amazon S3 where your prompt dataset is stored.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The S3 URI of the prompt dataset.",
+                    "minLength": 1,
+                    "maxLength": 1024
+                }
+            },
+            "required": [
+                "S3Uri"
+            ],
+            "additionalProperties": false
+        },
+        "EvaluatorModelConfig": {
+            "type": "object",
+            "description": "The evaluator model configuration.",
+            "properties": {
+                "BedrockEvaluatorModels": {
+                    "type": "array",
+                    "description": "The evaluator models.",
+                    "items": {
+                        "$ref": "#/definitions/BedrockEvaluatorModel"
+                    },
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "insertionOrder": false
+                }
+            },
+            "required": [
+                "BedrockEvaluatorModels"
+            ],
+            "additionalProperties": false
+        },
+        "BedrockEvaluatorModel": {
+            "type": "object",
+            "description": "The evaluator model used in evaluation.",
+            "properties": {
+                "ModelIdentifier": {
+                    "type": "string",
+                    "description": "The ARN of the evaluator model.",
+                    "minLength": 1,
+                    "maxLength": 2048
+                }
+            },
+            "required": [
+                "ModelIdentifier"
+            ],
+            "additionalProperties": false
+        },
+        "HumanEvaluationCustomMetric": {
+            "type": "object",
+            "description": "A custom metric for human evaluation.",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the metric.",
+                    "minLength": 1,
+                    "maxLength": 63
+                },
+                "RatingMethod": {
+                    "type": "string",
+                    "description": "The rating method for the metric.",
+                    "minLength": 1,
+                    "maxLength": 100
+                },
+                "Description": {
+                    "type": "string",
+                    "description": "An optional description of the metric.",
+                    "minLength": 1,
+                    "maxLength": 63
+                }
+            },
+            "required": [
+                "Name",
+                "RatingMethod"
+            ],
+            "additionalProperties": false
+        },
+        "HumanWorkflowConfig": {
+            "type": "object",
+            "description": "The parameters of the human workflow.",
+            "properties": {
+                "FlowDefinitionArn": {
+                    "type": "string",
+                    "description": "The ARN for the flow definition.",
+                    "minLength": 0,
+                    "maxLength": 1024
+                },
+                "Instructions": {
+                    "type": "string",
+                    "description": "Instructions for the flow definition.",
+                    "minLength": 1,
+                    "maxLength": 5000
+                }
+            },
+            "required": [
+                "FlowDefinitionArn"
+            ],
+            "additionalProperties": false
+        },
+        "EvaluationInferenceConfig": {
+            "type": "object",
+            "description": "The configuration details of the inference model for the evaluation job.",
+            "properties": {
+                "Models": {
+                    "type": "array",
+                    "description": "The inference models.",
+                    "items": {
+                        "$ref": "#/definitions/EvaluationModelConfig"
+                    },
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "insertionOrder": false
+                },
+                "RagConfigs": {
+                    "type": "array",
+                    "description": "The RAG configurations for knowledge base evaluation.",
+                    "items": {
+                        "$ref": "#/definitions/RAGConfig"
+                    },
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "insertionOrder": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "EvaluationModelConfig": {
+            "type": "object",
+            "description": "Defines the models used in the evaluation job.",
+            "properties": {
+                "BedrockModel": {
+                    "$ref": "#/definitions/EvaluationBedrockModel"
+                }
+            },
+            "additionalProperties": false
+        },
+        "EvaluationBedrockModel": {
+            "type": "object",
+            "description": "Contains the ARN of the Amazon Bedrock model specified.",
+            "properties": {
+                "ModelIdentifier": {
+                    "type": "string",
+                    "description": "The ARN of the Amazon Bedrock model or inference profile.",
+                    "minLength": 1,
+                    "maxLength": 2048
+                },
+                "InferenceParams": {
+                    "type": "string",
+                    "description": "Inference parameters for the model.",
+                    "minLength": 1,
+                    "maxLength": 1023
+                }
+            },
+            "required": [
+                "ModelIdentifier"
+            ],
+            "additionalProperties": false
+        },
+        "RAGConfig": {
+            "type": "object",
+            "description": "Contains configuration details for retrieval of information and response generation.",
+            "properties": {
+                "KnowledgeBaseConfig": {
+                    "$ref": "#/definitions/KnowledgeBaseConfig"
+                }
+            },
+            "additionalProperties": false
+        },
+        "KnowledgeBaseConfig": {
+            "type": "object",
+            "description": "The configuration details for knowledge base retrieval and response generation.",
+            "properties": {
+                "RetrieveConfig": {
+                    "$ref": "#/definitions/RetrieveConfig"
+                },
+                "RetrieveAndGenerateConfig": {
+                    "$ref": "#/definitions/RetrieveAndGenerateConfig"
+                }
+            },
+            "additionalProperties": false
+        },
+        "RetrieveConfig": {
+            "type": "object",
+            "description": "Contains configuration details for retrieving information from a knowledge base.",
+            "properties": {
+                "KnowledgeBaseId": {
+                    "type": "string",
+                    "description": "The unique identifier of the knowledge base."
+                },
+                "KnowledgeBaseRetrievalConfiguration": {
+                    "$ref": "#/definitions/KnowledgeBaseRetrievalConfiguration"
+                }
+            },
+            "required": [
+                "KnowledgeBaseId",
+                "KnowledgeBaseRetrievalConfiguration"
+            ],
+            "additionalProperties": false
+        },
+        "KnowledgeBaseRetrievalConfiguration": {
+            "type": "object",
+            "description": "Contains details about how a knowledge base retrieval is configured.",
+            "properties": {
+                "VectorSearchConfiguration": {
+                    "$ref": "#/definitions/KnowledgeBaseVectorSearchConfiguration"
+                }
+            },
+            "required": [
+                "VectorSearchConfiguration"
+            ],
+            "additionalProperties": false
+        },
+        "KnowledgeBaseVectorSearchConfiguration": {
+            "type": "object",
+            "description": "Contains details about how to ingest the documents in a data source.",
+            "properties": {
+                "NumberOfResults": {
+                    "type": "integer",
+                    "description": "The number of results to return.",
+                    "minimum": 1,
+                    "maximum": 100
+                }
+            },
+            "additionalProperties": false
+        },
+        "RetrieveAndGenerateConfig": {
+            "type": "object",
+            "description": "Contains configuration details for retrieving information from a knowledge base and generating responses.",
+            "properties": {
+                "Type": {
+                    "type": "string",
+                    "description": "The type of resource that is queried by the retrieve and generate configuration."
+                },
+                "KnowledgeBaseConfiguration": {
+                    "$ref": "#/definitions/KnowledgeBaseRetrieveAndGenerateConfiguration"
+                }
+            },
+            "required": [
+                "Type",
+                "KnowledgeBaseConfiguration"
+            ],
+            "additionalProperties": false
+        },
+        "KnowledgeBaseRetrieveAndGenerateConfiguration": {
+            "type": "object",
+            "description": "Contains details about the resource being queried.",
+            "properties": {
+                "KnowledgeBaseId": {
+                    "type": "string",
+                    "description": "The unique identifier of the knowledge base."
+                },
+                "ModelArn": {
+                    "type": "string",
+                    "description": "The ARN of the model used to generate responses."
+                },
+                "RetrievalConfiguration": {
+                    "$ref": "#/definitions/KnowledgeBaseRetrievalConfiguration"
+                }
+            },
+            "required": [
+                "KnowledgeBaseId",
+                "ModelArn"
+            ],
+            "additionalProperties": false
+        },
+        "EvaluationOutputDataConfig": {
+            "type": "object",
+            "description": "The Amazon S3 bucket configuration for storing the results of the evaluation job.",
+            "properties": {
+                "S3Uri": {
+                    "type": "string",
+                    "description": "The S3 URI where the results are stored.",
+                    "minLength": 1,
+                    "maxLength": 1024
+                }
+            },
+            "required": [
+                "S3Uri"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "JobArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the evaluation job.",
+            "minLength": 0,
+            "maxLength": 1011,
+            "pattern": "^arn:aws(-[a-z]+)?:bedrock:[a-z0-9-]{1,20}:[0-9]{12}:evaluation-job/[a-z0-9]{12}$"
+        },
+        "JobName": {
+            "type": "string",
+            "description": "A name for the evaluation job.",
+            "minLength": 1,
+            "maxLength": 63,
+            "pattern": "^[a-z0-9](-*[a-z0-9]){0,62}$"
+        },
+        "JobDescription": {
+            "type": "string",
+            "description": "A description of the evaluation job.",
+            "minLength": 1,
+            "maxLength": 200
+        },
+        "RoleArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of an IAM service role that Amazon Bedrock can assume to perform tasks on your behalf.",
+            "minLength": 0,
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[a-z]+)?:iam::[0-9]{12}:role/.+$"
+        },
+        "CustomerEncryptionKeyId": {
+            "type": "string",
+            "description": "The customer managed encryption key ARN used to encrypt the evaluation job.",
+            "minLength": 1,
+            "maxLength": 2048
+        },
+        "ApplicationType": {
+            "type": "string",
+            "description": "Specifies whether the evaluation job is for evaluating a model or evaluating a knowledge base.",
+            "enum": [
+                "ModelEvaluation",
+                "RagEvaluation"
+            ]
+        },
+        "EvaluationConfig": {
+            "$ref": "#/definitions/EvaluationConfig"
+        },
+        "InferenceConfig": {
+            "$ref": "#/definitions/EvaluationInferenceConfig"
+        },
+        "OutputDataConfig": {
+            "$ref": "#/definitions/EvaluationOutputDataConfig"
+        },
+        "JobType": {
+            "type": "string",
+            "description": "Specifies whether the evaluation job is automated or human-based.",
+            "enum": [
+                "Human",
+                "Automated"
+            ]
+        },
+        "Status": {
+            "type": "string",
+            "description": "The current status of the evaluation job.",
+            "enum": [
+                "InProgress",
+                "Completed",
+                "Failed",
+                "Stopping",
+                "Stopped",
+                "Deleting"
+            ]
+        },
+        "CreationTime": {
+            "type": "string",
+            "description": "The time the evaluation job was created.",
+            "format": "date-time"
+        },
+        "LastModifiedTime": {
+            "type": "string",
+            "description": "The time the evaluation job was last modified.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags to associate with the evaluation job.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "minItems": 0,
+            "maxItems": 200,
+            "insertionOrder": false
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/JobArn",
+        "/properties/JobName",
+        "/properties/JobDescription",
+        "/properties/RoleArn",
+        "/properties/CustomerEncryptionKeyId",
+        "/properties/ApplicationType",
+        "/properties/EvaluationConfig",
+        "/properties/InferenceConfig",
+        "/properties/OutputDataConfig",
+        "/properties/JobType",
+        "/properties/Status",
+        "/properties/CreationTime",
+        "/properties/LastModifiedTime",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/JobArn"
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "bedrock:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "bedrock:GetEvaluationJob",
+                "bedrock:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "bedrock:ListEvaluationJobs"
+            ]
+        }
+    }
+}

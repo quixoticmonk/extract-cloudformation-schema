@@ -1,0 +1,179 @@
+{
+    "typeName": "AWS::BackupGateway::Gateway",
+    "description": "Resource schema for an AWS Backup Gateway gateway, providing read-only visibility into an activated gateway's metadata.",
+    "properties": {
+        "GatewayArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the gateway.",
+            "minLength": 50,
+            "maxLength": 180,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov):backup-gateway(:[a-zA-Z-0-9]+){3}\\/[a-zA-Z-0-9]+$"
+        },
+        "GatewayId": {
+            "type": "string",
+            "description": "The service-assigned identifier of the gateway, which is the resource path segment of its ARN.",
+            "minLength": 1,
+            "maxLength": 126,
+            "pattern": "^[a-zA-Z-0-9]+$"
+        },
+        "GatewayDisplayName": {
+            "type": "string",
+            "description": "The display name given to the gateway when it was activated.",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9-]*$"
+        },
+        "GatewayType": {
+            "type": "string",
+            "description": "The type of the gateway.",
+            "enum": [
+                "BACKUP_VM"
+            ]
+        },
+        "LastSeenTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time when the gateway last contacted the AWS Backup Gateway service."
+        },
+        "VpcEndpoint": {
+            "type": "string",
+            "description": "The DNS name of the VPC endpoint the gateway was activated through.",
+            "minLength": 1,
+            "maxLength": 255
+        },
+        "MaintenanceStartTime": {
+            "type": "object",
+            "description": "The recurring maintenance window during which the gateway applies software updates.",
+            "properties": {
+                "HourOfDay": {
+                    "type": "integer",
+                    "description": "The hour of the day when the maintenance window starts, in the gateway's time zone.",
+                    "minimum": 0,
+                    "maximum": 23
+                },
+                "MinuteOfHour": {
+                    "type": "integer",
+                    "description": "The minute of the hour when the maintenance window starts, in the gateway's time zone.",
+                    "minimum": 0,
+                    "maximum": 59
+                },
+                "DayOfWeek": {
+                    "type": "integer",
+                    "description": "The day of the week when the maintenance window starts, in the gateway's time zone, where 0 is Sunday and 6 is Saturday.",
+                    "minimum": 0,
+                    "maximum": 6
+                },
+                "DayOfMonth": {
+                    "type": "integer",
+                    "description": "The day of the month when the maintenance window starts, in the gateway's time zone.",
+                    "minimum": 1,
+                    "maximum": 31
+                }
+            },
+            "required": [
+                "HourOfDay",
+                "MinuteOfHour"
+            ],
+            "additionalProperties": false
+        },
+        "SoftwareVersion": {
+            "type": "string",
+            "description": "The version of the software running on the gateway appliance.",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "HypervisorId": {
+            "type": "string",
+            "description": "The identifier of the hypervisor the gateway is associated with, when the gateway has been associated with one.",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "NextUpdateAvailabilityTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time at which the next software update will become available for the gateway."
+        },
+        "DeprecationDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date on which the gateway's current software version stops being supported."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags assigned to the gateway.",
+            "insertionOrder": false,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Key": {
+                        "type": "string",
+                        "description": "The tag key.",
+                        "minLength": 1,
+                        "maxLength": 128,
+                        "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+                    },
+                    "Value": {
+                        "type": "string",
+                        "description": "The tag value.",
+                        "minLength": 0,
+                        "maxLength": 256,
+                        "pattern": "^[^\\x00]*$"
+                    }
+                },
+                "required": [
+                    "Key",
+                    "Value"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    "createOnlyProperties": [
+        "/properties/GatewayDisplayName",
+        "/properties/GatewayType",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/DeprecationDate",
+        "/properties/GatewayArn",
+        "/properties/GatewayId",
+        "/properties/HypervisorId",
+        "/properties/LastSeenTime",
+        "/properties/MaintenanceStartTime",
+        "/properties/NextUpdateAvailabilityTime",
+        "/properties/SoftwareVersion",
+        "/properties/VpcEndpoint"
+    ],
+    "additionalProperties": false,
+    "primaryIdentifier": [
+        "/properties/GatewayArn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/GatewayId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "backup-gateway:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "backup-gateway:GetGateway",
+                "backup-gateway:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "backup-gateway:ListGateways"
+            ]
+        }
+    }
+}

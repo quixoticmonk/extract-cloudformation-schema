@@ -1,0 +1,141 @@
+{
+    "typeName": "AWS::CleanRoomsML::AudienceModel",
+    "description": "Resource Type definition for AWS::CleanRoomsML::AudienceModel",
+    "properties": {
+        "AudienceModelArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the audience model.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws[-a-z]*:cleanrooms-ml:[-a-z0-9]+:[0-9]{12}:audience-model/[-a-zA-Z0-9_/.]+$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The name of the audience model resource.",
+            "minLength": 1,
+            "maxLength": 63,
+            "pattern": "^(?!\\s*$)[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t]*$"
+        },
+        "TrainingDatasetArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the training dataset for this audience model.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws[-a-z]*:cleanrooms-ml:[-a-z0-9]+:[0-9]{12}:training-dataset/[-a-zA-Z0-9_/.]+$"
+        },
+        "Description": {
+            "type": "string",
+            "description": "The description of the audience model.",
+            "minLength": 0,
+            "maxLength": 255,
+            "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]*$"
+        },
+        "KmsKeyArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the KMS key. This key is used to encrypt and decrypt customer-owned data in the trained ML model and the associated data.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws[-a-z]*:kms:[-a-z0-9]+:[0-9]{12}:key/.+$"
+        },
+        "TrainingDataStartTime": {
+            "type": "string",
+            "description": "The start date and time of the training window.",
+            "format": "date-time"
+        },
+        "TrainingDataEndTime": {
+            "type": "string",
+            "description": "The end date and time of the training window.",
+            "format": "date-time"
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the audience model.",
+            "enum": [
+                "CREATE_PENDING",
+                "CREATE_IN_PROGRESS",
+                "CREATE_FAILED",
+                "ACTIVE",
+                "DELETE_PENDING",
+                "DELETE_IN_PROGRESS",
+                "DELETE_FAILED"
+            ]
+        },
+        "CreateTime": {
+            "type": "string",
+            "description": "The time at which the audience model was created.",
+            "format": "date-time"
+        },
+        "UpdateTime": {
+            "type": "string",
+            "description": "The most recent time at which the audience model was updated.",
+            "format": "date-time"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags that are assigned to the audience model.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false,
+            "maxItems": 200
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/AudienceModelArn",
+        "/properties/Name",
+        "/properties/TrainingDatasetArn",
+        "/properties/Description",
+        "/properties/KmsKeyArn",
+        "/properties/TrainingDataStartTime",
+        "/properties/TrainingDataEndTime",
+        "/properties/Status",
+        "/properties/CreateTime",
+        "/properties/UpdateTime",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/AudienceModelArn"],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "cleanrooms-ml:GetAudienceModel"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "cleanrooms-ml:GetAudienceModel"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "cleanrooms-ml:ListAudienceModels"
+            ]
+        }
+    }
+}
