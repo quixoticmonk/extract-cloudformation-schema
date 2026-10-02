@@ -1,0 +1,158 @@
+{
+    "typeName": "AWS::EC2::VPCEndpointConnection",
+    "description": "Resource Type definition for AWS::EC2::VPCEndpointConnection. A connection between an interface or Gateway Load Balancer VPC endpoint created by a service consumer and a VPC endpoint service owned by the caller. A connection comes into existence implicitly when a consumer creates an endpoint to the caller's endpoint service; there is no API that creates one directly, so this is a read-only resource.",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag. Tag keys are case-sensitive, accept a maximum of 127 Unicode characters, and may not begin with aws:.",
+                    "minLength": 1,
+                    "maxLength": 127
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "DnsEntry": {
+            "type": "object",
+            "description": "A DNS entry for the endpoint.",
+            "properties": {
+                "DnsName": {
+                    "type": "string",
+                    "description": "The DNS name."
+                },
+                "HostedZoneId": {
+                    "type": "string",
+                    "description": "The ID of the private hosted zone."
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the VPC endpoint connection."
+        },
+        "VpcEndpointConnectionId": {
+            "type": "string",
+            "description": "The ID of the VPC endpoint connection."
+        },
+        "ServiceId": {
+            "type": "string",
+            "description": "The ID of the VPC endpoint service to which the endpoint is connected."
+        },
+        "VpcEndpointId": {
+            "type": "string",
+            "description": "The ID of the VPC endpoint that is connected to the service."
+        },
+        "VpcEndpointOwner": {
+            "type": "string",
+            "description": "The ID of the Amazon Web Services account that owns the VPC endpoint."
+        },
+        "VpcEndpointState": {
+            "type": "string",
+            "description": "The state of the VPC endpoint connection, for example pendingAcceptance, pending, available, deleting, deleted, rejected or failed."
+        },
+        "VpcEndpointRegion": {
+            "type": "string",
+            "description": "The Region of the VPC endpoint that is connected to the service."
+        },
+        "IpAddressType": {
+            "type": "string",
+            "description": "The IP address type of the VPC endpoint.",
+            "enum": [
+                "ipv4",
+                "dualstack",
+                "ipv6"
+            ]
+        },
+        "CreationTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time that the VPC endpoint connection was created."
+        },
+        "DnsEntries": {
+            "type": "array",
+            "description": "The DNS entries for the VPC endpoint.",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/DnsEntry"
+            }
+        },
+        "NetworkLoadBalancerArns": {
+            "type": "array",
+            "description": "The Amazon Resource Names (ARNs) of the network load balancers for the service.",
+            "insertionOrder": false,
+            "items": {
+                "type": "string"
+            }
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags assigned to the VPC endpoint connection.",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/VpcEndpointConnectionId",
+        "/properties/ServiceId",
+        "/properties/VpcEndpointId",
+        "/properties/VpcEndpointOwner",
+        "/properties/VpcEndpointState",
+        "/properties/VpcEndpointRegion",
+        "/properties/IpAddressType",
+        "/properties/CreationTimestamp",
+        "/properties/DnsEntries",
+        "/properties/NetworkLoadBalancerArns",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/VpcEndpointConnectionId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "ec2:DescribeTags"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ec2:DescribeVpcEndpointConnections",
+                "ec2:DescribeTags"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "ec2:DescribeVpcEndpointConnections"
+            ]
+        }
+    }
+}

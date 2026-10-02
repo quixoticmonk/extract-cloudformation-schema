@@ -1,0 +1,196 @@
+{
+    "typeName": "AWS::EC2::ImportImageTask",
+    "description": "Resource schema for an EC2 Import Image Task. This is a read-only resource representing a VM image import job.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The ARN of the import image task."
+        },
+        "ImportTaskId": {
+            "type": "string",
+            "description": "The ID of the import image task."
+        },
+        "ImageId": {
+            "type": "string",
+            "description": "The ID of the AMI of the imported virtual machine. Populated only once the import task completes; an in-progress task returns an empty string."
+        },
+        "Status": {
+            "type": "string",
+            "description": "A brief status for the import image task."
+        },
+        "SnapshotDetails": {
+            "type": "array",
+            "description": "Information about the snapshots created from the imported disks.",
+            "items": {
+                "$ref": "#/definitions/SnapshotDetail"
+            },
+            "insertionOrder": false
+        },
+        "Description": {
+            "type": "string",
+            "description": "A description string for the import image task."
+        },
+        "Encrypted": {
+            "type": "boolean",
+            "description": "Specifies whether the destination AMI of the imported image should be encrypted."
+        },
+        "KmsKeyId": {
+            "type": "string",
+            "description": "An identifier for the symmetric AWS KMS key used to create the encrypted AMI."
+        },
+        "LicenseType": {
+            "type": "string",
+            "description": "The license type to be used for the Amazon Machine Image (AMI) after importing."
+        },
+        "LicenseSpecifications": {
+            "type": "array",
+            "description": "The ARNs of the license configurations.",
+            "items": {
+                "$ref": "#/definitions/ImportImageLicenseConfiguration"
+            },
+            "insertionOrder": false
+        },
+        "UsageOperation": {
+            "type": "string",
+            "description": "The usage operation value for the AMI."
+        },
+        "BootMode": {
+            "type": "string",
+            "description": "The boot mode of the virtual machine. The enum mirrors EC2's shared BootModeValues shape; ImportImage itself does not accept uefi-preferred.",
+            "enum": [
+                "legacy-bios",
+                "uefi",
+                "uefi-preferred"
+            ]
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags for the import image task.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "UserBucket": {
+            "type": "object",
+            "description": "Describes the Amazon S3 bucket for the disk image.",
+            "properties": {
+                "S3Bucket": {
+                    "type": "string",
+                    "description": "The name of the Amazon S3 bucket where the disk image is located."
+                },
+                "S3Key": {
+                    "type": "string",
+                    "description": "The file name of the disk image."
+                }
+            },
+            "additionalProperties": false
+        },
+        "ImportImageLicenseConfiguration": {
+            "type": "object",
+            "description": "The response information for license configurations.",
+            "properties": {
+                "LicenseConfigurationArn": {
+                    "type": "string",
+                    "description": "The ARN of a license configuration."
+                }
+            },
+            "additionalProperties": false
+        },
+        "SnapshotDetail": {
+            "type": "object",
+            "description": "Describes the snapshot created from the imported disk.",
+            "properties": {
+                "DiskImageSize": {
+                    "type": "number",
+                    "description": "The size of the disk in the snapshot, in GiB."
+                },
+                "Format": {
+                    "type": "string",
+                    "description": "The format of the disk image from which the snapshot is created."
+                },
+                "SnapshotId": {
+                    "type": "string",
+                    "description": "The snapshot ID of the disk being imported. Populated once the import task completes."
+                },
+                "Status": {
+                    "type": "string",
+                    "description": "A brief status of the snapshot creation."
+                },
+                "UserBucket": {
+                    "$ref": "#/definitions/UserBucket"
+                }
+            },
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag."
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag."
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/BootMode",
+        "/properties/Description",
+        "/properties/Encrypted",
+        "/properties/KmsKeyId",
+        "/properties/LicenseSpecifications",
+        "/properties/LicenseType",
+        "/properties/Tags",
+        "/properties/UsageOperation"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/ImportTaskId",
+        "/properties/ImageId",
+        "/properties/SnapshotDetails",
+        "/properties/Status"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/ImportTaskId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "ec2:DescribeImportImageTasks"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ec2:DescribeImportImageTasks"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "ec2:DescribeImportImageTasks"
+            ]
+        }
+    }
+}

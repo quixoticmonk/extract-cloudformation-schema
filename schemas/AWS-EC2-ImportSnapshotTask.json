@@ -1,0 +1,130 @@
+{
+    "typeName": "AWS::EC2::ImportSnapshotTask",
+    "description": "Resource schema for an EC2 import snapshot task. This is a read-only resource representing a VM Import/Export job that converts a disk image into an EBS snapshot.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The ARN of the import snapshot task."
+        },
+        "ImportTaskId": {
+            "type": "string",
+            "description": "The ID of the import snapshot task."
+        },
+        "Status": {
+            "type": "string",
+            "description": "A brief status for the import snapshot task."
+        },
+        "SnapshotId": {
+            "type": "string",
+            "description": "The ID of the snapshot created from the imported disk. Populated once the import task completes."
+        },
+        "DiskImageSize": {
+            "type": "number",
+            "description": "The size of the disk in the snapshot."
+        },
+        "Description": {
+            "type": "string",
+            "description": "A description of the import snapshot task."
+        },
+        "Encrypted": {
+            "type": "boolean",
+            "description": "Indicates whether the snapshot is encrypted."
+        },
+        "Format": {
+            "type": "string",
+            "description": "The format of the disk image from which the snapshot is created."
+        },
+        "UserBucket": {
+            "$ref": "#/definitions/UserBucket"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags for the import snapshot task.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "UserBucket": {
+            "type": "object",
+            "description": "Describes the Amazon S3 bucket for the disk image.",
+            "properties": {
+                "S3Bucket": {
+                    "type": "string",
+                    "description": "The name of the Amazon S3 bucket where the disk image is located."
+                },
+                "S3Key": {
+                    "type": "string",
+                    "description": "The file name of the disk image."
+                }
+            },
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag."
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag."
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/Description",
+        "/properties/Encrypted",
+        "/properties/Format",
+        "/properties/Tags",
+        "/properties/UserBucket"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/DiskImageSize",
+        "/properties/ImportTaskId",
+        "/properties/SnapshotId",
+        "/properties/Status"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/ImportTaskId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "ec2:DescribeImportSnapshotTasks"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ec2:DescribeImportSnapshotTasks"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "ec2:DescribeImportSnapshotTasks"
+            ]
+        }
+    }
+}

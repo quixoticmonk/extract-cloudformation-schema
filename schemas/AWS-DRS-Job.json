@@ -1,0 +1,383 @@
+{
+    "typeName": "AWS::DRS::Job",
+    "description": "Resource Type definition for AWS::DRS::Job. An AWS Elastic Disaster Recovery Job is an asynchronous workflow, created by recovery, failback, termination and source-network recovery operations.",
+    "sourceUrl": "https://docs.aws.amazon.com/drs/latest/APIReference/API_Job.html",
+    "definitions": {
+        "Tag": {
+            "description": "A key-value pair to associate with a resource.",
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "description": "The key of the tag.",
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256
+                },
+                "Value": {
+                    "description": "The value of the tag.",
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "LaunchStatus": {
+            "description": "The status of a launch performed by the Job.",
+            "type": "string",
+            "enum": [
+                "PENDING",
+                "IN_PROGRESS",
+                "LAUNCHED",
+                "FAILED",
+                "TERMINATED"
+            ]
+        },
+        "LaunchActionParameter": {
+            "description": "Launch action parameter.",
+            "type": "object",
+            "properties": {
+                "Value": {
+                    "description": "Value of the parameter.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1011,
+                    "pattern": "^[A-Za-z0-9.-]+$"
+                },
+                "Type": {
+                    "description": "Type of the parameter.",
+                    "type": "string",
+                    "enum": [
+                        "SSM_STORE",
+                        "DYNAMIC"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "LaunchAction": {
+            "description": "Launch action.",
+            "type": "object",
+            "properties": {
+                "ActionId": {
+                    "description": "Launch action Id.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+                },
+                "ActionCode": {
+                    "description": "Launch action code.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1011,
+                    "pattern": "^([A-Za-z0-9-/:])+$"
+                },
+                "Type": {
+                    "description": "Launch action type.",
+                    "type": "string",
+                    "enum": [
+                        "SSM_AUTOMATION",
+                        "SSM_COMMAND"
+                    ]
+                },
+                "Name": {
+                    "description": "Launch action name.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9 /_-]*$"
+                },
+                "Active": {
+                    "description": "Whether the launch action is active.",
+                    "type": "boolean"
+                },
+                "Order": {
+                    "description": "Launch action order.",
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 10000
+                },
+                "ActionVersion": {
+                    "description": "Launch action version.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 10,
+                    "pattern": "^(\\$DEFAULT|\\$LATEST|[0-9]+)$"
+                },
+                "Optional": {
+                    "description": "Whether the launch action is optional.",
+                    "type": "boolean"
+                },
+                "Parameters": {
+                    "description": "Launch action parameters.",
+                    "type": "object",
+                    "maxProperties": 20,
+                    "patternProperties": {
+                        "^([A-Za-z0-9])+$": {
+                            "$ref": "#/definitions/LaunchActionParameter"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "Description": {
+                    "description": "Launch action description.",
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 1024,
+                    "pattern": "^[0-9a-zA-Z ():/.,'-_#*;\n]*$"
+                },
+                "Category": {
+                    "description": "Launch action category.",
+                    "type": "string",
+                    "enum": [
+                        "MONITORING",
+                        "VALIDATION",
+                        "CONFIGURATION",
+                        "SECURITY",
+                        "OTHER"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "LaunchActionRun": {
+            "description": "Launch action run.",
+            "type": "object",
+            "properties": {
+                "Action": {
+                    "$ref": "#/definitions/LaunchAction"
+                },
+                "RunId": {
+                    "description": "Launch action run id.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+                },
+                "Status": {
+                    "description": "Run status of the launch action.",
+                    "type": "string",
+                    "enum": [
+                        "IN_PROGRESS",
+                        "SUCCEEDED",
+                        "FAILED"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "LaunchActionsStatus": {
+            "description": "Status of the post-launch actions of a participating server.",
+            "type": "object",
+            "properties": {
+                "SsmAgentDiscoveryDatetime": {
+                    "description": "Time where the AWS Systems Manager was detected as running on the launched instance. The service returns UTC offsets (e.g. 2026-08-24T22:27:26.134456+00:00), which the Smithy model's own ISO8601DatetimeString pattern (trailing 'Z' required) rejects, so that pattern is deliberately not enforced here.",
+                    "type": "string",
+                    "minLength": 19,
+                    "maxLength": 32
+                },
+                "Runs": {
+                    "description": "List of post launch action status.",
+                    "type": "array",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/LaunchActionRun"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ParticipatingServer": {
+            "description": "Represents a server participating in an asynchronous Job.",
+            "type": "object",
+            "properties": {
+                "SourceServerID": {
+                    "description": "The Source Server ID of a participating server.",
+                    "type": "string",
+                    "minLength": 19,
+                    "maxLength": 19,
+                    "pattern": "^s-[0-9a-zA-Z]{17}$"
+                },
+                "RecoveryInstanceID": {
+                    "description": "The Recovery Instance ID of a participating server.",
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 19,
+                    "pattern": "^i-[0-9a-fA-F]{8,}$"
+                },
+                "LaunchStatus": {
+                    "$ref": "#/definitions/LaunchStatus"
+                },
+                "LaunchActionsStatus": {
+                    "$ref": "#/definitions/LaunchActionsStatus"
+                }
+            },
+            "additionalProperties": false
+        },
+        "ParticipatingResourceID": {
+            "description": "ID of a resource participating in an asynchronous Job.",
+            "type": "object",
+            "properties": {
+                "SourceNetworkID": {
+                    "description": "Source Network ID.",
+                    "type": "string",
+                    "minLength": 20,
+                    "maxLength": 20,
+                    "pattern": "^sn-[0-9a-zA-Z]{17}$"
+                }
+            },
+            "required": [
+                "SourceNetworkID"
+            ],
+            "additionalProperties": false
+        },
+        "ParticipatingResource": {
+            "description": "Represents a resource participating in an asynchronous Job.",
+            "type": "object",
+            "properties": {
+                "ParticipatingResourceID": {
+                    "$ref": "#/definitions/ParticipatingResourceID"
+                },
+                "LaunchStatus": {
+                    "$ref": "#/definitions/LaunchStatus"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "description": "The ARN of a Job.",
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:.{16,2044}$"
+        },
+        "JobID": {
+            "description": "The ID of the Job.",
+            "type": "string",
+            "minLength": 24,
+            "maxLength": 24,
+            "pattern": "^drsjob-[0-9a-zA-Z]{17}$"
+        },
+        "Type": {
+            "description": "The type of the Job.",
+            "type": "string",
+            "enum": [
+                "LAUNCH",
+                "TERMINATE",
+                "CREATE_CONVERTED_SNAPSHOT"
+            ]
+        },
+        "InitiatedBy": {
+            "description": "A string representing who initiated the Job.",
+            "type": "string",
+            "enum": [
+                "START_RECOVERY",
+                "START_DRILL",
+                "FAILBACK",
+                "DIAGNOSTIC",
+                "TERMINATE_RECOVERY_INSTANCES",
+                "TARGET_ACCOUNT",
+                "CREATE_NETWORK_RECOVERY",
+                "UPDATE_NETWORK_RECOVERY",
+                "ASSOCIATE_NETWORK_RECOVERY"
+            ]
+        },
+        "Status": {
+            "description": "The status of the Job.",
+            "type": "string",
+            "enum": [
+                "PENDING",
+                "STARTED",
+                "COMPLETED"
+            ]
+        },
+        "CreationDateTime": {
+            "description": "The date and time of when the Job was created. The service returns UTC offsets (e.g. 2026-08-24T22:27:26.134456+00:00), which the Smithy model's own ISO8601DatetimeString pattern (trailing 'Z' required) rejects, so that pattern is deliberately not enforced here.",
+            "type": "string",
+            "minLength": 19,
+            "maxLength": 32
+        },
+        "EndDateTime": {
+            "description": "The date and time of when the Job ended. The service returns UTC offsets (e.g. 2026-08-24T22:27:26.134456+00:00), which the Smithy model's own ISO8601DatetimeString pattern (trailing 'Z' required) rejects, so that pattern is deliberately not enforced here.",
+            "type": "string",
+            "minLength": 19,
+            "maxLength": 32
+        },
+        "ParticipatingServers": {
+            "description": "A list of servers that the Job is acting upon.",
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/ParticipatingServer"
+            }
+        },
+        "ParticipatingResources": {
+            "description": "A list of resources that the Job is acting upon.",
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/ParticipatingResource"
+            }
+        },
+        "Tags": {
+            "description": "A list of tags associated with the Job.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/JobID",
+        "/properties/Type",
+        "/properties/InitiatedBy",
+        "/properties/Status",
+        "/properties/CreationDateTime",
+        "/properties/EndDateTime",
+        "/properties/ParticipatingServers",
+        "/properties/ParticipatingResources",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/JobID"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "drs:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "drs:DescribeJobs",
+                "drs:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "drs:DescribeJobs"
+            ]
+        }
+    }
+}

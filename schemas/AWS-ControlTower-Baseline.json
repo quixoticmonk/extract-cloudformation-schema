@@ -1,0 +1,43 @@
+{
+    "typeName": "AWS::ControlTower::Baseline",
+    "description": "Resource type definition for AWS::ControlTower::Baseline. Represents an AWS Control Tower baseline: an AWS-managed set of resources and controls that can be enabled on an organizational unit. Baselines are read-only, AWS-managed catalog items.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The full ARN of the baseline.",
+            "pattern": "^arn:[a-z-]+:controltower:[a-z0-9-]*:[0-9]{0,12}:baseline/[A-Z0-9]{16}$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "A user-friendly name for the baseline."
+        },
+        "Description": {
+            "type": "string",
+            "description": "A description of the baseline."
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/Name",
+        "/properties/Description"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "controltower:GetBaseline"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "controltower:ListBaselines"
+            ]
+        }
+    }
+}

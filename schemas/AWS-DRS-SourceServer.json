@@ -1,0 +1,267 @@
+{
+    "typeName": "AWS::DRS::SourceServer",
+    "description": "Resource Type definition for AWS::DRS::SourceServer. A Source Server is a machine registered with AWS Elastic Disaster Recovery whose disks replicate into a DRS staging area so it can be recovered. Source Servers are registered out-of-band by the AWS Replication Agent (there is no create API), so this is a read-only resource that provides visibility into Source Servers via Cloud Control API.",
+    "sourceUrl": "https://docs.aws.amazon.com/drs/latest/APIReference/API_SourceServer.html",
+    "definitions": {
+        "Tag": {
+            "description": "A key-value pair to associate with a resource.",
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        },
+        "OS": {
+            "description": "Operating System of the Source Server, as discovered by the AWS Replication Agent.",
+            "type": "object",
+            "properties": {
+                "FullString": {
+                    "type": "string",
+                    "description": "The long name of the Operating System."
+                }
+            },
+            "additionalProperties": false
+        },
+        "CPU": {
+            "description": "A CPU of the Source Server.",
+            "type": "object",
+            "properties": {
+                "Cores": {
+                    "type": "integer",
+                    "description": "The number of CPU cores."
+                },
+                "ModelName": {
+                    "type": "string",
+                    "description": "The model name of the CPU."
+                }
+            },
+            "additionalProperties": false
+        },
+        "Disk": {
+            "description": "A disk of the Source Server.",
+            "type": "object",
+            "properties": {
+                "DeviceName": {
+                    "type": "string",
+                    "description": "The disk or device name."
+                },
+                "Bytes": {
+                    "type": "integer",
+                    "description": "The amount of storage on the disk in bytes."
+                }
+            },
+            "additionalProperties": false
+        },
+        "NetworkInterface": {
+            "description": "A network interface of the Source Server.",
+            "type": "object",
+            "properties": {
+                "MacAddress": {
+                    "type": "string",
+                    "description": "The MAC address of the network interface."
+                },
+                "Ips": {
+                    "type": "array",
+                    "description": "The IP addresses of the network interface.",
+                    "insertionOrder": false,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "IsPrimary": {
+                    "type": "boolean",
+                    "description": "Whether this is the primary network interface."
+                }
+            },
+            "additionalProperties": false
+        },
+        "IdentificationHints": {
+            "description": "Hints used to uniquely identify a machine.",
+            "type": "object",
+            "properties": {
+                "Fqdn": {
+                    "type": "string",
+                    "description": "The Fully Qualified Domain Name identification hint."
+                },
+                "Hostname": {
+                    "type": "string",
+                    "description": "The hostname identification hint."
+                },
+                "AwsInstanceID": {
+                    "type": "string",
+                    "description": "The AWS Instance ID identification hint."
+                },
+                "VmWareUuid": {
+                    "type": "string",
+                    "description": "The VMware vCenter UUID identification hint. Only populated for VMware-origin Source Servers."
+                }
+            },
+            "additionalProperties": false
+        },
+        "SourceProperties": {
+            "description": "The source properties of the Source Server, as discovered by the AWS Replication Agent.",
+            "type": "object",
+            "properties": {
+                "LastUpdatedDateTime": {
+                    "type": "string",
+                    "description": "The date and time the Source Server properties were last updated."
+                },
+                "RecommendedInstanceType": {
+                    "type": "string",
+                    "description": "The recommended EC2 instance type that will be used when launching a recovery instance."
+                },
+                "Os": {
+                    "$ref": "#/definitions/OS"
+                },
+                "RamBytes": {
+                    "type": "integer",
+                    "description": "The amount of RAM in bytes."
+                },
+                "Cpus": {
+                    "type": "array",
+                    "description": "The CPUs of the Source Server.",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/CPU"
+                    }
+                },
+                "Disks": {
+                    "type": "array",
+                    "description": "The disks of the Source Server.",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/Disk"
+                    }
+                },
+                "NetworkInterfaces": {
+                    "type": "array",
+                    "description": "The network interfaces of the Source Server.",
+                    "insertionOrder": false,
+                    "items": {
+                        "$ref": "#/definitions/NetworkInterface"
+                    }
+                },
+                "IdentificationHints": {
+                    "$ref": "#/definitions/IdentificationHints"
+                },
+                "SupportsNitroInstances": {
+                    "type": "boolean",
+                    "description": "Whether the Source Server supports Nitro instances."
+                }
+            },
+            "additionalProperties": false
+        },
+        "DataReplicationInfo": {
+            "description": "Information about the data replication of the Source Server.",
+            "type": "object",
+            "properties": {
+                "DataReplicationState": {
+                    "type": "string",
+                    "description": "The state of the data replication.",
+                    "enum": [
+                        "STOPPED",
+                        "INITIATING",
+                        "INITIAL_SYNC",
+                        "BACKLOG",
+                        "CREATING_SNAPSHOT",
+                        "CONTINUOUS",
+                        "PAUSED",
+                        "RESCAN",
+                        "STALLED",
+                        "DISCONNECTED"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "description": "The ARN of the Source Server.",
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:.{16,2044}$"
+        },
+        "SourceServerID": {
+            "description": "The ID of the Source Server.",
+            "type": "string",
+            "minLength": 19,
+            "maxLength": 19,
+            "pattern": "^s-[0-9a-zA-Z]{17}$"
+        },
+        "AgentVersion": {
+            "description": "The version of the AWS Replication Agent installed on the Source Server.",
+            "type": "string",
+            "pattern": "^[0-9]{1,5}.[0-9]{1,5}.[0-9]{1,5}(.[0-9]{4}.[0-9]{3}.[0-9]{4})?$"
+        },
+        "ReplicationDirection": {
+            "description": "The replication direction of the Source Server.",
+            "type": "string",
+            "enum": [
+                "FAILOVER",
+                "FAILBACK"
+            ]
+        },
+        "SourceProperties": {
+            "$ref": "#/definitions/SourceProperties"
+        },
+        "DataReplicationInfo": {
+            "$ref": "#/definitions/DataReplicationInfo"
+        },
+        "Tags": {
+            "description": "An array of tags that are associated with the Source Server.",
+            "type": "array",
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/SourceServerID",
+        "/properties/AgentVersion",
+        "/properties/ReplicationDirection",
+        "/properties/SourceProperties",
+        "/properties/DataReplicationInfo",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/SourceServerID"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["drs:ListTagsForResource"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "drs:DescribeSourceServers",
+                "drs:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "drs:DescribeSourceServers"
+            ]
+        }
+    }
+}

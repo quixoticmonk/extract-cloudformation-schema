@@ -1,0 +1,188 @@
+{
+    "typeName": "AWS::FSx::Task",
+    "description": "Represents an Amazon FSx for Lustre data repository task. Data repository tasks perform bulk operations between an Amazon FSx for Lustre file system and its linked data repositories.",
+    "properties": {
+        "TaskId": {
+            "type": "string",
+            "description": "The system-generated, unique 17-digit ID of the data repository task.",
+            "minLength": 12,
+            "maxLength": 128,
+            "pattern": "^(task-[0-9a-f]{17,})$"
+        },
+        "ResourceARN": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the data repository task.",
+            "minLength": 8,
+            "maxLength": 512
+        },
+        "Lifecycle": {
+            "type": "string",
+            "description": "The lifecycle status of the data repository task.",
+            "enum": ["PENDING", "EXECUTING", "FAILED", "SUCCEEDED", "CANCELED", "CANCELING"]
+        },
+        "Type": {
+            "type": "string",
+            "description": "The type of data repository task.",
+            "enum": ["EXPORT_TO_REPOSITORY", "IMPORT_METADATA_FROM_REPOSITORY", "RELEASE_DATA_FROM_FILESYSTEM", "AUTO_RELEASE_DATA"]
+        },
+        "FileSystemId": {
+            "type": "string",
+            "description": "The globally unique ID of the file system.",
+            "minLength": 11,
+            "maxLength": 21,
+            "pattern": "^(fs-[0-9a-f]{8,})$"
+        },
+        "FileCacheId": {
+            "type": "string",
+            "description": "The system-generated, unique ID of the Amazon File Cache that a data repository task is associated with. Present instead of FileSystemId for AUTO_RELEASE_DATA cache tasks.",
+            "minLength": 11,
+            "maxLength": 21,
+            "pattern": "^(fc-[0-9a-f]{8,})$"
+        },
+        "Paths": {
+            "type": "array",
+            "description": "A list of paths for the data repository task to use when the task is processed.",
+            "items": {
+                "type": "string",
+                "maxLength": 4096
+            },
+            "maxItems": 100
+        },
+        "Report": {
+            "$ref": "#/definitions/CompletionReport"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Tags associated with the data repository task.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50
+        },
+        "ReleaseConfiguration": {
+            "$ref": "#/definitions/ReleaseConfiguration"
+        },
+        "CreationTime": {
+            "type": "string",
+            "description": "The time the data repository task was created.",
+            "format": "date-time"
+        }
+    },
+    "definitions": {
+        "CompletionReport": {
+            "type": "object",
+            "description": "Provides a report detailing the data repository task results.",
+            "properties": {
+                "Enabled": {
+                    "type": "boolean",
+                    "description": "Set to True to generate a CompletionReport when the task completes."
+                },
+                "Path": {
+                    "type": "string",
+                    "description": "Specifies the location of the report on the linked S3 data repository.",
+                    "minLength": 3,
+                    "maxLength": 4357
+                },
+                "Format": {
+                    "type": "string",
+                    "description": "Specifies the format of the CompletionReport.",
+                    "enum": ["REPORT_CSV_20191124"]
+                },
+                "Scope": {
+                    "type": "string",
+                    "description": "Specifies the scope of the CompletionReport.",
+                    "enum": ["FAILED_FILES_ONLY"]
+                }
+            },
+            "required": ["Enabled"],
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair for a resource tag.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The tag key.",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The tag value.",
+                    "minLength": 0,
+                    "maxLength": 256
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        },
+        "ReleaseConfiguration": {
+            "type": "object",
+            "description": "The configuration that specifies the last accessed time criteria for files that will be released.",
+            "properties": {
+                "DurationSinceLastAccess": {
+                    "$ref": "#/definitions/DurationSinceLastAccess"
+                }
+            },
+            "additionalProperties": false
+        },
+        "DurationSinceLastAccess": {
+            "type": "object",
+            "description": "Defines the minimum amount of time since last access for a file to be eligible for release.",
+            "properties": {
+                "Unit": {
+                    "type": "string",
+                    "description": "The unit of time used by the Value parameter.",
+                    "enum": ["DAYS"]
+                },
+                "Value": {
+                    "type": "integer",
+                    "description": "An integer that represents the minimum amount of time (in days) since a file was last accessed.",
+                    "minimum": 0
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": ["Type"],
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/TaskId",
+        "/properties/ResourceARN",
+        "/properties/Lifecycle",
+        "/properties/CreationTime",
+        "/properties/FileCacheId"
+    ],
+    "createOnlyProperties": [
+        "/properties/Type",
+        "/properties/FileSystemId",
+        "/properties/Paths",
+        "/properties/Report",
+        "/properties/ReleaseConfiguration",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/ResourceARN"],
+    "additionalIdentifiers": [["/properties/TaskId"]],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": ["fsx:ListTagsForResource"]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "fsx:DescribeDataRepositoryTasks",
+                "fsx:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "fsx:DescribeDataRepositoryTasks"
+            ]
+        }
+    }
+}
