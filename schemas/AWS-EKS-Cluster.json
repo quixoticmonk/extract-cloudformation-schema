@@ -771,6 +771,9 @@
         "/properties/RollbackConfig",
         "/properties/ActiveCertificateAuthorityId"
     ],
+    "deprecatedProperties": [
+        "/properties/EncryptionConfig/Resources"
+    ],
     "handlers": {
         "create": {
             "permissions": [
