@@ -1,0 +1,135 @@
+{
+    "typeName": "AWS::BackupGateway::VirtualMachine",
+    "description": "Represents a virtual machine discovered by an AWS Backup Gateway hypervisor.",
+    "properties": {
+        "ResourceArn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the virtual machine.",
+            "minLength": 50,
+            "maxLength": 500,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov):backup-gateway(:[a-zA-Z-0-9]+){3}\\/[a-zA-Z-0-9]+$"
+        },
+        "HypervisorId": {
+            "type": "string",
+            "description": "The ID of the virtual machine's hypervisor."
+        },
+        "HostName": {
+            "type": "string",
+            "description": "The host name of the virtual machine.",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9-]*$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The name of the virtual machine.",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9-]*$"
+        },
+        "Path": {
+            "type": "string",
+            "description": "The path of the virtual machine.",
+            "minLength": 1,
+            "maxLength": 4096,
+            "pattern": "^[^\\x00]+$"
+        },
+        "VmwareTags": {
+            "type": "array",
+            "description": "The VMware tags associated with the virtual machine.",
+            "items": {
+                "$ref": "#/definitions/VmwareTag"
+            },
+            "insertionOrder": false
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags associated with the virtual machine.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "VmwareTag": {
+            "type": "object",
+            "description": "A VMware tag attached to the virtual machine.",
+            "properties": {
+                "VmwareCategory": {
+                    "type": "string",
+                    "description": "The category of the VMware tag.",
+                    "minLength": 1,
+                    "maxLength": 80
+                },
+                "VmwareTagName": {
+                    "type": "string",
+                    "description": "The user-defined name of the VMware tag.",
+                    "minLength": 1,
+                    "maxLength": 80
+                },
+                "VmwareTagDescription": {
+                    "type": "string",
+                    "description": "The user-defined description of the VMware tag."
+                }
+            },
+            "additionalProperties": false
+        },
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with the resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag.",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^[^\\x00]*$"
+                }
+            },
+            "required": ["Key", "Value"],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/ResourceArn",
+        "/properties/HypervisorId",
+        "/properties/HostName",
+        "/properties/Name",
+        "/properties/Path",
+        "/properties/VmwareTags",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": ["/properties/ResourceArn"],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "backup-gateway:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "backup-gateway:GetVirtualMachine",
+                "backup-gateway:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "backup-gateway:ListVirtualMachines"
+            ]
+        }
+    }
+}

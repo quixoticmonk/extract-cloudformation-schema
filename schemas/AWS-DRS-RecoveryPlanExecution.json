@@ -1,0 +1,120 @@
+{
+    "typeName": "AWS::DRS::RecoveryPlanExecution",
+    "description": "Resource type definition for AWS::DRS::RecoveryPlanExecution. A Recovery Plan execution is a single run of an AWS Elastic Disaster Recovery recovery plan, in either DRILL or RECOVERY mode. An execution is a point-in-time record of that run: it captures the plan and mode it ran with, when it started and finished, and how it ended.",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A tag key-value pair.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The tag key.",
+                    "maxLength": 256
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The tag value.",
+                    "maxLength": 256
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "RecoveryPlanExecutionArn": {
+            "type": "string",
+            "description": "The ARN of the Recovery Plan execution.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[a-z0-9]+)*:drs:[a-z0-9-]+:[0-9]{12}:[a-zA-Z0-9_/.-]+$"
+        },
+        "RecoveryPlanArn": {
+            "type": "string",
+            "description": "The ARN of the Recovery Plan that this execution ran.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:aws(-[a-z0-9]+)*:drs:[a-z0-9-]+:[0-9]{12}:[a-zA-Z0-9_/.-]+$"
+        },
+        "Mode": {
+            "type": "string",
+            "description": "Whether the Recovery Plan ran as a drill or as an actual recovery.",
+            "enum": [
+                "DRILL",
+                "RECOVERY"
+            ]
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the Recovery Plan execution. Not constrained to a fixed set of values: the service documents an execution status (TIMED_OUT) that the published service model omits, so an enum here would reject a valid response."
+        },
+        "StartedAt": {
+            "type": "string",
+            "description": "The time at which the Recovery Plan execution started, as an ISO 8601 timestamp. The service returns an explicit UTC offset (2026-09-06T09:36:19.037172+00:00, exactly 32 characters) which the model's own ISO8601DatetimeString pattern rejects, so only the PATTERN is widened here; the length bound stays at the model's 32.",
+            "minLength": 19,
+            "maxLength": 32,
+            "pattern": "^[1-9][0-9]*-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+        },
+        "CompletedAt": {
+            "type": "string",
+            "description": "The time at which the Recovery Plan execution reached a terminal status, as an ISO 8601 timestamp. Absent while the execution is still running. The service returns an explicit UTC offset (2026-09-06T09:36:19.037172+00:00, exactly 32 characters) which the model's own ISO8601DatetimeString pattern rejects, so only the PATTERN is widened here; the length bound stays at the model's 32.",
+            "minLength": 19,
+            "maxLength": 32,
+            "pattern": "^[1-9][0-9]*-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags associated with the Recovery Plan execution.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "uniqueItems": true,
+            "insertionOrder": false
+        }
+    },
+    "required": [
+        "RecoveryPlanArn",
+        "Mode"
+    ],
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/RecoveryPlanExecutionArn",
+        "/properties/Status",
+        "/properties/StartedAt",
+        "/properties/CompletedAt"
+    ],
+    "createOnlyProperties": [
+        "/properties/RecoveryPlanArn",
+        "/properties/Mode",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/RecoveryPlanExecutionArn"
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "drs:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "drs:GetRecoveryPlanExecution",
+                "drs:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "drs:ListRecoveryPlanExecutions"
+            ]
+        }
+    }
+}

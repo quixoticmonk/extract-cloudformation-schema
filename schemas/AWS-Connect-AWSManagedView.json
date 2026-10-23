@@ -1,0 +1,91 @@
+{
+    "typeName": "AWS::Connect::AWSManagedView",
+    "description": "Resource type definition for an AWS-managed view in Amazon Connect.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "A synthetic ARN combining the instance and view identifiers for CloudFormation."
+        },
+        "ViewId": {
+            "type": "string",
+            "description": "The short identifier of the AWS-managed view.",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^[a-zA-Z0-9\\_\\-:\\/$]+$"
+        },
+        "InstanceId": {
+            "type": "string",
+            "description": "The identifier of the Amazon Connect instance.",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9\\_\\-:\\/]+$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The name of the view.",
+            "minLength": 1,
+            "maxLength": 255
+        },
+        "Status": {
+            "type": "string",
+            "description": "The status of the view.",
+            "enum": ["PUBLISHED", "SAVED"]
+        },
+        "Type": {
+            "type": "string",
+            "description": "The type of the view.",
+            "enum": ["CUSTOMER_MANAGED", "AWS_MANAGED"]
+        },
+        "Description": {
+            "type": "string",
+            "description": "The description of the view.",
+            "minLength": 1,
+            "maxLength": 4096
+        },
+        "Version": {
+            "type": "integer",
+            "description": "The current version of the view."
+        }
+    },
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/InstanceId",
+        "/properties/ViewId"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/Name",
+        "/properties/Status",
+        "/properties/Type",
+        "/properties/Description",
+        "/properties/Version"
+    ],
+    "primaryIdentifier": ["/properties/Arn"],
+    "additionalIdentifiers": [["/properties/InstanceId", "/properties/ViewId"]],
+    "tagging": {
+        "taggable": false
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "connect:DescribeView"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "InstanceId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "pattern": "^[a-zA-Z0-9\\_\\-:\\/]+$"
+                    }
+                },
+                "required": ["InstanceId"]
+            },
+            "permissions": [
+                "connect:ListViews"
+            ]
+        }
+    }
+}

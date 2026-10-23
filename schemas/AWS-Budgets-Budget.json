@@ -349,6 +349,7 @@
     "Budget"
   ],
   "createOnlyProperties": [
+    "/properties/Budget/BudgetName",
     "/properties/NotificationsWithSubscribers"
   ],
   "primaryIdentifier": [
@@ -356,5 +357,56 @@
   ],
   "readOnlyProperties": [
     "/properties/Id"
-  ]
+  ],
+  "tagging": {
+    "taggable": true,
+    "tagOnCreate": true,
+    "tagUpdatable": true,
+    "cloudFormationSystemTags": true,
+    "tagProperty": "/properties/ResourceTags",
+    "permissions": [
+      "budgets:TagResource",
+      "budgets:UntagResource",
+      "budgets:ListTagsForResource"
+    ]
+  },
+  "handlers": {
+    "create": {
+      "permissions": [
+        "budgets:ModifyBudget",
+        "budgets:TagResource",
+        "budgets:ViewBudget",
+        "billing:GetBillingViewData",
+        "budgets:ListTagsForResource"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "budgets:ModifyBudget"
+      ]
+    },
+    "list": {
+      "permissions": [
+        "budgets:ViewBudget",
+        "billing:GetBillingViewData"
+      ]
+    },
+    "read": {
+      "permissions": [
+        "budgets:ViewBudget",
+        "billing:GetBillingViewData",
+        "budgets:ListTagsForResource"
+      ]
+    },
+    "update": {
+      "permissions": [
+        "budgets:ModifyBudget",
+        "budgets:TagResource",
+        "budgets:UntagResource",
+        "budgets:ListTagsForResource",
+        "budgets:ViewBudget",
+        "billing:GetBillingViewData"
+      ]
+    }
+  }
 }

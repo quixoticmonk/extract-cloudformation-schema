@@ -85,6 +85,7 @@
                 "dynamodb:BatchWriteItem",
                 "dynamodb:DeleteTable",
                 "dynamodb:DeleteTableReplica",
+                "dynamodb:DisassociateTableReplica",
                 "dynamodb:UpdateItem",
                 "dynamodb:TagResource",
                 "dynamodb:UntagResource",
@@ -142,6 +143,24 @@
     ],
     "additionalProperties": false,
     "definitions": {
+        "SearchSchemaElement": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+                "AttributeName": {"type": "string"},
+                "SearchSchemaElementType": {
+                    "type": "string",
+                    "enum": [
+                        "HASH",
+                        "INLINE_FILTER"
+                    ]
+                }
+            },
+            "required": [
+                "AttributeName",
+                "SearchSchemaElementType"
+            ]
+        },
         "LocalSecondaryIndex": {
             "additionalProperties": false,
             "type": "object",
@@ -164,6 +183,12 @@
                 "Projection",
                 "KeySchema"
             ]
+        },
+        "VectorAttribute": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {"AttributeName": {"type": "string"}},
+            "required": ["AttributeName"]
         },
         "ReplicaSpecification": {
             "additionalProperties": false,
@@ -293,6 +318,42 @@
             "additionalProperties": false,
             "type": "object",
             "properties": {"WriteCapacityAutoScalingSettings": {"$ref": "#/definitions/CapacityAutoScalingSettings"}}
+        },
+        "VectorIndex": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+                "IndexName": {"type": "string"},
+                "VectorAttribute": {"$ref": "#/definitions/VectorAttribute"},
+                "Projection": {"$ref": "#/definitions/Projection"},
+                "Dimensions": {
+                    "maximum": 4096,
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "SearchSchema": {
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "insertionOrder": false,
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/SearchSchemaElement"}
+                },
+                "DistanceFunction": {
+                    "type": "string",
+                    "enum": [
+                        "COSINE",
+                        "DOT_PRODUCT",
+                        "EUCLIDEAN"
+                    ]
+                }
+            },
+            "required": [
+                "IndexName",
+                "VectorAttribute",
+                "Projection",
+                "Dimensions",
+                "DistanceFunction"
+            ]
         },
         "WriteOnDemandThroughputSettings": {
             "additionalProperties": false,
@@ -536,6 +597,13 @@
         "SSESpecification": {"$ref": "#/definitions/SSESpecification"},
         "StreamSpecification": {"$ref": "#/definitions/StreamSpecification"},
         "WarmThroughput": {"$ref": "#/definitions/WarmThroughput"},
+        "VectorIndexes": {
+            "minItems": 1,
+            "uniqueItems": true,
+            "insertionOrder": false,
+            "type": "array",
+            "items": {"$ref": "#/definitions/VectorIndex"}
+        },
         "Replicas": {
             "minItems": 1,
             "uniqueItems": true,

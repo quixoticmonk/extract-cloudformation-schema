@@ -1,0 +1,343 @@
+{
+    "typeName": "AWS::EMR::Session",
+    "description": "An Amazon EMR Spark Connect session. A session is an interactive workload started on an Amazon EMR cluster that has Spark Connect sessions enabled, and is supported in Amazon EMR Spark 8.0.0 and later.",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair containing user-defined metadata that you can associate with an Amazon EMR resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "A user-defined key, which is the minimum required information for a valid tag."
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "A user-defined value, which is optional in a tag."
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "Configuration": {
+            "type": "object",
+            "description": "An optional configuration specification to be used when provisioning application configurations.",
+            "properties": {
+                "Classification": {
+                    "type": "string",
+                    "description": "The classification within a configuration."
+                },
+                "Properties": {
+                    "type": "object",
+                    "description": "A set of properties specified within a configuration classification.",
+                    "patternProperties": {
+                        ".*": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "Configurations": {
+                    "type": "array",
+                    "description": "A list of additional configurations to apply within a configuration object.",
+                    "items": {
+                        "$ref": "#/definitions/Configuration"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "LogTypesMap": {
+            "type": "object",
+            "description": "A map of log component names to the list of log types to publish for that component.",
+            "patternProperties": {
+                "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]{0,10280}$": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 10280,
+                        "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "SessionCloudWatchLoggingConfiguration": {
+            "type": "object",
+            "description": "The CloudWatch Logs configuration for the session.",
+            "properties": {
+                "Enabled": {
+                    "type": "boolean",
+                    "description": "Whether CloudWatch Logs is enabled for the session."
+                },
+                "LogGroup": {
+                    "type": "string",
+                    "description": "The name of the log group where session logs are published.",
+                    "maxLength": 10280,
+                    "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+                },
+                "LogStreamNamePrefix": {
+                    "type": "string",
+                    "description": "The prefix applied to the log stream name where session logs are published.",
+                    "maxLength": 10280,
+                    "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+                },
+                "EncryptionKeyArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the KMS key used to encrypt the logs published to CloudWatch Logs.",
+                    "maxLength": 10280,
+                    "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+                },
+                "LogTypes": {
+                    "$ref": "#/definitions/LogTypesMap"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SessionManagedLoggingConfiguration": {
+            "type": "object",
+            "description": "The Amazon EMR-managed logging configuration for the session.",
+            "properties": {
+                "Enabled": {
+                    "type": "boolean",
+                    "description": "Whether Amazon EMR-managed logging is enabled for the session."
+                },
+                "EncryptionKeyArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the KMS key used to encrypt the managed logs.",
+                    "maxLength": 10280,
+                    "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SessionS3LoggingConfiguration": {
+            "type": "object",
+            "description": "The Amazon S3 logging configuration for the session.",
+            "properties": {
+                "Enabled": {
+                    "type": "boolean",
+                    "description": "Whether Amazon S3 logging is enabled for the session."
+                },
+                "LogUri": {
+                    "type": "string",
+                    "description": "The Amazon S3 destination URI where session logs are published.",
+                    "maxLength": 10280,
+                    "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+                },
+                "EncryptionKeyArn": {
+                    "type": "string",
+                    "description": "The Amazon Resource Name (ARN) of the KMS key used to encrypt logs published to Amazon S3.",
+                    "maxLength": 10280,
+                    "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+                },
+                "LogTypes": {
+                    "$ref": "#/definitions/LogTypesMap"
+                }
+            },
+            "additionalProperties": false
+        },
+        "SessionMonitoringConfiguration": {
+            "type": "object",
+            "description": "The monitoring configuration for a session. Controls where session logs are published.",
+            "properties": {
+                "CloudWatchLoggingConfiguration": {
+                    "$ref": "#/definitions/SessionCloudWatchLoggingConfiguration"
+                },
+                "ManagedLoggingConfiguration": {
+                    "$ref": "#/definitions/SessionManagedLoggingConfiguration"
+                },
+                "S3LoggingConfiguration": {
+                    "$ref": "#/definitions/SessionS3LoggingConfiguration"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "ClusterId": {
+            "type": "string",
+            "description": "The ID of the cluster that the session belongs to.",
+            "maxLength": 256
+        },
+        "Id": {
+            "type": "string",
+            "description": "The ID of the session.",
+            "maxLength": 256
+        },
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the session.",
+            "minLength": 20,
+            "maxLength": 2048
+        },
+        "Name": {
+            "type": "string",
+            "description": "An optional name for the session.",
+            "maxLength": 256,
+            "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+        },
+        "ExecutionRoleArn": {
+            "type": "string",
+            "description": "The execution role ARN for the session. Amazon EMR uses this role to access Amazon Web Services resources on your behalf during session execution.",
+            "minLength": 20,
+            "maxLength": 2048,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):iam::(\\d{12})?:(role((\\u002F)|(\\u002F[\\u0021-\\u007F]+\\u002F))[\\w+=,.@-]+)$"
+        },
+        "EngineConfigurations": {
+            "type": "array",
+            "description": "The configuration overrides for the session. Only runtime configuration overrides are supported.",
+            "items": {
+                "$ref": "#/definitions/Configuration"
+            }
+        },
+        "MonitoringConfiguration": {
+            "$ref": "#/definitions/SessionMonitoringConfiguration"
+        },
+        "SessionIdleTimeoutInMinutes": {
+            "type": "number",
+            "description": "The idle timeout, in minutes. If the session is idle for this duration, Amazon EMR automatically terminates it."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags associated with the session.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        },
+        "State": {
+            "type": "string",
+            "description": "The current state of the session.",
+            "enum": [
+                "SUBMITTED",
+                "STARTING",
+                "STARTED",
+                "IDLE",
+                "BUSY",
+                "TERMINATING",
+                "TERMINATED",
+                "FAILED"
+            ]
+        },
+        "AccountId": {
+            "type": "string",
+            "description": "The Amazon Web Services account ID that owns the session.",
+            "maxLength": 256,
+            "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+        },
+        "StateChangeReason": {
+            "type": "string",
+            "description": "A human-readable message describing the most recent state change.",
+            "maxLength": 10280,
+            "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+        },
+        "ReleaseLabel": {
+            "type": "string",
+            "description": "The Amazon EMR release label of the cluster that the session is running on.",
+            "maxLength": 256,
+            "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+        },
+        "ServerUrl": {
+            "type": "string",
+            "description": "The Spark Connect server URL for the session.",
+            "maxLength": 10280,
+            "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*$"
+        },
+        "CreatedAt": {
+            "type": "string",
+            "description": "The date and time that the session was created.",
+            "format": "date-time"
+        },
+        "UpdatedAt": {
+            "type": "string",
+            "description": "The date and time that the session was last updated.",
+            "format": "date-time"
+        },
+        "StartedAt": {
+            "type": "string",
+            "description": "The date and time that the session entered the STARTED state.",
+            "format": "date-time"
+        },
+        "EndedAt": {
+            "type": "string",
+            "description": "The date and time that the session was terminated or failed.",
+            "format": "date-time"
+        },
+        "IdleSince": {
+            "type": "string",
+            "description": "The date and time that the session last entered the IDLE state.",
+            "format": "date-time"
+        }
+    },
+    "required": [],
+    "additionalProperties": false,
+    "createOnlyProperties": [
+        "/properties/Name",
+        "/properties/ExecutionRoleArn",
+        "/properties/EngineConfigurations",
+        "/properties/MonitoringConfiguration",
+        "/properties/SessionIdleTimeoutInMinutes",
+        "/properties/Tags"
+    ],
+    "readOnlyProperties": [
+        "/properties/ClusterId",
+        "/properties/Id",
+        "/properties/Arn",
+        "/properties/State",
+        "/properties/AccountId",
+        "/properties/StateChangeReason",
+        "/properties/ReleaseLabel",
+        "/properties/ServerUrl",
+        "/properties/CreatedAt",
+        "/properties/UpdatedAt",
+        "/properties/StartedAt",
+        "/properties/EndedAt",
+        "/properties/IdleSince"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/ClusterId",
+            "/properties/Id"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "elasticmapreduce:AddTags",
+            "elasticmapreduce:RemoveTags"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "elasticmapreduce:GetSession"
+            ]
+        },
+        "list": {
+            "handlerSchema": {
+                "properties": {
+                    "ClusterId": {
+                        "type": "string",
+                        "maxLength": 256
+                    }
+                },
+                "required": [
+                    "ClusterId"
+                ]
+            },
+            "permissions": [
+                "elasticmapreduce:ListSessions"
+            ]
+        }
+    }
+}
