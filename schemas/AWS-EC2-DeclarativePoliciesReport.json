@@ -1,0 +1,121 @@
+{
+    "typeName": "AWS::EC2::DeclarativePoliciesReport",
+    "description": "Resource Type definition for AWS::EC2::DeclarativePoliciesReport. A read-only resource representing an EC2 declarative-policies account status report, which is a report generation job: for every account in an AWS Organizations scope it reports the current status of each attribute a declarative policy can govern.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The ARN of the account status report."
+        },
+        "ReportId": {
+            "type": "string",
+            "description": "The ID of the report."
+        },
+        "S3Bucket": {
+            "type": "string",
+            "description": "The name of the Amazon S3 bucket where the report is located. The bucket must be in the same Region where the report generation request is made."
+        },
+        "S3Prefix": {
+            "type": "string",
+            "description": "The prefix for your S3 object."
+        },
+        "TargetId": {
+            "type": "string",
+            "description": "The root ID, organizational unit ID, or account ID the report covers. Format: r-ab12 for a root, ou-ab12-cdef1234 for an organizational unit, or 123456789012 for an account."
+        },
+        "StartTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time when the report generation started."
+        },
+        "EndTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time when the report generation ended. Absent while the report is running and populated in every terminal state."
+        },
+        "Status": {
+            "type": "string",
+            "description": "The current status of the report.",
+            "enum": [
+                "running",
+                "cancelled",
+                "complete",
+                "error"
+            ]
+        },
+        "Tags": {
+            "type": "array",
+            "description": "Any tags assigned to the report.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair to associate with a resource.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The key of the tag."
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The value of the tag."
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "S3Bucket",
+        "TargetId"
+    ],
+    "createOnlyProperties": [
+        "/properties/S3Bucket",
+        "/properties/S3Prefix",
+        "/properties/Tags",
+        "/properties/TargetId"
+    ],
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/EndTime",
+        "/properties/ReportId",
+        "/properties/StartTime",
+        "/properties/Status"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/ReportId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": []
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "ec2:DescribeDeclarativePoliciesReports"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "ec2:DescribeDeclarativePoliciesReports"
+            ]
+        }
+    }
+}

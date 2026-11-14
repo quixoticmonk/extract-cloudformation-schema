@@ -1,0 +1,269 @@
+{
+    "typeName": "AWS::AppStream::Image",
+    "description": "Resource Type definition for AWS::AppStream::Image (read-only). Represents an existing Amazon AppStream 2.0 private image and supports Read and List, for referencing an image in templates and for inventory, tag and compliance coverage. Importing an image is intentionally out of scope: CreateImportedImage is a long-running asynchronous build over an EC2 AMI the caller must first register with UEFI boot and TPM 2.0 support, which does not fit a CloudFormation stack lifecycle.",
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "description": "A key-value pair associated with the image.",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "description": "The tag key.",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^(^(?!aws:).[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+                },
+                "Value": {
+                    "type": "string",
+                    "description": "The tag value.",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        },
+        "Application": {
+            "type": "object",
+            "description": "An application in the image's application catalog. A healthy image populates these members from the catalog the image was imported with; Enabled and Metadata are the service's own rather than echoes of that catalog.",
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "The name of the application.",
+                    "minLength": 1
+                },
+                "DisplayName": {
+                    "type": "string",
+                    "description": "The application name to display.",
+                    "minLength": 1
+                },
+                "LaunchPath": {
+                    "type": "string",
+                    "description": "The path to the application executable in the instance.",
+                    "minLength": 1
+                },
+                "LaunchParameters": {
+                    "type": "string",
+                    "description": "The arguments passed to the application at launch.",
+                    "minLength": 1
+                },
+                "Enabled": {
+                    "type": "boolean",
+                    "description": "Whether the application is enabled. AppStream can disable an application after image creation if there is a problem with it, so a healthy image reports true and this is the one Application member whose value is the service's judgement rather than an echo of the imported catalog."
+                },
+                "Metadata": {
+                    "type": "object",
+                    "description": "Additional service-defined attributes describing the application. The keys are chosen by AppStream rather than by the caller, so the shape is a string map; a healthy imported image reports WORKING_DIRECTORY.",
+                    "patternProperties": {
+                        "^.*$": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the image.",
+            "pattern": "^arn:aws(?:\\-cn|\\-iso\\-b|\\-iso|\\-us\\-gov)?:[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.\\\\-]{0,1023}$"
+        },
+        "Name": {
+            "type": "string",
+            "description": "The unique name of the image.",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,100}$"
+        },
+        "Description": {
+            "type": "string",
+            "description": "The description displayed for the image.",
+            "maxLength": 256,
+            "pattern": "^[a-zA-Z0-9_.() -]+$"
+        },
+        "DisplayName": {
+            "type": "string",
+            "description": "The name displayed for the image.",
+            "maxLength": 100,
+            "pattern": "^[a-zA-Z0-9_.() -]+$"
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The tags associated with the image.",
+            "insertionOrder": false,
+            "uniqueItems": true,
+            "maxItems": 50,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
+        },
+        "State": {
+            "type": "string",
+            "description": "The state of the image.",
+            "enum": [
+                "PENDING",
+                "AVAILABLE",
+                "FAILED",
+                "COPYING",
+                "DELETING",
+                "CREATING",
+                "IMPORTING",
+                "VALIDATING"
+            ]
+        },
+        "Visibility": {
+            "type": "string",
+            "description": "Indicates whether the image is public, private, or shared.",
+            "enum": [
+                "PUBLIC",
+                "PRIVATE",
+                "SHARED"
+            ]
+        },
+        "ImageBuilderSupported": {
+            "type": "boolean",
+            "description": "Indicates whether an image builder can be launched from this image."
+        },
+        "Platform": {
+            "type": "string",
+            "description": "The operating system platform of the image.",
+            "enum": [
+                "WINDOWS",
+                "WINDOWS_SERVER_2016",
+                "WINDOWS_SERVER_2019",
+                "WINDOWS_SERVER_2022",
+                "WINDOWS_SERVER_2025",
+                "WINDOWS_10",
+                "WINDOWS_11",
+                "AMAZON_LINUX2",
+                "RHEL7",
+                "RHEL8",
+                "ROCKY_LINUX8",
+                "UBUNTU2404",
+                "UBUNTU_PRO_2404"
+            ]
+        },
+        "CreatedTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The time the image was created."
+        },
+        "AppstreamAgentVersion": {
+            "type": "string",
+            "description": "The version of the AppStream agent reported for this image.",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "Applications": {
+            "type": "array",
+            "description": "The applications associated with the image.",
+            "insertionOrder": false,
+            "items": {
+                "$ref": "#/definitions/Application"
+            }
+        },
+        "LatestAppstreamAgentVersion": {
+            "type": "string",
+            "description": "Indicates whether the image is using the latest AppStream agent version.",
+            "enum": [
+                "TRUE",
+                "FALSE"
+            ]
+        },
+        "SupportedInstanceFamilies": {
+            "type": "array",
+            "description": "The instance families that can launch from this image.",
+            "insertionOrder": false,
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "DynamicAppProvidersEnabled": {
+            "type": "string",
+            "description": "Indicates whether dynamic app providers are enabled within the image.",
+            "enum": [
+                "ENABLED",
+                "DISABLED"
+            ]
+        },
+        "ImageSharedWithOthers": {
+            "type": "string",
+            "description": "Indicates whether the image is shared with another AWS account.",
+            "enum": [
+                "TRUE",
+                "FALSE"
+            ]
+        },
+        "ManagedSoftwareIncluded": {
+            "type": "boolean",
+            "description": "Indicates whether the image includes license-included applications."
+        },
+        "ImageType": {
+            "type": "string",
+            "description": "The type of the image.",
+            "enum": [
+                "CUSTOM",
+                "NATIVE",
+                "BYOL"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/AppstreamAgentVersion",
+        "/properties/Applications",
+        "/properties/Arn",
+        "/properties/CreatedTime",
+        "/properties/Description",
+        "/properties/DisplayName",
+        "/properties/DynamicAppProvidersEnabled",
+        "/properties/ImageBuilderSupported",
+        "/properties/ImageSharedWithOthers",
+        "/properties/ImageType",
+        "/properties/LatestAppstreamAgentVersion",
+        "/properties/ManagedSoftwareIncluded",
+        "/properties/Name",
+        "/properties/Platform",
+        "/properties/State",
+        "/properties/SupportedInstanceFamilies",
+        "/properties/Tags",
+        "/properties/Visibility"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/Name"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "appstream:ListTagsForResource"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "appstream:DescribeImages",
+                "appstream:ListTagsForResource"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "appstream:DescribeImages"
+            ]
+        }
+    }
+}

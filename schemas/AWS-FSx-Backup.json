@@ -70,9 +70,6 @@
         }
     },
     "additionalProperties": false,
-    "required": [
-        "FileSystemId"
-    ],
     "createOnlyProperties": [
         "/properties/FileSystemId"
     ],

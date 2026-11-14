@@ -15,6 +15,9 @@
     "Port": {
       "type": "integer"
     },
+    "ServerlessV2PlatformVersion": {
+      "type": "string"
+    },
     "DBClusterIdentifier": {
       "type": "string"
     },
@@ -172,6 +175,7 @@
   "readOnlyProperties": [
     "/properties/ReadEndpoint",
     "/properties/Id",
+    "/properties/ServerlessV2PlatformVersion",
     "/properties/Endpoint",
     "/properties/ClusterResourceId"
   ]

@@ -1,0 +1,112 @@
+{
+    "typeName": "AWS::CloudHSMV2::Backup",
+    "description": "Represents a backup of an AWS CloudHSM cluster. Backups are created by the service when a cluster is activated, when an HSM is added to or removed from an active cluster, and periodically thereafter.",
+    "properties": {
+        "Arn": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the backup."
+        },
+        "BackupId": {
+            "type": "string",
+            "description": "The identifier (ID) of the backup.",
+            "pattern": "^backup-[2-7a-zA-Z]{11,16}$"
+        },
+        "BackupState": {
+            "type": "string",
+            "description": "The state of the backup.",
+            "enum": [
+                "CREATE_IN_PROGRESS",
+                "READY",
+                "DELETED",
+                "PENDING_DELETION"
+            ]
+        },
+        "ClusterId": {
+            "type": "string",
+            "description": "The identifier (ID) of the cluster that was backed up.",
+            "pattern": "^cluster-[2-7a-zA-Z]{11,16}$"
+        },
+        "CreateTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the backup was created."
+        },
+        "NeverExpires": {
+            "type": "boolean",
+            "description": "Whether the backup is exempt from the cluster's backup retention policy."
+        },
+        "Tags": {
+            "type": "array",
+            "description": "The list of tags for the backup.",
+            "items": {
+                "$ref": "#/definitions/Tag"
+            },
+            "maxItems": 50,
+            "insertionOrder": false
+        }
+    },
+    "definitions": {
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 0,
+                    "maxLength": 256,
+                    "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+                }
+            },
+            "required": [
+                "Key",
+                "Value"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/Arn",
+        "/properties/BackupId",
+        "/properties/BackupState",
+        "/properties/ClusterId",
+        "/properties/CreateTimestamp",
+        "/properties/NeverExpires",
+        "/properties/Tags"
+    ],
+    "primaryIdentifier": [
+        "/properties/Arn"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/BackupId"
+        ]
+    ],
+    "tagging": {
+        "taggable": true,
+        "tagOnCreate": false,
+        "tagUpdatable": false,
+        "cloudFormationSystemTags": false,
+        "tagProperty": "/properties/Tags",
+        "permissions": [
+            "cloudhsm:ListTags"
+        ]
+    },
+    "handlers": {
+        "read": {
+            "permissions": [
+                "cloudhsm:DescribeBackups"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "cloudhsm:DescribeBackups"
+            ]
+        }
+    }
+}

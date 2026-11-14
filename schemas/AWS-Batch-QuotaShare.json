@@ -111,7 +111,6 @@
     "permissions": ["Batch:TagResource", "Batch:UntagResource"]
   },
   "required": [
-    "QuotaShareName",
     "JobQueue",
     "CapacityLimits",
     "ResourceSharingConfiguration",

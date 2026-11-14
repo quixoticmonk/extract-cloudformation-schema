@@ -165,6 +165,36 @@
                 }
             ]
         },
+        "CertificateConfiguration": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "title": "S3",
+                    "properties": {
+                        "S3": {
+                            "$ref": "#/definitions/S3CertificateConfiguration"
+                        }
+                    },
+                    "required": [
+                        "S3"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "title": "SecretsManager",
+                    "properties": {
+                        "SecretsManager": {
+                            "$ref": "#/definitions/SecretsManagerCertificateConfiguration"
+                        }
+                    },
+                    "required": [
+                        "SecretsManager"
+                    ],
+                    "additionalProperties": false
+                }
+            ]
+        },
         "ConnectorConfiguration": {
             "type": "object",
             "properties": {
@@ -474,13 +504,13 @@
                     "type": "string",
                     "maxLength": 256,
                     "minLength": 1,
-                    "pattern": "^/[a-zA-Z0-9\\-\\._/]+$"
+                    "pattern": "^/[a-zA-Z0-9\\-\\._/{}]+$"
                 },
                 "ProviderPath": {
                     "type": "string",
                     "maxLength": 256,
                     "minLength": 1,
-                    "pattern": "^/[a-zA-Z0-9\\-\\._/]+$"
+                    "pattern": "^/[a-zA-Z0-9\\-\\._/{}]+$"
                 },
                 "Models": {
                     "type": "array",
@@ -625,7 +655,7 @@
                     "type": "string",
                     "maxLength": 170,
                     "minLength": 1,
-                    "pattern": "^arn:(aws[a-zA-Z-]*)?:lambda:([a-z]{2}(-gov)?-[a-z]+-\\d{1}):(\\d{12}):function:([a-zA-Z0-9-_.]+)(:(\\$LATEST|[a-zA-Z0-9-_]+))?$"
+                    "pattern": "^arn:(aws[a-zA-Z-]*)?:lambda:([a-z0-9-]+):(\\d{12}):function:([a-zA-Z0-9-_.]+)(:(\\$LATEST|[a-zA-Z0-9-_]+))?$"
                 },
                 "ToolSchema": {
                     "$ref": "#/definitions/ToolSchema"
@@ -817,9 +847,9 @@
             "properties": {
                 "Model": {
                     "type": "string",
-                    "maxLength": 256,
+                    "maxLength": 2048,
                     "minLength": 1,
-                    "pattern": "^[a-zA-Z0-9\\-\\._\\*\\?@]+(/[a-zA-Z0-9\\-\\._\\*\\?@]+)*$"
+                    "pattern": "^[a-zA-Z0-9\\-\\._\\*\\?@:]+(/[a-zA-Z0-9\\-\\._\\*\\?@:]+)*$"
                 }
             },
             "required": [
@@ -1029,6 +1059,23 @@
             ],
             "additionalProperties": false
         },
+        "S3CertificateConfiguration": {
+            "type": "object",
+            "properties": {
+                "Uri": {
+                    "type": "string",
+                    "pattern": "^s3://.{1,2043}$"
+                },
+                "BucketOwnerAccountId": {
+                    "type": "string",
+                    "pattern": "^[0-9]{12}$"
+                }
+            },
+            "required": [
+                "Uri"
+            ],
+            "additionalProperties": false
+        },
         "S3Configuration": {
             "type": "object",
             "properties": {
@@ -1089,6 +1136,19 @@
                 "boolean",
                 "integer"
             ]
+        },
+        "SecretsManagerCertificateConfiguration": {
+            "type": "object",
+            "properties": {
+                "SecretArn": {
+                    "type": "string",
+                    "pattern": "^arn:aws(-[^:]+)?:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+$"
+                }
+            },
+            "required": [
+                "SecretArn"
+            ],
+            "additionalProperties": false
         },
         "SelfManagedLatticeResource": {
             "oneOf": [
@@ -1270,6 +1330,14 @@
         "AuthorizationData": {
             "$ref": "#/definitions/AuthorizationData"
         },
+        "CertificateConfigurations": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/CertificateConfiguration"
+            },
+            "maxItems": 1,
+            "minItems": 1
+        },
         "CreatedAt": {
             "type": "string",
             "format": "date-time"
@@ -1289,7 +1357,7 @@
         },
         "GatewayArn": {
             "type": "string",
-            "pattern": "^arn:aws(|-cn|-us-gov):bedrock-agentcore:[a-z0-9-]{1,20}:[0-9]{12}:gateway/([0-9a-z][-]?){1,48}-[a-z0-9]{10}$"
+            "pattern": "^arn:(aws(-[a-z]+)*):bedrock-agentcore:[a-z0-9-]{1,20}:[0-9]{12}:gateway/([0-9a-z][-]?){1,48}-[a-z0-9]{10}$"
         },
         "GatewayIdentifier": {
             "type": "string",
@@ -1376,6 +1444,13 @@
                 "bedrock-agentcore:SynchronizeGatewayTargets",
                 "bedrock-mantle:GetModel",
                 "bedrock-mantle:ListModels",
+                "bedrock:ListCustomModelDeployments",
+                "bedrock:ListFoundationModels",
+                "bedrock:ListImportedModels",
+                "bedrock:ListInferenceProfiles",
+                "bedrock:ListMarketplaceModelEndpoints",
+                "bedrock:ListPromptRouters",
+                "bedrock:ListProvisionedModelThroughputs",
                 "ec2:CreateNetworkInterface",
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeSubnets",
@@ -1442,6 +1517,13 @@
                 "bedrock-agentcore:UpdateGatewayTarget",
                 "bedrock-mantle:GetModel",
                 "bedrock-mantle:ListModels",
+                "bedrock:ListCustomModelDeployments",
+                "bedrock:ListFoundationModels",
+                "bedrock:ListImportedModels",
+                "bedrock:ListInferenceProfiles",
+                "bedrock:ListMarketplaceModelEndpoints",
+                "bedrock:ListPromptRouters",
+                "bedrock:ListProvisionedModelThroughputs",
                 "ec2:CreateNetworkInterface",
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeSubnets",

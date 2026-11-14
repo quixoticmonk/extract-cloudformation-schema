@@ -205,6 +205,7 @@
                     ]
                 },
                 "PointInTimeRecoverySpecification": {"$ref": "#/definitions/PointInTimeRecoverySpecification"},
+                "DisassociationProtectionEnabled": {"type": "boolean"},
                 "ReplicaStreamSpecification": {"$ref": "#/definitions/ReplicaStreamSpecification"},
                 "GlobalSecondaryIndexes": {
                     "uniqueItems": true,
@@ -595,6 +596,13 @@
         },
         "TableId": {"type": "string"},
         "SSESpecification": {"$ref": "#/definitions/SSESpecification"},
+        "TableType": {
+            "type": "string",
+            "enum": [
+                "GlobalTableReplica",
+                "Regional"
+            ]
+        },
         "StreamSpecification": {"$ref": "#/definitions/StreamSpecification"},
         "WarmThroughput": {"$ref": "#/definitions/WarmThroughput"},
         "VectorIndexes": {

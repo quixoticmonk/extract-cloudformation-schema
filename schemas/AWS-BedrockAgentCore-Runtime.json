@@ -914,6 +914,7 @@
     "replacementStrategy": "create_then_delete",
     "handlers": {
         "create": {
+            "timeoutInMinutes": 35,
             "permissions": [
                 "bedrock-agentcore:CreateAgentRuntime",
                 "bedrock-agentcore:CreateAgentRuntimeEndpoint",
@@ -947,6 +948,7 @@
             ]
         },
         "update": {
+            "timeoutInMinutes": 35,
             "permissions": [
                 "bedrock-agentcore:UpdateAgentRuntime",
                 "bedrock-agentcore:UpdateAgentRuntimeEndpoint",
@@ -973,6 +975,7 @@
             ]
         },
         "delete": {
+            "timeoutInMinutes": 130,
             "permissions": [
                 "bedrock-agentcore:DeleteAgentRuntime",
                 "bedrock-agentcore:DeleteAgentRuntimeEndpoint",
