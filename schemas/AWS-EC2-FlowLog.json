@@ -91,7 +91,10 @@
         "VPC",
         "TransitGateway",
         "TransitGatewayAttachment",
-        "RegionalNatGateway"
+        "RegionalNatGateway",
+        "CoreNetwork",
+        "CoreNetworkEdge",
+        "CoreNetworkAttachment"
       ]
     },
     "Tags": {
@@ -187,6 +190,7 @@
         "iam:CreateServiceLinkedRole",
         "iam:PassRole",
         "logs:CreateLogDelivery",
+        "networkmanager:GetCoreNetwork",
         "s3:GetBucketPolicy",
         "s3:PutBucketPolicy"
       ]

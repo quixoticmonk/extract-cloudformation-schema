@@ -57,6 +57,11 @@
           "maxLength": 1024,
           "minLength": 1,
           "pattern": "^arn:(aws[a-zA-Z0-9-]*):sso:::instance/(sso)?ins-[a-zA-Z0-9-.]{16}$"
+        },
+        "UserBackgroundSessionsEnabled": {
+          "description": "Enables user background sessions for this application so sessions can continue running after users log out of their interactive notebook or their Identity Center sessions expire.",
+          "type": "boolean",
+          "default": false
         }
       }
     },
@@ -653,7 +658,7 @@
     "taggable": true,
     "tagOnCreate": true,
     "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
+    "cloudFormationSystemTags": true,
     "tagProperty": "/properties/Tags",
     "permissions": [
       "emr-serverless:TagResource",
@@ -703,7 +708,8 @@
         "sso:PutApplicationAuthenticationMethod",
         "sso:PutApplicationAssignmentConfiguration",
         "sso:PutApplicationGrant",
-        "sso:PutApplicationAccessScope"
+        "sso:PutApplicationAccessScope",
+        "sso:PutApplicationSessionConfiguration"
       ]
     },
     "read": {
@@ -744,7 +750,15 @@
         "kms:GenerateDataKey",
         "kms:TagResource",
         "kms:UntagResource",
-        "kms:Decrypt"
+        "kms:Decrypt",
+        "sso:DescribeInstance",
+        "sso:CreateApplication",
+        "sso:DeleteApplication",
+        "sso:PutApplicationAuthenticationMethod",
+        "sso:PutApplicationAssignmentConfiguration",
+        "sso:PutApplicationGrant",
+        "sso:PutApplicationAccessScope",
+        "sso:PutApplicationSessionConfiguration"
       ]
     },
     "delete": {
